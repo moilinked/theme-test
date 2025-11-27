@@ -1,0 +1,446 @@
+[
+  
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Page background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "primary_color",
+        "label": "Primary",
+        "default": "#036aff"
+      },
+      {
+        "type": "color",
+        "id": "text_primary_color",
+        "label": "Primary text",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "text_secondary_color",
+        "label": "Secondary text",
+        "default": "#555555"
+      },
+      {
+        "type": "color",
+        "id": "text_tertiary_color",
+        "label": "Tertiary text",
+        "default": "#888888"
+      },
+      {
+        "type": "color",
+        "id": "link_color",
+        "label": "Links",
+        "default": "#036aff"
+      },
+      {
+        "type": "header",
+        "content": "Filled buttons"
+      },
+      {
+        "type": "color",
+        "id": "button_filled_bg_color",
+        "label": "Background",
+        "default": "#036aff"
+      },
+      {
+        "type": "color",
+        "id": "button_filled_text_color",
+        "label": "Text",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "button_filled_hover_bg_color",
+        "label": "Hover Background",
+        "default": "#003eb3"
+      },
+      {
+        "type": "color",
+        "id": "button_filled_hover_text_color",
+        "label": "Hover Text",
+        "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "Outlined buttons"
+      },
+      {
+        "type": "color",
+        "id": "button_outlined_border_color",
+        "label": "Border",
+        "default": "#036aff"
+      },
+      {
+        "type": "color",
+        "id": "button_outlined_text_color",
+        "label": "Text",
+        "default": "#036aff"
+      },
+      {
+        "type": "color",
+        "id": "button_outlined_hover_bg_color",
+        "label": "Hover Background",
+        "default": "#036aff"
+      },
+      {
+        "type": "color",
+        "id": "button_outlined_hover_text_color",
+        "label": "Hover Text",
+        "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "Messages"
+      },
+      {
+        "type": "color",
+        "id": "error_bg_color",
+        "label": "Error background",
+        "default": "#fcedee"
+      },
+      {
+        "type": "color",
+        "id": "error_text_color",
+        "label": "Error text",
+        "default": "#b40c1c"
+      },
+      {
+        "type": "color",
+        "id": "success_bg_color",
+        "label": "Success background",
+        "default": "#e8f6ea"
+      },
+      {
+        "type": "color",
+        "id": "success_text_color",
+        "label": "Success text",
+        "default": "#2c7e3f"
+      },
+      {
+        "type": "color",
+        "id": "info_bg_color",
+        "label": "Info background",
+        "default": "#E4EDFA"
+      },
+      {
+        "type": "color",
+        "id": "info_text_color",
+        "label": "Info text",
+        "default": "#1A66D2"
+      },
+      {
+        "type": "color",
+        "id": "warning_bg_color",
+        "label": "Warning background",
+        "default": "#E4EDFA"
+      },
+      {
+        "type": "color",
+        "id": "warning_text_color",
+        "label": "Warning text",
+        "default": "#1A66D2"
+      }
+    ]
+  },
+  {
+    "name": "屏幕尺寸",
+    "settings": [
+      {
+        "type": "range",
+        "id": "pc_page_width",
+        "min": 1000,
+        "max": 1440,
+        "step": 20,
+        "default": 1280,
+        "unit": "px",
+        "label": "PC max width"
+      },
+      {
+        "type": "range",
+        "id": "pad_page_width",
+        "min": 1000,
+        "max": 1280,
+        "step": 4,
+        "default": 1024,
+        "unit": "px",
+        "label": "Media pad max width"
+      },
+      {
+        "type": "range",
+        "id": "mobile_page_width",
+        "min": 700,
+        "max": 800,
+        "default": 767,
+        "unit": "px",
+        "label": "Media mobile max width"
+      }
+    ]
+  },
+  {
+    "name": "Product Card",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Coming Soon"
+      }
+    ]
+  },
+  {
+    "name": "阴影",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Popup"
+      },
+      {
+        "type": "range",
+        "id": "popup_shadow_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "透明度",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "popup_shadow_horizontal_offset",
+        "min": -40,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "水平偏移量",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "popup_shadow_vertical_offset",
+        "min": -40,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "垂直偏移量",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "popup_shadow_blur",
+        "min": 0,
+        "max": 40,
+        "step": 5,
+        "unit": "px",
+        "label": "模糊",
+        "default": 0
+      }
+    ]
+  },
+  {
+    "name": "社交媒体",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "Youtube"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "Tiktok"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter"
+      },
+      {
+        "type": "text",
+        "id": "social_snapchat_link",
+        "label": "Snapchat"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest"
+      },
+      {
+        "type": "text",
+        "id": "social_tumblr_link",
+        "label": "Tumblr"
+      },
+      {
+        "type": "text",
+        "id": "social_vimeo_link",
+        "label": "Vimeo"
+      }
+    ]
+  },
+  {
+    "name": "货币格式",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "currency_code_enabled",
+        "label": "Show currency code",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "180px x 180px .png"
+      }
+    ]
+  },
+  {
+    "name": "drawer",
+    "settings": [
+      {
+        "type": "header",
+        "content": "border"
+      },
+      {
+        "type": "range",
+        "id": "drawer_border_thickness",
+        "min": 0,
+        "max": 24,
+        "step": 1,
+        "unit": "px",
+        "label": "border thickness",
+        "default": 1
+      },
+      {
+        "type": "range",
+        "id": "drawer_border_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "border opacity",
+        "default": 10
+      },
+      {
+        "type": "header",
+        "content": "shadow"
+      },
+      {
+        "type": "range",
+        "id": "drawer_shadow_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "opacity",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "drawer_shadow_horizontal_offset",
+        "min": -40,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "horizontal_offset",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "drawer_shadow_vertical_offset",
+        "min": -40,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "vertical_offset",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "drawer_shadow_blur",
+        "min": 0,
+        "max": 40,
+        "step": 5,
+        "unit": "px",
+        "label": "blur",
+        "default": 0
+      }
+    ]
+  },
+  {
+    "name": "购物车",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "抽屉"
+          },
+          {
+            "value": "page",
+            "label": "页面"
+          },
+          {
+            "value": "notification",
+            "label": "弹出窗口通知"
+          }
+        ],
+        "default": "notification",
+        "label": "类型"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "label": "厂商",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cart_note",
+        "label": "购物车备注",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "购物车抽屉"
+      },
+      {
+        "type": "collection",
+        "id": "cart_drawer_collection",
+        "label": "产品系列",
+        "info": "在购物车抽屉为空时显示"
+      },
+      {
+        "type": "color_scheme",
+        "id": "cart_color_scheme",
+        "label": "配色方案",
+        "default": "scheme-1"
+      }
+    ]
+  }
+]
