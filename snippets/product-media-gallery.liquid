@@ -64,7 +64,12 @@
           class="product__media-item grid__item slider__slide{% if single_media_visible %} product__media-item--single{% endif %}{% if product.selected_or_first_available_variant.featured_media == nil and forloop.index == 1 %} is-active{% endif %}{% if media.media_type != 'image' %} product__media-item--full{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
           data-media-id="{{ section.id }}-{{ media.id }}"
         >
-          <img src="{{ media.preview_image | image_url: width: 100 }}" width="" height="" />
+          <img
+            style="height: 100%;width: 100%;object-fit: cover;"
+            src="{{ media.preview_image | image_url: width: 100 }}"
+            width=""
+            height=""
+          >
         </li>
       {%- endfor -%}
     </ul>
