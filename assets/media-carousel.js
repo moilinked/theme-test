@@ -388,8 +388,6 @@ class CarouselComponent extends HTMLElement {
     } else {
       targetIndex = Math.max(0, this.currentPage - 1);
     }
-    console.log("this.currentPage=====>", this.currentPage);
-    console.log("this.targetIndex=====>", targetIndex);
 
     //- 滚动到目标项目
     const targetItem = this.sliderItems[targetIndex];
@@ -400,7 +398,6 @@ class CarouselComponent extends HTMLElement {
 
   //- 设置轮播图位置
   setSlidePosition(left) {
-    // this.sliderWrapper.style.transform = `translateX(${left}px)`;
     this.sliderWrapper.scrollTo({ left, behavior: "smooth" });
   }
 }
