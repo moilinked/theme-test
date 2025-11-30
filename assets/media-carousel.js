@@ -424,12 +424,24 @@ class CarouselComponent extends HTMLElement {
 
     if (!this.firstRealItem || !this.lastRealItem) return;
 
-    console.log("this.currentPage=====>", this.currentPage);
+    const isNext = event.currentTarget.name === "next";
+    if (isNext) {
+      targetIndex = (this.currentPage + 1) % this.sliderItemsToShow.length;
+    } else {
+      targetIndex =
+        (this.currentPage - 1 + this.sliderItemsToShow.length) %
+        this.sliderItemsToShow.length;
+    }
+    console.log("this.targetIndex=====>", this.targetIndex);
+
+    //- 滚动到目标项目
+    // const targetItem = this.sliderItemsToShow[targetIndex];
+    // if (targetItem) {
+    //   this.setSli
     return;
 
     const currentScrollLeft = this.sliderWrapper.scrollLeft;
     const step = event.currentTarget.dataset.step || 1;
-    const isNext = event.currentTarget.name === "next";
 
     //- 找到当前最接近的真实项目
     let currentIndex = 0;
