@@ -180,11 +180,9 @@ class CarouselComponent extends HTMLElement {
       this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]')
     }
 
-    //- 计算每个项目的实际宽度（包括margin等）
     const firstItem = this.sliderItemsToShow[0]
     const secondItem = this.sliderItemsToShow[1] || firstItem
     
-    //- 获取第一个项目的实际宽度（包括margin）
     const firstItemRect = firstItem.getBoundingClientRect()
     const secondItemRect = secondItem.getBoundingClientRect()
     
