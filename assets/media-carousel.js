@@ -151,7 +151,7 @@ class CarouselComponent extends HTMLElement {
   initPages() {
     this.setup();
     this.setupDrag();
-    window.addEventListener("resize", this.updateWidth);
+    window.addEventListener("resize", () => this.updateWidth());
 
     this.dispatchEvent(
       new CustomEvent("carouselSlideChanged", {
