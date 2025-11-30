@@ -107,7 +107,7 @@ class CarouselComponent extends HTMLElement {
     super()
     this.sliderWrapper = this.querySelector('[id^="Carousel-"]') //- wrapper
     this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]') //- items
-    this.enableSliderLooping = false
+    this.enableSliderLooping = true
     this.prevButton = this.querySelector('button[name="previous"]')
     this.nextButton = this.querySelector('button[name="next"]')
 
@@ -115,20 +115,20 @@ class CarouselComponent extends HTMLElement {
 
     this.initPages()
     
-    // 监听容器大小变化
+    //- 监听容器大小变化
     const resizeObserver = new ResizeObserver(() => {
-      // 使用 requestAnimationFrame 确保在布局更新后重新计算
+      //- 使用 requestAnimationFrame 确保在布局更新后重新计算
       requestAnimationFrame(() => this.initPages())
     })
     resizeObserver.observe(this.sliderWrapper)
     
-    // 监听窗口大小变化（处理方向改变等情况）
+    //- 监听窗口大小变化（处理方向改变等情况）
     this.handleResize = debounce(() => {
       requestAnimationFrame(() => this.initPages())
     }, 250)
     window.addEventListener('resize', this.handleResize)
 
-    // 绑定事件处理函数，保存引用以便后续清理
+    //- 绑定事件处理函数，保存引用以便后续清理
     this.boundUpdate = this.update.bind(this)
     this.boundOnButtonClick = this.onButtonClick.bind(this)
     
@@ -137,7 +137,7 @@ class CarouselComponent extends HTMLElement {
     this.nextButton.addEventListener('click', this.boundOnButtonClick)
   }
 
-  // 清理函数，在组件销毁时调用
+  //- 清理函数，在组件销毁时调用
   disconnectedCallback() {
     if (this.handleResize) {
       window.removeEventListener('resize', this.handleResize)
@@ -155,54 +155,47 @@ class CarouselComponent extends HTMLElement {
 
   //- 初始化轮播列表
   initPages() {
-    // 重新获取所有项目，确保获取最新的DOM状态
+    //- 重新获取所有项目，确保获取最新的DOM状态
     this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]')
     this.sliderItemsToShow = Array.from(this.sliderItems).filter(element => element.clientWidth > 0)
     
     //- 如果列表长度小于 1，则不进行初始化
     if (this.sliderItemsToShow.length < 1) {
-      // 如果只有一个项目，禁用导航按钮
+      //- 如果只有一个项目，禁用导航按钮
       if (this.prevButton) this.prevButton.setAttribute('disabled', 'disabled')
       if (this.nextButton) this.nextButton.setAttribute('disabled', 'disabled')
       return
     }
 
-    // 如果只有一个项目，禁用导航按钮
-    if (this.sliderItemsToShow.length === 1) {
-      if (this.prevButton) this.prevButton.setAttribute('disabled', 'disabled')
-      if (this.nextButton) this.nextButton.setAttribute('disabled', 'disabled')
-      return
-    }
-
-    // 计算每个项目的实际宽度（包括margin等）
+    //- 计算每个项目的实际宽度（包括margin等）
     const firstItem = this.sliderItemsToShow[0]
     const secondItem = this.sliderItemsToShow[1]
     
-    // 获取第一个项目的实际宽度（包括margin）
+    //- 获取第一个项目的实际宽度（包括margin）
     const firstItemRect = firstItem.getBoundingClientRect()
     const secondItemRect = secondItem.getBoundingClientRect()
     
-    // 计算项目之间的偏移量（包括间距）
+    //- 计算项目之间的偏移量（包括间距）
     this.sliderItemOffset = secondItemRect.left - firstItemRect.left || firstItem.offsetWidth
     
-    // 如果偏移量为0，使用项目宽度作为默认值
+    //- 如果偏移量为0，使用项目宽度作为默认值
     if (this.sliderItemOffset <= 0) {
       this.sliderItemOffset = firstItem.offsetWidth || firstItemRect.width
     }
 
-    // 计算每页可以显示的项目数量
+    //- 计算每页可以显示的项目数量
     const containerWidth = this.sliderWrapper.clientWidth
     const firstItemLeft = firstItem.offsetLeft
     
-    // 计算可见区域可以容纳多少个完整项目
+    //- 计算可见区域可以容纳多少个完整项目
     this.slidesPerPage = Math.max(1, Math.floor(
       (containerWidth - firstItemLeft) / this.sliderItemOffset
     ))
     
-    // 计算总页数
+    //- 计算总页数
     this.totalPages = Math.max(1, this.sliderItemsToShow.length - this.slidesPerPage + 1)
     
-    // 更新按钮状态
+    //- 更新按钮状态
     this.update()
   }
 
