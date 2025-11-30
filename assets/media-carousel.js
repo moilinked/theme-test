@@ -214,7 +214,7 @@ class CarouselComponent extends HTMLElement {
     console.log("this.totalPages=====>", this.totalPages);
 
     //- 如果启用循环，初始化时滚动到第一个真实项目
-    if (this.sliderItemsToShow.length > 1 && this.firstRealItem) {
+    if (this.currentPage === 1 && this.sliderItemsToShow.length > 1 && this.firstRealItem) {
       requestAnimationFrame(() => {
         if (this.firstRealItem && this.firstRealItem.offsetLeft > 0) {
           this.sliderWrapper.scrollTo({
