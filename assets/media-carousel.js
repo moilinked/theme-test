@@ -162,7 +162,7 @@ class CarouselComponent extends HTMLElement {
     
     //- 如果列表长度小于 1，则不进行初始化
     if (this.sliderItemsToShow.length < 1) {
-      //- 如果只有一个项目，禁用导航按钮
+      this.buttons && this.buttons.classList.add('hidden');
       if (this.prevButton) this.prevButton.setAttribute('disabled', 'disabled')
       if (this.nextButton) this.nextButton.setAttribute('disabled', 'disabled')
       return
