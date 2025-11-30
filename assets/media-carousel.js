@@ -427,11 +427,11 @@ class CarouselComponent extends HTMLElement {
     const isNext = event.currentTarget.name === "next";
     let targetIndex;
     if (isNext) {
-      targetIndex = (this.currentPage + 1) % this.sliderItemsToShow.length;
+      targetIndex = (this.currentPage + 1) % this.sliderItems.length;
     } else {
       targetIndex =
-        (this.currentPage - 1 + this.sliderItemsToShow.length) %
-        this.sliderItemsToShow.length;
+        (this.currentPage - 1 + this.sliderItems.length) %
+        this.sliderItems.length;
     }
     console.log("this.targetIndex=====>", targetIndex);
 
@@ -440,39 +440,6 @@ class CarouselComponent extends HTMLElement {
     if (targetItem) {
       this.setSlidePosition(targetItem.offsetLeft);
     }
-    return;
-
-    const currentScrollLeft = this.sliderWrapper.scrollLeft;
-    const step = event.currentTarget.dataset.step || 1;
-
-    //- 找到当前最接近的真实项目
-    let currentIndex = 0;
-    let minDistance = Infinity;
-
-    for (let i = 0; i < this.sliderItemsToShow.length; i++) {
-      const item = this.sliderItemsToShow[i];
-      const distance = Math.abs(item.offsetLeft - currentScrollLeft);
-      if (distance < minDistance) {
-        minDistance = distance;
-        currentIndex = i;
-      }
-    }
-
-    //- 计算下一个目标索引
-    // let targetIndex;
-    if (isNext) {
-      targetIndex = (currentIndex + step) % this.sliderItemsToShow.length;
-    } else {
-      targetIndex =
-        (currentIndex - step + this.sliderItemsToShow.length) %
-        this.sliderItemsToShow.length;
-    }
-
-    //- 滚动到目标项目
-    // const targetItem = this.sliderItemsToShow[targetIndex];
-    // if (targetItem) {
-    //   this.setSlidePosition(targetItem.offsetLeft);
-    // }
   }
 
   //- 设置轮播图位置
