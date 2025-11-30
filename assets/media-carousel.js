@@ -351,7 +351,7 @@ class CarouselComponent extends HTMLElement {
     const lastCloneRight = lastCloneLeft + this.lastClone.offsetWidth;
 
     //- 如果滚动到了最后一个克隆节点（末尾），跳转到第一个真实项目
-    if (this.currentPage === this.totalPages) {
+    if (this.currentPage === this.sliderItems.length) {
       this.isJumping = true;
       requestAnimationFrame(() => {
         this.sliderWrapper.scrollTo({ left: firstRealLeft, behavior: "auto" });
@@ -361,7 +361,7 @@ class CarouselComponent extends HTMLElement {
       });
     }
     //- 如果滚动到了第一个克隆节点（开头），跳转到最后一个真实项目
-    else if (this.currentPage === 1) {
+    else if (this.currentPage === 0) {
       this.isJumping = true;
       requestAnimationFrame(() => {
         this.sliderWrapper.scrollTo({ left: lastRealLeft, behavior: "auto" });
