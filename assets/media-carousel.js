@@ -203,33 +203,25 @@ class CarouselComponent extends HTMLElement {
     const firstItem = this.sliderItemsToShow[0];
     const secondItem = this.sliderItemsToShow[1] || firstItem;
     
-    //- 重置 transform 以获取准确的位置
-    const savedTransform = this.sliderWrapper.style.transform;
-    this.sliderWrapper.style.transform = 'translateX(0)';
-    
-    requestAnimationFrame(() => {
-      const firstItemRect = firstItem.getBoundingClientRect();
-      const secondItemRect = secondItem.getBoundingClientRect();
-      const wrapperRect = this.sliderWrapper.getBoundingClientRect();
-      
-      //- 计算项目之间的偏移量
-      this.sliderItemOffset = secondItemRect.left - firstItemRect.left || firstItem.offsetWidth;
-      if (this.sliderItemOffset <= 0) {
-        this.sliderItemOffset = firstItem.offsetWidth || firstItemRect.width;
-      }
-      
-      //- 恢复 transform
-      this.sliderWrapper.style.transform = savedTransform || 'translateX(0)';
-    });
+    //- 使用 offsetLeft 计算项目之间的偏移量（不受 transform 影响）
+    this.sliderItemOffset = secondItem.offsetLeft - firstItem.offsetLeft || firstItem.offsetWidth;
+    if (this.sliderItemOffset <= 0) {
+      this.sliderItemOffset = firstItem.offsetWidth;
+    }
 
-    //- 如果启用循环，初始化时移动到第一个真实项目
+    //- 初始化时移动到第一个真实项目
     if (this.sliderItemsToShow.length > 1 && this.firstRealItem) {
       requestAnimationFrame(() => {
         if (this.firstRealItem) {
           const firstRealLeft = this.getItemPosition(this.firstRealItem);
-          this.setTranslateX(-firstRealLeft, false);
+          this.currentTranslateX = -firstRealLeft;
+          this.sliderWrapper.style.transform = `translateX(${this.currentTranslateX}px)`;
         }
       });
+    } else {
+      //- 如果没有项目或只有一个项目，重置位置
+      this.currentTranslateX = 0;
+      this.sliderWrapper.style.transform = 'translateX(0)';
     }
 
     //- 更新按钮状态
@@ -239,17 +231,9 @@ class CarouselComponent extends HTMLElement {
   //- 获取项目相对于容器的位置（不考虑当前 transform）
   getItemPosition(item) {
     if (!item) return 0;
-    //- 获取项目在 DOM 中的原始位置（相对于 sliderWrapper）
-    //- 需要临时移除 transform 来获取准确位置
-    const savedTransform = this.sliderWrapper.style.transform;
-    this.sliderWrapper.style.transform = 'translateX(0)';
-    
-    const position = item.offsetLeft;
-    
-    //- 恢复 transform
-    this.sliderWrapper.style.transform = savedTransform;
-    
-    return position;
+    //- 使用 offsetLeft 获取项目相对于 sliderWrapper 的位置
+    //- offsetLeft 不受 transform 影响，返回的是元素在文档流中的位置
+    return item.offsetLeft;
   }
 
   //- 克隆首尾项目
@@ -301,8 +285,10 @@ class CarouselComponent extends HTMLElement {
     //- 获取当前可见的真实项目
     let currentElement = null;
     if (this.sliderItems && this.sliderItems.length > 0) {
-      const currentTranslateX = -this.currentTranslateX; // 转换为正值
+      //- currentTranslateX 是负值（向左移动），需要转换为正值来计算位置
+      const visibleLeft = -this.currentTranslateX;
       const viewportCenter = this.sliderWrapper.clientWidth / 2;
+      const viewportCenterAbsolute = visibleLeft + viewportCenter;
       let minDistance = Infinity;
       let closestIndex = 0;
 
@@ -311,9 +297,7 @@ class CarouselComponent extends HTMLElement {
         const item = this.sliderItems[i];
         const itemLeft = this.getItemPosition(item);
         const itemCenter = itemLeft + item.offsetWidth / 2;
-        const distance = Math.abs(
-          currentTranslateX + viewportCenter - itemCenter
-        );
+        const distance = Math.abs(viewportCenterAbsolute - itemCenter);
 
         if (distance < minDistance) {
           minDistance = distance;
