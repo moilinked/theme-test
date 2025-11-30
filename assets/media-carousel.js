@@ -285,7 +285,7 @@ class CarouselComponent extends HTMLElement {
     // }
 
     this.currentPage = Math.max(
-      1,
+      0,
       Math.round(scrollLeft / this.sliderItemOffset) + 1
     );
 
