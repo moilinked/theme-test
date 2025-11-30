@@ -108,6 +108,7 @@ class CarouselComponent extends HTMLElement {
     this.sliderWrapper = this.querySelector('[id^="Carousel-"]') //- wrapper
     this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]') //- items
     this.enableSliderLooping = true
+    this.buttons = this.querySelectorAll('[id^="Carousel-Button-"]')
     this.prevButton = this.querySelector('button[name="previous"]')
     this.nextButton = this.querySelector('button[name="next"]')
 
@@ -115,20 +116,16 @@ class CarouselComponent extends HTMLElement {
 
     this.initPages()
     
-    //- 监听容器大小变化
     const resizeObserver = new ResizeObserver(() => {
-      //- 使用 requestAnimationFrame 确保在布局更新后重新计算
       requestAnimationFrame(() => this.initPages())
     })
     resizeObserver.observe(this.sliderWrapper)
     
-    //- 监听窗口大小变化（处理方向改变等情况）
     this.handleResize = debounce(() => {
       requestAnimationFrame(() => this.initPages())
     }, 250)
     window.addEventListener('resize', this.handleResize)
 
-    //- 绑定事件处理函数，保存引用以便后续清理
     this.boundUpdate = this.update.bind(this)
     this.boundOnButtonClick = this.onButtonClick.bind(this)
     
@@ -157,9 +154,8 @@ class CarouselComponent extends HTMLElement {
   initPages() {
     this.removeClones()
     
-    //- 重新获取所有项目，确保获取最新的DOM状态
     this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]')
-    //- 过滤掉克隆节点，只保留真实项目
+    //- 过滤掉克隆节点
     this.sliderItemsToShow = Array.from(this.sliderItems).filter(element => 
       element.clientWidth > 0 && !element.hasAttribute('data-clone')
     )
