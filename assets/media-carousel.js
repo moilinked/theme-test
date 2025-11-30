@@ -127,13 +127,17 @@ class MediaCarousel extends HTMLElement {
 class CarouselComponent extends HTMLElement {
   constructor() {
     super();
-    this.sliderWrapper = this.querySelector('[id^="Carousel-"]'); //- wrapper
+    this.sliderWrapper = this.querySelector('[id^="Carousel-"]'); //- wrapper (用于 transform 的容器)
     this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]'); //- 所有轮播卡片
     this.buttons = this.querySelectorAll('[id^="Carousel-Button-"]'); //- 切换按钮
     this.prevButton = this.querySelector('button[name="previous"]');
     this.nextButton = this.querySelector('button[name="next"]');
 
     if (!this.sliderWrapper || !this.buttons) return;
+
+    //- 初始化 translateX 位置
+    this.currentTranslateX = 0;
+    this.isTransitioning = false;
 
     this.initPages();
 
@@ -150,7 +154,8 @@ class CarouselComponent extends HTMLElement {
     this.boundUpdate = this.update.bind(this);
     this.boundOnButtonClick = this.onButtonClick.bind(this);
 
-    this.sliderWrapper.addEventListener("scroll", this.boundUpdate);
+    //- 使用 transitionend 事件替代 scroll 事件
+    this.sliderWrapper.addEventListener("transitionend", this.boundUpdate);
     this.prevButton.addEventListener("click", this.boundOnButtonClick);
     this.nextButton.addEventListener("click", this.boundOnButtonClick);
   }
@@ -161,7 +166,7 @@ class CarouselComponent extends HTMLElement {
       window.removeEventListener("resize", this.handleResize);
     }
     if (this.sliderWrapper && this.boundUpdate) {
-      this.sliderWrapper.removeEventListener("scroll", this.boundUpdate);
+      this.sliderWrapper.removeEventListener("transitionend", this.boundUpdate);
     }
     if (this.prevButton && this.boundOnButtonClick) {
       this.prevButton.removeEventListener("click", this.boundOnButtonClick);
@@ -206,20 +211,27 @@ class CarouselComponent extends HTMLElement {
       this.sliderItemOffset = firstItem.offsetWidth || firstItemRect.width;
     }
 
-    //- 如果启用循环，初始化时滚动到第一个真实项目
-    if (this.currentPage === 1 && this.sliderItemsToShow.length > 1 && this.firstRealItem) {
+    //- 如果启用循环，初始化时移动到第一个真实项目
+    if (this.sliderItemsToShow.length > 1 && this.firstRealItem) {
       requestAnimationFrame(() => {
-        if (this.firstRealItem && this.firstRealItem.offsetLeft > 0) {
-          this.sliderWrapper.scrollTo({
-            left: this.firstRealItem.offsetLeft,
-            behavior: "auto",
-          });
+        if (this.firstRealItem) {
+          const firstRealLeft = this.getItemPosition(this.firstRealItem);
+          this.setTranslateX(-firstRealLeft, false);
         }
       });
     }
 
     //- 更新按钮状态
     this.update();
+  }
+
+  //- 获取项目相对于容器的位置（考虑 transform）
+  getItemPosition(item) {
+    if (!item) return 0;
+    //- 获取项目相对于 sliderWrapper 的位置
+    const wrapperRect = this.sliderWrapper.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    return itemRect.left - wrapperRect.left + this.currentTranslateX;
   }
 
   //- 克隆首尾项目
