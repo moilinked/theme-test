@@ -123,16 +123,17 @@ class MediaCarousel extends HTMLElement {
   }
 }
 
+//* 产品媒体文件无限循环轮播组件
 class CarouselComponent extends HTMLElement {
   constructor() {
     super();
     this.sliderWrapper = this.querySelector('[id^="Carousel-"]'); //- wrapper
-    this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]'); //- items
-    this.buttons = this.querySelectorAll('[id^="Carousel-Button-"]');
+    this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]'); //- 所有轮播卡片
+    this.buttons = this.querySelectorAll('[id^="Carousel-Button-"]'); //- 切换按钮
     this.prevButton = this.querySelector('button[name="previous"]');
     this.nextButton = this.querySelector('button[name="next"]');
 
-    if (!this.sliderWrapper || !this.nextButton) return;
+    if (!this.sliderWrapper || !this.buttons) return;
 
     this.initPages();
 
