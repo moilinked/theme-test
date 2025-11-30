@@ -154,6 +154,15 @@ class CarouselComponent extends HTMLElement {
       requestAnimationFrame(() => this.updateWidth());
     }, 250);
     window.addEventListener("resize", this.handleResize);
+
+    this.dispatchEvent(
+      new CustomEvent("carouselSlideChanged", {
+        detail: {
+          currentPage: this.currentIndex,
+          currentElement,
+        },
+      })
+    );
   }
 
   //- 重置内容
