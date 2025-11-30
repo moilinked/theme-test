@@ -239,11 +239,16 @@ class CarouselComponent extends HTMLElement {
     };
 
     this.animationId = requestAnimationFrame(animate);
+
+    let currentPage = i;
+    if (i === 0) currentPage = total;
+    if (i === total + 1) currentPage = 1;
+
     this.dispatchEvent(
       new CustomEvent("carouselSlideChanged", {
         detail: {
-          currentPage: i,
-          currentElement: this.sliderItems[this.currentIndex],
+          currentPage,
+          currentElement: this.sliderItems[this.currentPage],
         },
       })
     );
