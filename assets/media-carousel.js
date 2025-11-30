@@ -167,9 +167,17 @@ class CarouselComponent extends HTMLElement {
       return
     }
 
+    //- 如果启用循环且项目数量大于1，设置无限循环
+    if (this.enableSliderLooping && this.sliderItemsToShow.length > 1) {
+      this.setupInfiniteLoop()
+    } else {
+      //- 移除已存在的克隆节点
+      this.removeClones()
+    }
+
     //- 计算每个项目的实际宽度（包括margin等）
     const firstItem = this.sliderItemsToShow[0]
-    const secondItem = this.sliderItemsToShow[1]
+    const secondItem = this.sliderItemsToShow[1] || firstItem
     
     //- 获取第一个项目的实际宽度（包括margin）
     const firstItemRect = firstItem.getBoundingClientRect()
@@ -195,8 +203,51 @@ class CarouselComponent extends HTMLElement {
     //- 计算总页数
     this.totalPages = Math.max(1, this.sliderItemsToShow.length - this.slidesPerPage + 1)
     
+    //- 如果启用循环，初始化时滚动到第一个真实项目
+    if (this.enableSliderLooping && this.sliderItemsToShow.length > 1) {
+      // 等待DOM更新后滚动到第一个真实项目
+      requestAnimationFrame(() => {
+        if (this.firstRealItem) {
+          this.sliderWrapper.scrollTo({ left: this.firstRealItem.offsetLeft, behavior: 'auto' })
+        }
+      })
+    }
+    
     //- 更新按钮状态
     this.update()
+  }
+
+  //- 设置无限循环：克隆首尾项目
+  setupInfiniteLoop() {
+    //- 移除已存在的克隆节点
+    this.removeClones()
+    
+    if (this.sliderItemsToShow.length < 2) return
+    
+    const firstItem = this.sliderItemsToShow[0]
+    const lastItem = this.sliderItemsToShow[this.sliderItemsToShow.length - 1]
+    
+    //- 克隆最后一个项目并插入到开头
+    this.lastClone = lastItem.cloneNode(true)
+    this.lastClone.setAttribute('data-clone', 'last')
+    this.sliderWrapper.insertBefore(this.lastClone, firstItem)
+    
+    //- 克隆第一个项目并追加到末尾
+    this.firstClone = firstItem.cloneNode(true)
+    this.firstClone.setAttribute('data-clone', 'first')
+    this.sliderWrapper.appendChild(this.firstClone)
+    
+    //- 保存第一个真实项目的引用
+    this.firstRealItem = firstItem
+    this.lastRealItem = lastItem
+  }
+
+  //- 移除克隆节点
+  removeClones() {
+    const clones = this.sliderWrapper.querySelectorAll('[data-clone]')
+    clones.forEach(clone => clone.remove())
+    this.lastClone = null
+    this.firstClone = null
   }
 
   resetPages() {
