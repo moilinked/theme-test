@@ -200,14 +200,10 @@ class CarouselComponent extends HTMLElement {
     this.jumpToIndex(this.currentIndex);
 
     if (this.prevButton) {
-      this.prevButton.addEventListener("click", () =>
-        this.animateToIndex(--this.currentIndex)
-      );
+      this.prevButton.addEventListener("click", () => this.prev());
     }
     if (this.nextButton) {
-      this.nextButton.addEventListener("click", () =>
-        this.animateToIndex(++this.currentIndex)
-      );
+      this.nextButton.addEventListener("click", () => this.next());
     }
   }
 
@@ -263,7 +259,14 @@ class CarouselComponent extends HTMLElement {
     return i;
   }
 
-  //- 允许拖拽
+  next() {
+    this.animateToIndex(++this.currentIndex);
+  }
+
+  prev() {
+    this.animateToIndex(--this.currentIndex);
+  }
+
   setupDrag() {
     const el = this.sliderWrapper;
 
