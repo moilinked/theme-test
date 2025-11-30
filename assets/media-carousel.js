@@ -137,10 +137,10 @@ class CarouselComponent extends HTMLElement {
 
     this.initPages();
 
-    const resizeObserver = new ResizeObserver(() => {
-      requestAnimationFrame(() => this.initPages());
-    });
-    resizeObserver.observe(this.sliderWrapper);
+    // const resizeObserver = new ResizeObserver(() => {
+    //   requestAnimationFrame(() => this.initPages());
+    // });
+    // resizeObserver.observe(this.sliderWrapper);
 
     this.handleResize = debounce(() => {
       requestAnimationFrame(() => this.initPages());
@@ -182,20 +182,20 @@ class CarouselComponent extends HTMLElement {
         element.clientWidth > 0 && !element.hasAttribute("data-clone")
     );
 
-    //- 如果列表长度小于 1，则不进行初始化
-    if (this.sliderItemsToShow.length < 1) {
+    //- 如果列表长度小于 1，不需要轮播
+    if (this.sliderItemsToShow.length <= 1) {
       this.buttons && this.buttons.classList.add("hidden");
       if (this.prevButton) this.prevButton.setAttribute("disabled", "disabled");
       if (this.nextButton) this.nextButton.setAttribute("disabled", "disabled");
       return;
     }
 
-    //- 无限循环
+    //- 启用无限循环
     this.setupInfiniteLoop();
     this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]');
 
     const firstItem = this.sliderItemsToShow[0];
-    const secondItem = this.sliderItemsToShow[1] || firstItem;
+    const secondItem = this.sliderItemsToShow[1];
     const firstItemRect = firstItem.getBoundingClientRect();
     const secondItemRect = secondItem.getBoundingClientRect();
 
@@ -209,10 +209,7 @@ class CarouselComponent extends HTMLElement {
     this.slidesPerPage = 1;
 
     //- 计算总页数
-    this.totalPages = Math.max(
-      1,
-      this.sliderItemsToShow.length - this.slidesPerPage + 1
-    );
+    this.totalPages = this.sliderItemsToShow.length;
     console.log("this.totalPages=====>", this.totalPages);
 
     //- 如果启用循环，初始化时滚动到第一个真实项目
@@ -221,7 +218,7 @@ class CarouselComponent extends HTMLElement {
         if (this.firstRealItem && this.firstRealItem.offsetLeft > 0) {
           this.sliderWrapper.scrollTo({
             left: this.firstRealItem.offsetLeft,
-            behavior: "instant",
+            behavior: "auto",
           });
         }
       });
