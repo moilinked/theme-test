@@ -276,7 +276,6 @@ class CarouselComponent extends HTMLElement {
     if (!this.sliderWrapper || !this.buttons || !this.sliderItemOffset) return;
 
     const previousPage = this.currentPage;
-    console.log("this.currentPage=====>", this.currentPage);
     const scrollLeft = this.sliderWrapper.scrollLeft;
 
     //- 如果启用循环，检查是否需要跳转到真实节点
@@ -392,6 +391,7 @@ class CarouselComponent extends HTMLElement {
     } else {
       targetIndex = Math.max(0, this.currentPage - 1);
     }
+    console.log("this.currentPage=====>", this.currentPage);
     console.log("this.targetIndex=====>", targetIndex);
 
     //- 滚动到目标项目
