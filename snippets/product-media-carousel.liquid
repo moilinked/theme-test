@@ -80,7 +80,6 @@
           %}
         </div>
       {%- endif -%}
-      {% comment %}- 最大 9 图 -{% endcomment %}
       {%- for media in product.media -%}
         {% comment %}- 非图片类型不展示 -{% endcomment %}
         {% if media.media_type != 'image' %}
