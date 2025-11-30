@@ -29,6 +29,7 @@ class MediaCarousel extends HTMLElement {
 
   //- 轮播图切换时，设置当前激活的图片
   onSlideChanged(event) {
+    console.log("onSlideChanged=====>", event);
     const thumbnail = this.elements.thumbnails.querySelector(
       `[data-target="${event.detail.currentElement.dataset.mediaId}"]`
     );
@@ -123,15 +124,17 @@ class MediaCarousel extends HTMLElement {
   }
 }
 
-
 class CarouselComponent extends HTMLElement {
   constructor() {
     super();
+    //- elements
     this.sliderWrapper = this.querySelector('[id^="Carousel-"]');
     this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]');
-    this.buttons = this.querySelectorAll('[id^="Carousel-Button-"]'); //- 切换按钮
+    this.buttons = this.querySelectorAll('[id^="Carousel-Button-"]');
     this.prevButton = this.querySelector('button[name="previous"]');
     this.nextButton = this.querySelector('button[name="next"]');
+
+    //- state
     this.currentIndex = 1;
     this.slideWidth = 0;
     this.isDragging = false;
@@ -141,10 +144,35 @@ class CarouselComponent extends HTMLElement {
   }
 
   connectedCallback() {
+    this.initPages();
+  }
+
+  initPages() {
     this.setup();
-    this.setupArrows();
     this.setupDrag();
-    window.addEventListener("resize", () => this.updateWidth());
+    this.handleResize = debounce(() => {
+      requestAnimationFrame(() => this.updateWidth());
+    }, 250);
+    window.addEventListener("resize", this.handleResize);
+  }
+
+  //- 重置内容
+  resetPages() {
+    this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]');
+    this.initPages();
+  }
+
+  //- 清理函数
+  disconnectedCallback() {
+    if (this.handleResize) {
+      window.removeEventListener("resize", this.handleResize);
+    }
+    if (this.prevButton && this.prev) {
+      this.prevButton.removeEventListener("click", this.prev);
+    }
+    if (this.nextButton && this.next) {
+      this.nextButton.removeEventListener("click", this.next);
+    }
   }
 
   setup() {
@@ -162,6 +190,13 @@ class CarouselComponent extends HTMLElement {
 
     this.updateWidth();
     this.jumpToIndex(this.currentIndex);
+
+    if (this.prevButton) {
+      this.prevButton.addEventListener("click", () => this.prev());
+    }
+    if (this.nextButton) {
+      this.nextButton.addEventListener("click", () => this.next());
+    }
   }
 
   updateWidth() {
@@ -213,11 +248,6 @@ class CarouselComponent extends HTMLElement {
     this.animateToIndex(--this.currentIndex);
   }
 
-  setupArrows() {
-    this.prevButton.addEventListener("click", () => this.prev());
-    this.nextButton.addEventListener("click", () => this.next());
-  }
-
   setupDrag() {
     const el = this.sliderWrapper;
 
@@ -246,6 +276,16 @@ class CarouselComponent extends HTMLElement {
         this.animateToIndex(this.currentIndex); // 回弹
       }
     });
+  }
+
+  //- 判断元素是否在视口内
+  isSlideVisible(element, offset = 0) {
+    const lastVisibleSlide =
+      this.sliderWrapper.clientWidth + this.sliderWrapper.scrollLeft - offset;
+    return (
+      element.offsetLeft + element.clientWidth <= lastVisibleSlide &&
+      element.offsetLeft >= this.sliderWrapper.scrollLeft
+    );
   }
 }
 
@@ -333,7 +373,11 @@ class CarouselComponent2 extends HTMLElement {
     }
 
     //- 如果启用循环，初始化时滚动到第一个真实项目
-    if (this.currentPage === 1 && this.sliderItemsToShow.length > 1 && this.firstRealItem) {
+    if (
+      this.currentPage === 1 &&
+      this.sliderItemsToShow.length > 1 &&
+      this.firstRealItem
+    ) {
       requestAnimationFrame(() => {
         if (this.firstRealItem && this.firstRealItem.offsetLeft > 0) {
           this.sliderWrapper.scrollTo({
@@ -395,7 +439,6 @@ class CarouselComponent2 extends HTMLElement {
     const previousPage = this.currentPage;
     const scrollLeft = this.sliderWrapper.scrollLeft;
 
-
     this.currentPage = Math.max(
       0,
       Math.round(scrollLeft / this.sliderItemOffset) + 1
@@ -428,7 +471,7 @@ class CarouselComponent2 extends HTMLElement {
     }
 
     // setTimeout(() => {
-      this.handleInfiniteLoop();
+    this.handleInfiniteLoop();
     // }, 1000);
 
     //- 触发轮播图切换事件
@@ -464,7 +507,10 @@ class CarouselComponent2 extends HTMLElement {
     if (this.currentPage === this.sliderItems.length - 1) {
       this.isJumping = true;
       requestAnimationFrame(() => {
-        this.sliderWrapper.scrollTo({ left: firstRealLeft, behavior: "instant" });
+        this.sliderWrapper.scrollTo({
+          left: firstRealLeft,
+          behavior: "instant",
+        });
         setTimeout(() => {
           this.isJumping = false;
         }, 50);
@@ -474,7 +520,10 @@ class CarouselComponent2 extends HTMLElement {
     else if (this.currentPage === 0) {
       this.isJumping = true;
       requestAnimationFrame(() => {
-        this.sliderWrapper.scrollTo({ left: lastRealLeft, behavior: "instant" });
+        this.sliderWrapper.scrollTo({
+          left: lastRealLeft,
+          behavior: "instant",
+        });
         setTimeout(() => {
           this.isJumping = false;
         }, 50);
