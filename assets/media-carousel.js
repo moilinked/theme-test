@@ -155,7 +155,6 @@ class CarouselComponent extends HTMLElement {
 
   //- 初始化轮播列表
   initPages() {
-    //- 先移除已存在的克隆节点（如果存在）
     this.removeClones()
     
     //- 重新获取所有项目，确保获取最新的DOM状态
@@ -180,9 +179,11 @@ class CarouselComponent extends HTMLElement {
       this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]')
     }
 
+    //- 计算每个项目的实际宽度（包括margin等）
     const firstItem = this.sliderItemsToShow[0]
     const secondItem = this.sliderItemsToShow[1] || firstItem
     
+    //- 获取第一个项目的实际宽度（包括margin）
     const firstItemRect = firstItem.getBoundingClientRect()
     const secondItemRect = secondItem.getBoundingClientRect()
     
