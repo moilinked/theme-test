@@ -313,7 +313,7 @@ class CarouselComponent extends HTMLElement {
       }
 
       //- 如果启用循环，还需要检查克隆节点
-      if (this.enableSliderLooping && this.firstClone && this.lastClone) {
+      if (this.firstClone && this.lastClone) {
         //- 检查是否更接近第一个克隆节点（对应最后一个真实项目）
         const firstCloneCenter =
           this.firstClone.offsetLeft + this.firstClone.offsetWidth / 2;
