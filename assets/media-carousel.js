@@ -400,7 +400,8 @@ class CarouselComponent extends HTMLElement {
 
   //- 设置轮播图位置
   setSlidePosition(left) {
-    this.sliderWrapper.scrollTo({ left, behavior: "smooth" });
+    this.sliderWrapper.style.transform = `translateX(${left}px)`;
+    // this.sliderWrapper.scrollTo({ left, behavior: "smooth" });
   }
 }
 
