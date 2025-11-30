@@ -433,21 +433,6 @@ class CarouselComponent extends HTMLElement {
   onButtonClick(event) {
     event.preventDefault();
 
-    if (this.sliderItemsToShow && this.sliderItemsToShow.length > 1) {
-      this.handleLoopButtonClick(event);
-      return;
-    }
-
-    const step = event.currentTarget.dataset.step || 1;
-    this.slideScrollPosition =
-      event.currentTarget.name === "next"
-        ? this.sliderWrapper.scrollLeft + step * this.sliderItemOffset
-        : this.sliderWrapper.scrollLeft - step * this.sliderItemOffset;
-    this.setSlidePosition(this.slideScrollPosition);
-  }
-
-  //- 处理循环模式下的按钮点击
-  handleLoopButtonClick(event) {
     if (!this.firstRealItem || !this.lastRealItem) return;
 
     const currentScrollLeft = this.sliderWrapper.scrollLeft;
