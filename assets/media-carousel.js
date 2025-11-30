@@ -230,10 +230,9 @@ class CarouselComponent extends HTMLElement {
 
   //- 克隆首尾项目
   setupInfiniteLoop() {
-    //- 移除已存在的克隆节点
     this.removeClones();
 
-    if (this.sliderItemsToShow.length < 2) return;
+    if (this.sliderItemsToShow.length <= 1) return;
 
     const firstItem = this.sliderItemsToShow[0];
     const lastItem = this.sliderItemsToShow[this.sliderItemsToShow.length - 1];
@@ -266,16 +265,18 @@ class CarouselComponent extends HTMLElement {
     this.firstClone = null;
   }
 
+  //- 重置内容
   resetPages() {
-    this.sliderItems = this.querySelectorAll('[id^="Slide-"]');
+    this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]');
     this.initPages();
   }
 
   update() {
-    if (!this.sliderWrapper || !this.nextButton || !this.sliderItemOffset)
+    if (!this.sliderWrapper || !this.buttons || !this.sliderItemOffset)
       return;
 
     const previousPage = this.currentPage;
+    console.log("this.currentPage=====>", this.currentPage);
     const scrollLeft = this.sliderWrapper.scrollLeft;
 
     //- 如果启用循环，检查是否需要跳转到真实节点
