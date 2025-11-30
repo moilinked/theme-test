@@ -341,6 +341,9 @@ class CarouselComponent extends HTMLElement {
     //- 防止重复跳转
     if (this.isJumping) return;
 
+    console.log("this.currentPage=====>", this.currentPage);
+    return;
+
     const firstRealLeft = this.firstRealItem.offsetLeft;
     const lastRealLeft = this.lastRealItem.offsetLeft;
     const firstCloneLeft = this.firstClone.offsetLeft;
