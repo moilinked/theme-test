@@ -278,10 +278,6 @@ class CarouselComponent extends HTMLElement {
     const previousPage = this.currentPage;
     const scrollLeft = this.sliderWrapper.scrollLeft;
 
-    //- 如果启用循环，检查是否需要跳转到真实节点
-    if (this.sliderItemsToShow.length > 1) {
-      this.handleInfiniteLoop(scrollLeft);
-    }
 
     this.currentPage = Math.max(
       0,
@@ -312,6 +308,11 @@ class CarouselComponent extends HTMLElement {
       }
 
       this.currentPage = closestIndex;
+      
+      //- 如果启用循环，检查是否需要跳转到真实节点
+      if (this.sliderItemsToShow.length > 1) {
+        this.handleInfiniteLoop(scrollLeft);
+      }
     }
 
     //- 触发轮播图切换事件
