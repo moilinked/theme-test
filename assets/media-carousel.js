@@ -202,6 +202,7 @@ class CarouselComponent extends HTMLElement {
     //- 计算偏移量
     this.sliderItemOffset =
       secondItemRect.left - firstItemRect.left || firstItem.offsetWidth;
+    console.log("this.sliderItemOffset=====>", this.sliderItemOffset);
     if (this.sliderItemOffset <= 0) {
       this.sliderItemOffset = firstItem.offsetWidth || firstItemRect.width;
     }
@@ -275,7 +276,6 @@ class CarouselComponent extends HTMLElement {
     if (!this.sliderWrapper || !this.buttons || !this.sliderItemOffset) return;
 
     const previousPage = this.currentPage;
-    console.log("this.sliderItems=====>", this.sliderItems);
     console.log("this.currentPage=====>", this.currentPage);
     const scrollLeft = this.sliderWrapper.scrollLeft;
 
