@@ -351,7 +351,7 @@ class CarouselComponent extends HTMLElement {
     const lastCloneRight = lastCloneLeft + this.lastClone.offsetWidth;
 
     //- 如果滚动到了最后一个克隆节点（末尾），跳转到第一个真实项目
-    if (this.currentPage === this.sliderItems.length) {
+    if (this.currentPage === this.sliderItems.length - 1) {
       this.isJumping = true;
       requestAnimationFrame(() => {
         this.sliderWrapper.scrollTo({ left: firstRealLeft, behavior: "auto" });
