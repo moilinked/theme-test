@@ -199,11 +199,15 @@ class CarouselComponent extends HTMLElement {
     this.updateWidth();
     this.jumpToIndex(this.currentIndex);
 
-    if (this.prevButton && this.nextButton) {
-      this.prevButton.addEventListener("click", () => this.prev());
+    if (this.prevButton) {
+      this.prevButton.addEventListener("click", () =>
+        this.animateToIndex(--this.currentIndex)
+      );
     }
     if (this.nextButton) {
-      this.nextButton.addEventListener("click", () => this.next());
+      this.nextButton.addEventListener("click", () =>
+        this.animateToIndex(++this.currentIndex)
+      );
     }
   }
 
@@ -257,14 +261,6 @@ class CarouselComponent extends HTMLElement {
     if (i === 0) i = this.totalPages;
     if (i === this.totalPages + 1) i = 1;
     return i;
-  }
-
-  next() {
-    this.animateToIndex(++this.currentIndex);
-  }
-
-  prev() {
-    this.animateToIndex(--this.currentIndex);
   }
 
   setupDrag() {
