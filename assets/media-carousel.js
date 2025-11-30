@@ -251,6 +251,14 @@ class CarouselComponent extends HTMLElement {
 
   next() {
     this.animateToIndex(++this.currentIndex);
+    this.dispatchEvent(
+      new CustomEvent("carouselSlideChanged", {
+        detail: {
+          currentPage: this.currentIndex,
+          currentElement: this.sliderItems[this.currentIndex],
+        },
+      })
+    );
   }
 
   prev() {
