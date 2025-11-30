@@ -381,21 +381,43 @@ class CarouselComponent extends HTMLElement {
     const isNext = event.currentTarget.name === "next";
     let targetIndex;
     if (isNext) {
-      targetIndex = Math.min(this.sliderItems.length, this.currentPage + 1);
+      targetIndex = Math.min(this.sliderItems.length - 1, this.currentPage + 1);
     } else {
       targetIndex = Math.max(0, this.currentPage - 1);
     }
 
-    //- 滚动到目标项目
+    //- 移动到目标项目
     const targetItem = this.sliderItems[targetIndex];
     if (targetItem) {
-      this.setSlidePosition(targetItem.offsetLeft);
+      const targetLeft = this.getItemPosition(targetItem);
+      this.setSlidePosition(-targetLeft);
     }
   }
 
-  //- 设置轮播图位置
-  setSlidePosition(left) {
-    this.sliderWrapper.scrollTo({ left, behavior: "smooth" });
+  //- 设置轮播图位置（保留当前功能）
+  setSlidePosition(translateX) {
+    this.setTranslateX(translateX, true);
+  }
+
+  //- 设置 translateX 值
+  setTranslateX(translateX, smooth = true) {
+    if (this.isTransitioning && !smooth) {
+      //- 如果是不平滑的跳转，先移除 transition
+      this.sliderWrapper.style.transition = "none";
+      requestAnimationFrame(() => {
+        this.sliderWrapper.style.transform = `translateX(${translateX}px)`;
+        this.currentTranslateX = translateX;
+        //- 恢复 transition
+        this.sliderWrapper.style.transition = "";
+        this.isTransitioning = false;
+      });
+    } else {
+      this.sliderWrapper.style.transform = `translateX(${translateX}px)`;
+      this.currentTranslateX = translateX;
+      if (smooth) {
+        this.isTransitioning = true;
+      }
+    }
   }
 }
 
