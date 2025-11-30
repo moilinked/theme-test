@@ -153,9 +153,10 @@ class CarouselComponent extends HTMLElement {
 
     this.boundUpdate = this.update.bind(this);
     this.boundOnButtonClick = this.onButtonClick.bind(this);
+    this.boundTransitionEnd = this.onTransitionEnd.bind(this);
 
     //- 使用 transitionend 事件替代 scroll 事件
-    this.sliderWrapper.addEventListener("transitionend", this.boundUpdate);
+    this.sliderWrapper.addEventListener("transitionend", this.boundTransitionEnd);
     this.prevButton.addEventListener("click", this.boundOnButtonClick);
     this.nextButton.addEventListener("click", this.boundOnButtonClick);
   }
@@ -165,8 +166,8 @@ class CarouselComponent extends HTMLElement {
     if (this.handleResize) {
       window.removeEventListener("resize", this.handleResize);
     }
-    if (this.sliderWrapper && this.boundUpdate) {
-      this.sliderWrapper.removeEventListener("transitionend", this.boundUpdate);
+    if (this.sliderWrapper && this.boundTransitionEnd) {
+      this.sliderWrapper.removeEventListener("transitionend", this.boundTransitionEnd);
     }
     if (this.prevButton && this.boundOnButtonClick) {
       this.prevButton.removeEventListener("click", this.boundOnButtonClick);
@@ -403,24 +404,33 @@ class CarouselComponent extends HTMLElement {
     this.setTranslateX(translateX, true);
   }
 
+  //- transition 结束事件处理
+  onTransitionEnd(event) {
+    //- 只处理 transform 的 transition
+    if (event.propertyName === "transform") {
+      this.isTransitioning = false;
+      this.update();
+    }
+  }
+
   //- 设置 translateX 值
   setTranslateX(translateX, smooth = true) {
-    if (this.isTransitioning && !smooth) {
+    if (!smooth) {
       //- 如果是不平滑的跳转，先移除 transition
       this.sliderWrapper.style.transition = "none";
+      this.sliderWrapper.style.transform = `translateX(${translateX}px)`;
+      this.currentTranslateX = translateX;
+      //- 使用 requestAnimationFrame 确保样式已应用后再恢复 transition
       requestAnimationFrame(() => {
-        this.sliderWrapper.style.transform = `translateX(${translateX}px)`;
-        this.currentTranslateX = translateX;
-        //- 恢复 transition
         this.sliderWrapper.style.transition = "";
         this.isTransitioning = false;
       });
     } else {
+      //- 平滑过渡
+      this.sliderWrapper.style.transition = "transform 0.3s ease-in-out";
       this.sliderWrapper.style.transform = `translateX(${translateX}px)`;
       this.currentTranslateX = translateX;
-      if (smooth) {
-        this.isTransitioning = true;
-      }
+      this.isTransitioning = true;
     }
   }
 }
