@@ -347,7 +347,7 @@ class CarouselComponent extends HTMLElement {
     if (this.currentPage === this.sliderItems.length - 1) {
       this.isJumping = true;
       requestAnimationFrame(() => {
-        this.sliderWrapper.scrollTo({ left: firstRealLeft, behavior: "auto" });
+        this.sliderWrapper.scrollTo({ left: firstRealLeft, behavior: "instant" });
         setTimeout(() => {
           this.isJumping = false;
         }, 50);
@@ -357,7 +357,7 @@ class CarouselComponent extends HTMLElement {
     else if (this.currentPage === 0) {
       this.isJumping = true;
       requestAnimationFrame(() => {
-        this.sliderWrapper.scrollTo({ left: lastRealLeft, behavior: "auto" });
+        this.sliderWrapper.scrollTo({ left: lastRealLeft, behavior: "instant" });
         setTimeout(() => {
           this.isJumping = false;
         }, 50);
