@@ -425,6 +425,7 @@ class CarouselComponent extends HTMLElement {
     if (!this.firstRealItem || !this.lastRealItem) return;
 
     const isNext = event.currentTarget.name === "next";
+    let targetIndex;
     if (isNext) {
       targetIndex = (this.currentPage + 1) % this.sliderItemsToShow.length;
     } else {
@@ -457,7 +458,7 @@ class CarouselComponent extends HTMLElement {
     }
 
     //- 计算下一个目标索引
-    let targetIndex;
+    // let targetIndex;
     if (isNext) {
       targetIndex = (currentIndex + step) % this.sliderItemsToShow.length;
     } else {
