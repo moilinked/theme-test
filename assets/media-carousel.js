@@ -261,6 +261,11 @@ class CarouselComponent extends HTMLElement {
     const previousPage = this.currentPage
     const scrollLeft = this.sliderWrapper.scrollLeft
     
+    //- 如果启用循环，检查是否需要跳转到真实节点
+    if (this.enableSliderLooping && this.sliderItemsToShow.length > 1) {
+      this.handleInfiniteLoop(scrollLeft)
+    }
+    
     // 计算当前页（基于滚动位置和项目偏移量）
     // 添加一个小偏移量以避免边界问题
     this.currentPage = Math.max(1, Math.round(scrollLeft / this.sliderItemOffset) + 1)
@@ -270,27 +275,52 @@ class CarouselComponent extends HTMLElement {
       this.currentPage = this.totalPages
     }
 
-    //- 触发轮播图切换事件
-    if (this.currentPage !== previousPage && this.sliderItemsToShow && this.sliderItemsToShow.length > 0) {
-      const currentIndex = Math.min(this.currentPage - 1, this.sliderItemsToShow.length - 1)
-      const currentElement = this.sliderItemsToShow[currentIndex]
+    //- 获取当前可见的真实项目
+    let currentElement = null
+    if (this.sliderItemsToShow && this.sliderItemsToShow.length > 0) {
+      //- 找到当前滚动位置对应的真实项目
+      const currentScrollLeft = this.sliderWrapper.scrollLeft
+      for (let i = 0; i < this.sliderItemsToShow.length; i++) {
+        const item = this.sliderItemsToShow[i]
+        const itemLeft = item.offsetLeft
+        const itemRight = itemLeft + item.offsetWidth
+        
+        //- 检查项目是否在视口中心附近
+        if (currentScrollLeft >= itemLeft - this.sliderItemOffset / 2 && 
+            currentScrollLeft < itemRight - this.sliderItemOffset / 2) {
+          currentElement = item
+          this.currentPage = i + 1
+          break
+        }
+      }
       
-      if (currentElement) {
-        this.dispatchEvent(
-          new CustomEvent('carouselSlideChanged', {
-            detail: {
-              currentPage: this.currentPage,
-              currentElement: currentElement
-            }
-          })
-        )
+      //- 如果没找到，使用第一个项目
+      if (!currentElement) {
+        currentElement = this.sliderItemsToShow[0]
+        this.currentPage = 1
       }
     }
 
-    //- 如果启用轮播图循环，则不处理左右切换按钮状态
-    if (this.enableSliderLooping) return
+    //- 触发轮播图切换事件
+    if (this.currentPage !== previousPage && currentElement) {
+      this.dispatchEvent(
+        new CustomEvent('carouselSlideChanged', {
+          detail: {
+            currentPage: this.currentPage,
+            currentElement: currentElement
+          }
+        })
+      )
+    }
 
-    // 更新按钮状态
+    //- 如果启用循环，按钮始终可用
+    if (this.enableSliderLooping && this.sliderItemsToShow.length > 1) {
+      if (this.prevButton) this.prevButton.removeAttribute('disabled')
+      if (this.nextButton) this.nextButton.removeAttribute('disabled')
+      return
+    }
+
+    // 更新按钮状态（非循环模式）
     if (this.sliderItemsToShow && this.sliderItemsToShow.length > 0) {
       const isAtStart = scrollLeft <= 0 || (this.isSlideVisible(this.sliderItemsToShow[0]) && scrollLeft === 0)
       const isAtEnd = this.isSlideVisible(this.sliderItemsToShow[this.sliderItemsToShow.length - 1])
@@ -313,6 +343,37 @@ class CarouselComponent extends HTMLElement {
     }
   }
 
+  //- 处理无限循环：当滚动到克隆节点时，无缝跳转到真实节点
+  handleInfiniteLoop(scrollLeft) {
+    if (!this.firstRealItem || !this.lastRealItem || !this.firstClone || !this.lastClone) return
+    
+    const firstRealLeft = this.firstRealItem.offsetLeft
+    const lastRealLeft = this.lastRealItem.offsetLeft
+    const lastRealRight = lastRealLeft + this.lastRealItem.offsetWidth
+    const firstCloneLeft = this.firstClone.offsetLeft
+    const lastCloneLeft = this.lastClone.offsetLeft
+    
+    //- 如果滚动到了最后一个克隆节点（末尾），跳转到第一个真实项目
+    if (scrollLeft >= firstCloneLeft - 10) {
+      // 使用 requestAnimationFrame 确保在滚动动画完成后跳转
+      requestAnimationFrame(() => {
+        this.sliderWrapper.scrollTo({ 
+          left: firstRealLeft, 
+          behavior: 'auto' // 使用 auto 避免动画，实现无缝跳转
+        })
+      })
+    }
+    //- 如果滚动到了第一个克隆节点（开头），跳转到最后一个真实项目
+    else if (scrollLeft <= lastCloneLeft + 10) {
+      requestAnimationFrame(() => {
+        this.sliderWrapper.scrollTo({ 
+          left: lastRealLeft, 
+          behavior: 'auto' // 使用 auto 避免动画，实现无缝跳转
+        })
+      })
+    }
+  }
+
   //- 判断元素是否在视口内
   isSlideVisible(element, offset = 0) {
     const lastVisibleSlide = this.sliderWrapper.clientWidth + this.sliderWrapper.scrollLeft - offset
@@ -325,6 +386,13 @@ class CarouselComponent extends HTMLElement {
   //- 左右切换按钮点击事件
   onButtonClick(event) {
     event.preventDefault()
+    
+    //- 如果启用循环，使用循环滚动逻辑
+    if (this.enableSliderLooping && this.sliderItemsToShow && this.sliderItemsToShow.length > 1) {
+      this.handleLoopButtonClick(event)
+      return
+    }
+    
     //- 一次切换步长
     const step = event.currentTarget.dataset.step || 1
     this.slideScrollPosition =
@@ -332,6 +400,42 @@ class CarouselComponent extends HTMLElement {
         ? this.sliderWrapper.scrollLeft + step * this.sliderItemOffset
         : this.sliderWrapper.scrollLeft - step * this.sliderItemOffset
     this.setSlidePosition(this.slideScrollPosition)
+  }
+
+  //- 处理循环模式下的按钮点击
+  handleLoopButtonClick(event) {
+    if (!this.firstRealItem || !this.lastRealItem) return
+    
+    const currentScrollLeft = this.sliderWrapper.scrollLeft
+    const step = event.currentTarget.dataset.step || 1
+    const isNext = event.currentTarget.name === 'next'
+    
+    //- 找到当前最接近的真实项目
+    let currentIndex = 0
+    let minDistance = Infinity
+    
+    for (let i = 0; i < this.sliderItemsToShow.length; i++) {
+      const item = this.sliderItemsToShow[i]
+      const distance = Math.abs(item.offsetLeft - currentScrollLeft)
+      if (distance < minDistance) {
+        minDistance = distance
+        currentIndex = i
+      }
+    }
+    
+    //- 计算下一个目标索引
+    let targetIndex
+    if (isNext) {
+      targetIndex = (currentIndex + step) % this.sliderItemsToShow.length
+    } else {
+      targetIndex = (currentIndex - step + this.sliderItemsToShow.length) % this.sliderItemsToShow.length
+    }
+    
+    //- 滚动到目标项目
+    const targetItem = this.sliderItemsToShow[targetIndex]
+    if (targetItem) {
+      this.setSlidePosition(targetItem.offsetLeft)
+    }
   }
 
   //- 设置轮播图位置
