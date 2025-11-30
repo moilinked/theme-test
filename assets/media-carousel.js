@@ -272,17 +272,16 @@ class CarouselComponent extends HTMLElement {
   }
 
   update() {
-    if (!this.sliderWrapper || !this.buttons || !this.sliderItemOffset)
-      return;
+    if (!this.sliderWrapper || !this.buttons || !this.sliderItemOffset) return;
 
     const previousPage = this.currentPage;
     console.log("this.currentPage=====>", this.currentPage);
     const scrollLeft = this.sliderWrapper.scrollLeft;
 
     //- 如果启用循环，检查是否需要跳转到真实节点
-    if (this.sliderItemsToShow.length > 1) {
-      this.handleInfiniteLoop(scrollLeft);
-    }
+    // if (this.sliderItemsToShow.length > 1) {
+    //   this.handleInfiniteLoop(scrollLeft);
+    // }
 
     this.currentPage = Math.max(
       1,
@@ -388,29 +387,20 @@ class CarouselComponent extends HTMLElement {
     const lastCloneRight = lastCloneLeft + this.lastClone.offsetWidth;
 
     //- 如果滚动到了最后一个克隆节点（末尾），跳转到第一个真实项目
-    if (scrollLeft >= firstCloneLeft - this.sliderItemOffset / 2) {
+    if (this.currentPage === this.totalPages) {
       this.isJumping = true;
-      // 使用 requestAnimationFrame 确保在滚动动画完成后跳转
       requestAnimationFrame(() => {
-        this.sliderWrapper.scrollTo({
-          left: firstRealLeft,
-          behavior: "auto", // 使用 auto 避免动画，实现无缝跳转
-        });
-        // 短暂延迟后重置标志，避免重复触发
+        this.sliderWrapper.scrollTo({ left: firstRealLeft, behavior: "auto" });
         setTimeout(() => {
           this.isJumping = false;
         }, 50);
       });
     }
     //- 如果滚动到了第一个克隆节点（开头），跳转到最后一个真实项目
-    else if (scrollLeft <= lastCloneRight + this.sliderItemOffset / 2) {
+    else if (this.currentPage === 1) {
       this.isJumping = true;
       requestAnimationFrame(() => {
-        this.sliderWrapper.scrollTo({
-          left: lastRealLeft,
-          behavior: "auto", // 使用 auto 避免动画，实现无缝跳转
-        });
-        // 短暂延迟后重置标志，避免重复触发
+        this.sliderWrapper.scrollTo({ left: lastRealLeft, behavior: "auto" });
         setTimeout(() => {
           this.isJumping = false;
         }, 50);
