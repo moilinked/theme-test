@@ -427,11 +427,9 @@ class CarouselComponent extends HTMLElement {
     const isNext = event.currentTarget.name === "next";
     let targetIndex;
     if (isNext) {
-      targetIndex = (this.currentPage + 1) % this.sliderItems.length;
+      targetIndex = Math.min(this.sliderItems.length, this.currentPage + 1);
     } else {
-      targetIndex =
-        (this.currentPage - 1 + this.sliderItems.length) %
-        this.sliderItems.length;
+      targetIndex = Math.max(0, this.currentPage - 1);
     }
     console.log("this.targetIndex=====>", targetIndex);
 
