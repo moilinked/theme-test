@@ -236,32 +236,30 @@ class CarouselComponent extends HTMLElement {
       if (progress < 1) {
         this.animationId = requestAnimationFrame(animate);
       } else {
-        this.onScrollEnd(i);
+        const currentPage = this.getCurrentShownIndex(i);
+        this.currentIndex = currentPage;
+        this.jumpToIndex(currentPage);
       }
     };
 
     this.animationId = requestAnimationFrame(animate);
 
-    let currentPage = i;
-    if (i === 0) currentPage = this.totalPages;
-    if (i === this.totalPages + 1) currentPage = 1;
+    const currentPage = this.getCurrentShownIndex(i);
 
     this.dispatchEvent(
       new CustomEvent("carouselSlideChanged", {
         detail: {
           currentPage,
-          currentElement: this.sliderItems[this.currentPage],
+          currentElement: this.sliderItems[currentPage],
         },
       })
     );
   }
 
-  onScrollEnd(i) {
-    const total = this.sliderItems.length - 2;
-    if (i === 0) i = total;
-    if (i === total + 1) i = 1;
-    this.currentIndex = i;
-    this.jumpToIndex(i);
+  getCurrentShownIndex(i) {
+    if (i === 0) i = this.totalPages;
+    if (i === this.totalPages + 1) i = 1;
+    return i;
   }
 
   
