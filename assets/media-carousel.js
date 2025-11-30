@@ -350,7 +350,7 @@ class CarouselComponent extends HTMLElement {
         new CustomEvent("carouselSlideChanged", {
           detail: {
             currentPage: this.currentPage,
-            currentElement: currentElement,
+            currentElement,
           },
         })
       );
