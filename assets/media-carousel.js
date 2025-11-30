@@ -137,10 +137,10 @@ class CarouselComponent extends HTMLElement {
 
     this.initPages();
 
-    // const resizeObserver = new ResizeObserver(() => {
-    //   requestAnimationFrame(() => this.initPages());
-    // });
-    // resizeObserver.observe(this.sliderWrapper);
+    const resizeObserver = new ResizeObserver(() => {
+      requestAnimationFrame(() => this.initPages());
+    });
+    resizeObserver.observe(this.sliderWrapper);
 
     this.handleResize = debounce(() => {
       requestAnimationFrame(() => this.initPages());
