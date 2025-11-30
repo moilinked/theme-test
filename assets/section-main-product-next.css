@@ -1,55 +1,22 @@
 .media-slider-component {
+  display: block;
   position: relative;
+  overflow: hidden;
 }
 
 .media-slider-list {
   display: flex;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: hidden;
   margin: 0;
   padding: 0;
   width: 100%;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
 }
 
 .product__media-slider-item {
-  list-style: none;
   aspect-ratio: 1 / 1;
   flex: 0 0 100%;
-  height: 100%;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-}
-
-/* 移动端：一次显示一张，允许滑动 */
-@media screen and (max-width: 749px) {
-  .product__media-slider-item {
-    width: 100%;
-    min-width: 100%;
-  }
-}
-
-/* 平板端：可以显示多张（根据容器宽度自适应） */
-@media screen and (min-width: 750px) and (max-width: 989px) {
-  .product__media-slider-item {
-    width: 100%;
-    min-width: 100%;
-  }
-}
-
-/* 桌面端：根据容器宽度自适应，可以显示多张 */
-@media screen and (min-width: 990px) {
-  .product__media-slider-item {
-    width: 100%;
-    min-width: 100%;
-  }
-  
-  /* 如果容器足够宽，可以显示多张图片 */
-  .media-slider-list:has(.product__media-slider-item:nth-child(2)) {
-    --items-per-view: 1;
-  }
+  width: 100%;
+  user-select: none;
 }
 
 .product__media-slider-buttons {
@@ -60,11 +27,6 @@
   align-items: center;
   gap: 0.5rem;
   z-index: 1;
-}
-
-/* 隐藏滚动条但保持滚动功能 */
-.media-slider-list::-webkit-scrollbar {
-  display: none;
 }
 
 .media-slider-list {
