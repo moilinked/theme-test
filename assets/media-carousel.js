@@ -141,6 +141,7 @@ class CarouselComponent extends HTMLElement {
     this.startX = 0;
     this.startScrollLeft = 0;
     this.animationId = null;
+    this.totalPages = 0;
   }
 
   connectedCallback() {
@@ -196,6 +197,7 @@ class CarouselComponent extends HTMLElement {
     this.sliderWrapper.append(first);
 
     this.sliderItems = Array.from(this.sliderWrapper.children);
+    this.totalPages = this.sliderItems.length - 2;
 
     this.updateWidth();
     this.jumpToIndex(this.currentIndex);
@@ -241,8 +243,8 @@ class CarouselComponent extends HTMLElement {
     this.animationId = requestAnimationFrame(animate);
 
     let currentPage = i;
-    if (i === 0) currentPage = total;
-    if (i === total + 1) currentPage = 1;
+    if (i === 0) currentPage = this.totalPages;
+    if (i === this.totalPages + 1) currentPage = 1;
 
     this.dispatchEvent(
       new CustomEvent("carouselSlideChanged", {
