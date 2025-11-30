@@ -190,7 +190,6 @@ class CarouselComponent extends HTMLElement {
       return;
     }
 
-    //- 启用无限循环
     this.setupInfiniteLoop();
     this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]');
 
@@ -202,16 +201,9 @@ class CarouselComponent extends HTMLElement {
     //- 计算偏移量
     this.sliderItemOffset =
       secondItemRect.left - firstItemRect.left || firstItem.offsetWidth;
-    console.log("this.sliderItemOffset=====>", this.sliderItemOffset);
     if (this.sliderItemOffset <= 0) {
       this.sliderItemOffset = firstItem.offsetWidth || firstItemRect.width;
     }
-
-    this.slidesPerPage = 1;
-
-    //- 计算总页数
-    this.totalPages = this.sliderItemsToShow.length;
-    console.log("this.totalPages=====>", this.totalPages);
 
     //- 如果启用循环，初始化时滚动到第一个真实项目
     if (this.currentPage === 1 && this.sliderItemsToShow.length > 1 && this.firstRealItem) {
@@ -250,11 +242,9 @@ class CarouselComponent extends HTMLElement {
     this.firstClone.setAttribute("aria-hidden", "true");
     this.sliderWrapper.appendChild(this.firstClone);
 
-    //- 保存第一个真实项目的引用
     this.firstRealItem = firstItem;
     this.lastRealItem = lastItem;
 
-    //- 重置跳转标志
     this.isJumping = false;
   }
 
