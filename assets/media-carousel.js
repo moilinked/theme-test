@@ -128,9 +128,29 @@ class CarouselComponent extends HTMLElement {
     }, 250)
     window.addEventListener('resize', this.handleResize)
 
-    this.sliderWrapper.addEventListener('scroll', this.update.bind(this))
-    this.prevButton.addEventListener('click', this.onButtonClick.bind(this))
-    this.nextButton.addEventListener('click', this.onButtonClick.bind(this))
+    // 绑定事件处理函数，保存引用以便后续清理
+    this.boundUpdate = this.update.bind(this)
+    this.boundOnButtonClick = this.onButtonClick.bind(this)
+    
+    this.sliderWrapper.addEventListener('scroll', this.boundUpdate)
+    this.prevButton.addEventListener('click', this.boundOnButtonClick)
+    this.nextButton.addEventListener('click', this.boundOnButtonClick)
+  }
+
+  // 清理函数，在组件销毁时调用
+  disconnectedCallback() {
+    if (this.handleResize) {
+      window.removeEventListener('resize', this.handleResize)
+    }
+    if (this.sliderWrapper && this.boundUpdate) {
+      this.sliderWrapper.removeEventListener('scroll', this.boundUpdate)
+    }
+    if (this.prevButton && this.boundOnButtonClick) {
+      this.prevButton.removeEventListener('click', this.boundOnButtonClick)
+    }
+    if (this.nextButton && this.boundOnButtonClick) {
+      this.nextButton.removeEventListener('click', this.boundOnButtonClick)
+    }
   }
 
   //- 初始化轮播列表
@@ -192,37 +212,60 @@ class CarouselComponent extends HTMLElement {
   }
 
   update() {
-    if (!this.sliderWrapper || !this.nextButton) return
+    if (!this.sliderWrapper || !this.nextButton || !this.sliderItemOffset) return
 
     const previousPage = this.currentPage
-    this.currentPage = Math.round(this.sliderWrapper.scrollLeft / this.sliderItemOffset) + 1
-    console.log('this.currentPage=====>', this.currentPage)
+    const scrollLeft = this.sliderWrapper.scrollLeft
+    
+    // 计算当前页（基于滚动位置和项目偏移量）
+    // 添加一个小偏移量以避免边界问题
+    this.currentPage = Math.max(1, Math.round(scrollLeft / this.sliderItemOffset) + 1)
+    
+    // 确保当前页不超过总页数
+    if (this.totalPages && this.currentPage > this.totalPages) {
+      this.currentPage = this.totalPages
+    }
 
     //- 触发轮播图切换事件
-    if (this.currentPage !== previousPage) {
-      this.dispatchEvent(
-        new CustomEvent('carouselSlideChanged', {
-          detail: {
-            currentPage: this.currentPage,
-            currentElement: this.sliderItemsToShow[this.currentPage - 1]
-          }
-        })
-      )
+    if (this.currentPage !== previousPage && this.sliderItemsToShow && this.sliderItemsToShow.length > 0) {
+      const currentIndex = Math.min(this.currentPage - 1, this.sliderItemsToShow.length - 1)
+      const currentElement = this.sliderItemsToShow[currentIndex]
+      
+      if (currentElement) {
+        this.dispatchEvent(
+          new CustomEvent('carouselSlideChanged', {
+            detail: {
+              currentPage: this.currentPage,
+              currentElement: currentElement
+            }
+          })
+        )
+      }
     }
 
     //- 如果启用轮播图循环，则不处理左右切换按钮状态
     if (this.enableSliderLooping) return
 
-    if (this.isSlideVisible(this.sliderItemsToShow[0]) && this.sliderWrapper.scrollLeft === 0) {
-      this.prevButton.setAttribute('disabled', 'disabled')
-    } else {
-      this.prevButton.removeAttribute('disabled')
-    }
-
-    if (this.isSlideVisible(this.sliderItemsToShow[this.sliderItemsToShow.length - 1])) {
-      this.nextButton.setAttribute('disabled', 'disabled')
-    } else {
-      this.nextButton.removeAttribute('disabled')
+    // 更新按钮状态
+    if (this.sliderItemsToShow && this.sliderItemsToShow.length > 0) {
+      const isAtStart = scrollLeft <= 0 || (this.isSlideVisible(this.sliderItemsToShow[0]) && scrollLeft === 0)
+      const isAtEnd = this.isSlideVisible(this.sliderItemsToShow[this.sliderItemsToShow.length - 1])
+      
+      if (this.prevButton) {
+        if (isAtStart) {
+          this.prevButton.setAttribute('disabled', 'disabled')
+        } else {
+          this.prevButton.removeAttribute('disabled')
+        }
+      }
+      
+      if (this.nextButton) {
+        if (isAtEnd) {
+          this.nextButton.setAttribute('disabled', 'disabled')
+        } else {
+          this.nextButton.removeAttribute('disabled')
+        }
+      }
     }
   }
 
