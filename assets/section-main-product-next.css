@@ -1,10 +1,10 @@
 .media-slider-component {
   position: relative;
+  overflow: hidden;
 }
 
 .media-slider-list {
   display: flex;
-  overflow: hidden;
   margin: 0;
   padding: 0;
   width: 100%;
