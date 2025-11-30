@@ -10,11 +10,11 @@ class MediaCarousel extends HTMLElement {
 
     this.currentActive = "";
 
+    if (!this.elements.thumbnails) return;
     this.elements.viewer.addEventListener(
       "carouselSlideChanged",
       debounce(this.onSlideChanged.bind(this), 500)
     );
-    if (!this.elements.thumbnails) return;
     this.elements.thumbnails
       .querySelectorAll("[data-target]")
       .forEach((mediaToSwitch) => {
@@ -261,8 +261,6 @@ class CarouselComponent extends HTMLElement {
     if (i === this.totalPages + 1) i = 1;
     return i;
   }
-
-  
 
   next() {
     this.animateToIndex(++this.currentIndex);
