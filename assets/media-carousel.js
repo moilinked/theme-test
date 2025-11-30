@@ -217,6 +217,7 @@ class CarouselComponent extends HTMLElement {
           const firstRealLeft = this.getItemPosition(this.firstRealItem);
           this.currentTranslateX = -firstRealLeft;
           this.sliderWrapper.style.transform = `translateX(${this.currentTranslateX}px)`;
+          this.sliderWrapper.style.transform = `transition-duration: 0ms;`;
         }
       });
     } else {
