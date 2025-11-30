@@ -191,10 +191,11 @@ class CarouselComponent extends HTMLElement {
     }
 
     this.setupInfiniteLoop();
+    //- 包含克隆节点
     this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]');
 
-    const firstItem = this.sliderItemsToShow[0];
-    const secondItem = this.sliderItemsToShow[1];
+    const firstItem = this.sliderItemsToShow[1];
+    const secondItem = this.sliderItemsToShow[2];
     const firstItemRect = firstItem.getBoundingClientRect();
     const secondItemRect = secondItem.getBoundingClientRect();
 
