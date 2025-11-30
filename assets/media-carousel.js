@@ -424,6 +424,9 @@ class CarouselComponent extends HTMLElement {
 
     if (!this.firstRealItem || !this.lastRealItem) return;
 
+    console.log("this.currentPage=====>", this.currentPage);
+    return;
+
     const currentScrollLeft = this.sliderWrapper.scrollLeft;
     const step = event.currentTarget.dataset.step || 1;
     const isNext = event.currentTarget.name === "next";
