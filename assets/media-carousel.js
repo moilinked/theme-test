@@ -291,14 +291,14 @@ class CarouselComponent extends HTMLElement {
 
     //- 获取当前可见的真实项目
     let currentElement = null;
-    if (this.sliderItemsToShow && this.sliderItemsToShow.length > 0) {
+    if (this.sliderItems && this.sliderItems.length > 0) {
       const currentScrollLeft = this.sliderWrapper.scrollLeft;
       let minDistance = Infinity;
       let closestIndex = 0;
 
       //- 找到距离当前滚动位置最近的真实项目
-      for (let i = 0; i < this.sliderItemsToShow.length; i++) {
-        const item = this.sliderItemsToShow[i];
+      for (let i = 0; i < this.sliderItems.length; i++) {
+        const item = this.sliderItems[i];
         const itemLeft = item.offsetLeft;
         const itemCenter = itemLeft + item.offsetWidth / 2;
         const distance = Math.abs(
@@ -309,35 +309,6 @@ class CarouselComponent extends HTMLElement {
           minDistance = distance;
           closestIndex = i;
           currentElement = item;
-        }
-      }
-
-      //- 如果启用循环，还需要检查克隆节点
-      if (this.firstClone && this.lastClone) {
-        //- 检查是否更接近第一个克隆节点（对应最后一个真实项目）
-        const firstCloneCenter =
-          this.firstClone.offsetLeft + this.firstClone.offsetWidth / 2;
-        const firstCloneDistance = Math.abs(
-          currentScrollLeft +
-            this.sliderWrapper.clientWidth / 2 -
-            firstCloneCenter
-        );
-        if (firstCloneDistance < minDistance && this.lastRealItem) {
-          currentElement = this.lastRealItem;
-          closestIndex = this.sliderItemsToShow.length - 1;
-        }
-
-        //- 检查是否更接近最后一个克隆节点（对应第一个真实项目）
-        const lastCloneCenter =
-          this.lastClone.offsetLeft + this.lastClone.offsetWidth / 2;
-        const lastCloneDistance = Math.abs(
-          currentScrollLeft +
-            this.sliderWrapper.clientWidth / 2 -
-            lastCloneCenter
-        );
-        if (lastCloneDistance < minDistance && this.firstRealItem) {
-          currentElement = this.firstRealItem;
-          closestIndex = 0;
         }
       }
 
