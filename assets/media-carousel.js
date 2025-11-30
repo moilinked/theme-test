@@ -288,10 +288,6 @@ class CarouselComponent extends HTMLElement {
       Math.round(scrollLeft / this.sliderItemOffset) + 1
     );
 
-    if (this.totalPages && this.currentPage > this.totalPages) {
-      this.currentPage = this.totalPages;
-    }
-
     //- 获取当前可见的真实项目
     let currentElement = null;
     if (this.sliderItemsToShow && this.sliderItemsToShow.length > 0) {
