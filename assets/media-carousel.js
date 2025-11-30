@@ -426,8 +426,7 @@ class CarouselComponent extends HTMLElement {
         this.isTransitioning = false;
       });
     } else {
-      //- 平滑过渡
-      this.sliderWrapper.style.transition = "transform 0.3s ease-in-out";
+      //- 平滑过渡（transition 已在 CSS 中设置）
       this.sliderWrapper.style.transform = `translateX(${translateX}px)`;
       this.currentTranslateX = translateX;
       this.isTransitioning = true;
