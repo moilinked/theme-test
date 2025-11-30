@@ -1,6 +1,7 @@
 .media-slider-component {
   position: relative;
   overflow: hidden;
+  display: block;
 }
 
 .media-slider-list {
