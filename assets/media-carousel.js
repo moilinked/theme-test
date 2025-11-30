@@ -127,17 +127,13 @@ class MediaCarousel extends HTMLElement {
 class CarouselComponent extends HTMLElement {
   constructor() {
     super();
-    this.sliderWrapper = this.querySelector('[id^="Carousel-"]'); //- wrapper (用于 transform 的容器)
+    this.sliderWrapper = this.querySelector('[id^="Carousel-"]'); //- wrapper
     this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]'); //- 所有轮播卡片
     this.buttons = this.querySelectorAll('[id^="Carousel-Button-"]'); //- 切换按钮
     this.prevButton = this.querySelector('button[name="previous"]');
     this.nextButton = this.querySelector('button[name="next"]');
 
     if (!this.sliderWrapper || !this.buttons) return;
-
-    //- 初始化 translateX 位置
-    this.currentTranslateX = 0;
-    this.isTransitioning = false;
 
     this.initPages();
 
@@ -153,10 +149,8 @@ class CarouselComponent extends HTMLElement {
 
     this.boundUpdate = this.update.bind(this);
     this.boundOnButtonClick = this.onButtonClick.bind(this);
-    this.boundTransitionEnd = this.onTransitionEnd.bind(this);
 
-    //- 使用 transitionend 事件替代 scroll 事件
-    this.sliderWrapper.addEventListener("transitionend", this.boundTransitionEnd);
+    this.sliderWrapper.addEventListener("scroll", this.boundUpdate);
     this.prevButton.addEventListener("click", this.boundOnButtonClick);
     this.nextButton.addEventListener("click", this.boundOnButtonClick);
   }
@@ -166,8 +160,8 @@ class CarouselComponent extends HTMLElement {
     if (this.handleResize) {
       window.removeEventListener("resize", this.handleResize);
     }
-    if (this.sliderWrapper && this.boundTransitionEnd) {
-      this.sliderWrapper.removeEventListener("transitionend", this.boundTransitionEnd);
+    if (this.sliderWrapper && this.boundUpdate) {
+      this.sliderWrapper.removeEventListener("scroll", this.boundUpdate);
     }
     if (this.prevButton && this.boundOnButtonClick) {
       this.prevButton.removeEventListener("click", this.boundOnButtonClick);
@@ -200,42 +194,32 @@ class CarouselComponent extends HTMLElement {
     //- 包含克隆节点
     this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]');
 
-    //- 计算偏移量（使用第一个和第二个真实项目）
-    const firstItem = this.sliderItemsToShow[0];
-    const secondItem = this.sliderItemsToShow[1] || firstItem;
-    
-    //- 使用 offsetLeft 计算项目之间的偏移量（不受 transform 影响）
-    this.sliderItemOffset = secondItem.offsetLeft - firstItem.offsetLeft || firstItem.offsetWidth;
+    const firstItem = this.sliderItemsToShow[1];
+    const secondItem = this.sliderItemsToShow[2];
+    const firstItemRect = firstItem.getBoundingClientRect();
+    const secondItemRect = secondItem.getBoundingClientRect();
+
+    //- 计算偏移量
+    this.sliderItemOffset =
+      secondItemRect.left - firstItemRect.left || firstItem.offsetWidth;
     if (this.sliderItemOffset <= 0) {
-      this.sliderItemOffset = firstItem.offsetWidth;
+      this.sliderItemOffset = firstItem.offsetWidth || firstItemRect.width;
     }
 
-    //- 初始化时移动到第一个真实项目
-    if (this.sliderItemsToShow.length > 1 && this.firstRealItem) {
+    //- 如果启用循环，初始化时滚动到第一个真实项目
+    if (this.currentPage === 1 && this.sliderItemsToShow.length > 1 && this.firstRealItem) {
       requestAnimationFrame(() => {
-        if (this.firstRealItem) {
-          const firstRealLeft = this.getItemPosition(this.firstRealItem);
-          this.currentTranslateX = -firstRealLeft;
-          this.sliderWrapper.style.transform = `translateX(${this.currentTranslateX}px)`;
-          this.sliderWrapper.style.setAttribute("transition-duration", "0ms");
+        if (this.firstRealItem && this.firstRealItem.offsetLeft > 0) {
+          this.sliderWrapper.scrollTo({
+            left: this.firstRealItem.offsetLeft,
+            behavior: "auto",
+          });
         }
       });
-    } else {
-      //- 如果没有项目或只有一个项目，重置位置
-      this.currentTranslateX = 0;
-      this.sliderWrapper.style.transform = 'translateX(0)';
     }
 
     //- 更新按钮状态
     this.update();
-  }
-
-  //- 获取项目相对于容器的位置（不考虑当前 transform）
-  getItemPosition(item) {
-    if (!item) return 0;
-    //- 使用 offsetLeft 获取项目相对于 sliderWrapper 的位置
-    //- offsetLeft 不受 transform 影响，返回的是元素在文档流中的位置
-    return item.offsetLeft;
   }
 
   //- 克隆首尾项目
@@ -283,23 +267,29 @@ class CarouselComponent extends HTMLElement {
     if (!this.sliderWrapper || !this.buttons || !this.sliderItemOffset) return;
 
     const previousPage = this.currentPage;
+    const scrollLeft = this.sliderWrapper.scrollLeft;
+
+
+    this.currentPage = Math.max(
+      0,
+      Math.round(scrollLeft / this.sliderItemOffset) + 1
+    );
 
     //- 获取当前可见的真实项目
     let currentElement = null;
     if (this.sliderItems && this.sliderItems.length > 0) {
-      //- currentTranslateX 是负值（向左移动），需要转换为正值来计算位置
-      const visibleLeft = -this.currentTranslateX;
-      const viewportCenter = this.sliderWrapper.clientWidth / 2;
-      const viewportCenterAbsolute = visibleLeft + viewportCenter;
+      const currentScrollLeft = this.sliderWrapper.scrollLeft;
       let minDistance = Infinity;
       let closestIndex = 0;
 
-      //- 找到距离当前视口中心最近的项目
+      //- 找到距离当前滚动位置最近的真实项目
       for (let i = 0; i < this.sliderItems.length; i++) {
         const item = this.sliderItems[i];
-        const itemLeft = this.getItemPosition(item);
+        const itemLeft = item.offsetLeft;
         const itemCenter = itemLeft + item.offsetWidth / 2;
-        const distance = Math.abs(viewportCenterAbsolute - itemCenter);
+        const distance = Math.abs(
+          currentScrollLeft + this.sliderWrapper.clientWidth / 2 - itemCenter
+        );
 
         if (distance < minDistance) {
           minDistance = distance;
@@ -311,8 +301,9 @@ class CarouselComponent extends HTMLElement {
       this.currentPage = closestIndex;
     }
 
-    //- 处理无限循环
-    this.handleInfiniteLoop();
+    // setTimeout(() => {
+      this.handleInfiniteLoop();
+    // }, 1000);
 
     //- 触发轮播图切换事件
     if (this.currentPage !== previousPage && currentElement) {
@@ -327,7 +318,7 @@ class CarouselComponent extends HTMLElement {
     }
   }
 
-  //- 当移动到克隆节点时,跳转到真实节点
+  //- 当滚动到克隆节点时,跳转到真实节点
   handleInfiniteLoop() {
     if (
       !this.firstRealItem ||
@@ -340,25 +331,24 @@ class CarouselComponent extends HTMLElement {
     //- 防止重复跳转
     if (this.isJumping) return;
 
-    const currentItem = this.sliderItems[this.currentPage];
-    
-    //- 如果当前是最后一个克隆节点（firstClone），跳转到第一个真实项目
-    if (currentItem === this.firstClone) {
+    const firstRealLeft = this.firstRealItem.offsetLeft;
+    const lastRealLeft = this.lastRealItem.offsetLeft;
+
+    //- 如果滚动到了最后一个克隆节点（末尾），跳转到第一个真实项目
+    if (this.currentPage === this.sliderItems.length - 1) {
       this.isJumping = true;
       requestAnimationFrame(() => {
-        const firstRealLeft = this.getItemPosition(this.firstRealItem);
-        this.setTranslateX(-firstRealLeft, false);
+        this.sliderWrapper.scrollTo({ left: firstRealLeft, behavior: "instant" });
         setTimeout(() => {
           this.isJumping = false;
         }, 50);
       });
     }
-    //- 如果当前是第一个克隆节点（lastClone），跳转到最后一个真实项目
-    else if (currentItem === this.lastClone) {
+    //- 如果滚动到了第一个克隆节点（开头），跳转到最后一个真实项目
+    else if (this.currentPage === 0) {
       this.isJumping = true;
       requestAnimationFrame(() => {
-        const lastRealLeft = this.getItemPosition(this.lastRealItem);
-        this.setTranslateX(-lastRealLeft, false);
+        this.sliderWrapper.scrollTo({ left: lastRealLeft, behavior: "instant" });
         setTimeout(() => {
           this.isJumping = false;
         }, 50);
@@ -368,13 +358,11 @@ class CarouselComponent extends HTMLElement {
 
   //- 判断元素是否在视口内
   isSlideVisible(element, offset = 0) {
-    const currentTranslateX = -this.currentTranslateX;
-    const viewportRight = this.sliderWrapper.clientWidth + currentTranslateX - offset;
-    const itemLeft = this.getItemPosition(element);
-    const itemRight = itemLeft + element.offsetWidth;
+    const lastVisibleSlide =
+      this.sliderWrapper.clientWidth + this.sliderWrapper.scrollLeft - offset;
     return (
-      itemRight <= viewportRight &&
-      itemLeft >= currentTranslateX
+      element.offsetLeft + element.clientWidth <= lastVisibleSlide &&
+      element.offsetLeft >= this.sliderWrapper.scrollLeft
     );
   }
 
@@ -387,51 +375,21 @@ class CarouselComponent extends HTMLElement {
     const isNext = event.currentTarget.name === "next";
     let targetIndex;
     if (isNext) {
-      targetIndex = Math.min(this.sliderItems.length - 1, this.currentPage + 1);
+      targetIndex = Math.min(this.sliderItems.length, this.currentPage + 1);
     } else {
       targetIndex = Math.max(0, this.currentPage - 1);
     }
 
-    //- 移动到目标项目
+    //- 滚动到目标项目
     const targetItem = this.sliderItems[targetIndex];
     if (targetItem) {
-      const targetLeft = this.getItemPosition(targetItem);
-      this.setSlidePosition(-targetLeft);
+      this.setSlidePosition(targetItem.offsetLeft);
     }
   }
 
-  //- 设置轮播图位置（保留当前功能）
-  setSlidePosition(translateX) {
-    this.setTranslateX(translateX, true);
-  }
-
-  //- transition 结束事件处理
-  onTransitionEnd(event) {
-    //- 只处理 transform 的 transition
-    if (event.propertyName === "transform") {
-      this.isTransitioning = false;
-      this.update();
-    }
-  }
-
-  //- 设置 translateX 值
-  setTranslateX(translateX, smooth = true) {
-    if (!smooth) {
-      //- 如果是不平滑的跳转，先移除 transition
-      this.sliderWrapper.style.transition = "none";
-      this.sliderWrapper.style.transform = `translateX(${translateX}px)`;
-      this.currentTranslateX = translateX;
-      //- 使用 requestAnimationFrame 确保样式已应用后再恢复 transition
-      requestAnimationFrame(() => {
-        this.sliderWrapper.style.transition = "";
-        this.isTransitioning = false;
-      });
-    } else {
-      //- 平滑过渡（transition 已在 CSS 中设置）
-      this.sliderWrapper.style.transform = `translateX(${translateX}px)`;
-      this.currentTranslateX = translateX;
-      this.isTransitioning = true;
-    }
+  //- 设置轮播图位置
+  setSlidePosition(left) {
+    this.sliderWrapper.scrollTo({ left, behavior: "smooth" });
   }
 }
 
