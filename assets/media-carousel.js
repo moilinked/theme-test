@@ -308,12 +308,10 @@ class CarouselComponent extends HTMLElement {
       }
 
       this.currentPage = closestIndex;
-      
-      //- 如果启用循环，检查是否需要跳转到真实节点
-      if (this.sliderItemsToShow.length > 1) {
-        this.handleInfiniteLoop(scrollLeft);
-      }
     }
+
+    //- 如果启用循环，检查是否需要跳转到真实节点
+    this.handleInfiniteLoop();
 
     //- 触发轮播图切换事件
     if (this.currentPage !== previousPage && currentElement) {
