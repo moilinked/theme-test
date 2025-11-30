@@ -200,7 +200,7 @@ class CarouselComponent extends HTMLElement {
     this.updateWidth();
     this.jumpToIndex(this.currentIndex);
 
-    if (this.prevButton) {
+    if (this.prevButton && this.nextButton) {
       this.prevButton.addEventListener("click", () => this.prev());
     }
     if (this.nextButton) {
@@ -239,6 +239,14 @@ class CarouselComponent extends HTMLElement {
     };
 
     this.animationId = requestAnimationFrame(animate);
+    this.dispatchEvent(
+      new CustomEvent("carouselSlideChanged", {
+        detail: {
+          currentPage: i,
+          currentElement: this.sliderItems[this.currentIndex],
+        },
+      })
+    );
   }
 
   onScrollEnd(i) {
@@ -249,16 +257,10 @@ class CarouselComponent extends HTMLElement {
     this.jumpToIndex(i);
   }
 
+  
+
   next() {
     this.animateToIndex(++this.currentIndex);
-    this.dispatchEvent(
-      new CustomEvent("carouselSlideChanged", {
-        detail: {
-          currentPage: this.currentIndex,
-          currentElement: this.sliderItems[this.currentIndex],
-        },
-      })
-    );
   }
 
   prev() {
