@@ -283,36 +283,6 @@ class CarouselComponent extends HTMLElement {
     //   this.handleInfiniteLoop(scrollLeft);
     // }
 
-    this.currentPage = Math.max(
-      1,
-      Math.round(scrollLeft / this.sliderItemOffset) + 1
-    );
-
-    //- 获取当前可见的真实项目
-    let currentElement = null;
-    if (this.sliderItems && this.sliderItems.length > 0) {
-      const currentScrollLeft = this.sliderWrapper.scrollLeft;
-      let minDistance = Infinity;
-      let closestIndex = 0;
-
-      //- 找到距离当前滚动位置最近的真实项目
-      for (let i = 0; i < this.sliderItems.length; i++) {
-        const item = this.sliderItems[i];
-        const itemLeft = item.offsetLeft;
-        const itemCenter = itemLeft + item.offsetWidth / 2;
-        const distance = Math.abs(
-          currentScrollLeft + this.sliderWrapper.clientWidth / 2 - itemCenter
-        );
-
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIndex = i;
-          currentElement = item;
-        }
-      }
-
-      this.currentPage = closestIndex + 1;
-    }
 
     //- 触发轮播图切换事件
     if (this.currentPage !== previousPage && currentElement) {
@@ -324,13 +294,6 @@ class CarouselComponent extends HTMLElement {
           },
         })
       );
-    }
-
-    //- 如果启用循环，按钮始终可用
-    if (this.enableSliderLooping && this.sliderItemsToShow.length > 1) {
-      if (this.prevButton) this.prevButton.removeAttribute("disabled");
-      if (this.nextButton) this.nextButton.removeAttribute("disabled");
-      return;
     }
   }
 
