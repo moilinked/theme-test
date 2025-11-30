@@ -263,6 +263,7 @@ class CarouselComponent extends HTMLElement {
     return i;
   }
 
+  //- 允许拖拽
   setupDrag() {
     const el = this.sliderWrapper;
 
