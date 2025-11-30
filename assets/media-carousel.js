@@ -230,7 +230,7 @@ class CarouselComponent extends HTMLElement {
 
     const animate = (now) => {
       const progress = Math.min((now - startTime) / duration, 1);
-      const ease = progress * (2 - progress); // easeOutQuad
+      const ease = progress * (2 - progress);
 
       this.sliderWrapper.scrollLeft = start + change * ease;
 
