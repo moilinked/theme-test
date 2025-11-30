@@ -1,16 +1,17 @@
 .media-slider-component {
   position: relative;
-  overflow: hidden;
-  display: block;
 }
 
 .media-slider-list {
   display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
   margin: 0;
   padding: 0;
   width: 100%;
-  transition-property: transform;
-  will-change: transform;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 .product__media-slider-item {
@@ -18,7 +19,8 @@
   aspect-ratio: 1 / 1;
   flex: 0 0 100%;
   height: 100%;
-  flex-shrink: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 /* 移动端：一次显示一张，允许滑动 */
@@ -60,4 +62,12 @@
   z-index: 1;
 }
 
-/* translateX 模式不需要滚动条 */
+/* 隐藏滚动条但保持滚动功能 */
+.media-slider-list::-webkit-scrollbar {
+  display: none;
+}
+
+.media-slider-list {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
