@@ -311,7 +311,7 @@ class CarouselComponent extends HTMLElement {
         }
       }
 
-      this.currentPage = closestIndex + 1;
+      this.currentPage = closestIndex;
     }
 
     //- 触发轮播图切换事件
