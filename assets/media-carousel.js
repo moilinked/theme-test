@@ -469,10 +469,10 @@ class CarouselComponent extends HTMLElement {
     }
 
     //- 滚动到目标项目
-    const targetItem = this.sliderItemsToShow[targetIndex];
-    if (targetItem) {
-      this.setSlidePosition(targetItem.offsetLeft);
-    }
+    // const targetItem = this.sliderItemsToShow[targetIndex];
+    // if (targetItem) {
+    //   this.setSlidePosition(targetItem.offsetLeft);
+    // }
   }
 
   //- 设置轮播图位置
