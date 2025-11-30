@@ -329,7 +329,7 @@ class CarouselComponent extends HTMLElement {
   }
 
   //- 当滚动到克隆节点时,跳转到真实节点
-  handleInfiniteLoop(scrollLeft) {
+  handleInfiniteLoop() {
     if (
       !this.firstRealItem ||
       !this.lastRealItem ||
@@ -341,14 +341,8 @@ class CarouselComponent extends HTMLElement {
     //- 防止重复跳转
     if (this.isJumping) return;
 
-    // console.log("this.currentPage=====>", this.currentPage);
-    // return;
-
     const firstRealLeft = this.firstRealItem.offsetLeft;
     const lastRealLeft = this.lastRealItem.offsetLeft;
-    const firstCloneLeft = this.firstClone.offsetLeft;
-    const lastCloneLeft = this.lastClone.offsetLeft;
-    const lastCloneRight = lastCloneLeft + this.lastClone.offsetWidth;
 
     //- 如果滚动到了最后一个克隆节点（末尾），跳转到第一个真实项目
     if (this.currentPage === this.sliderItems.length - 1) {
