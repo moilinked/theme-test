@@ -230,16 +230,21 @@ class CarouselComponent extends HTMLElement {
     //- 克隆最后一个项目并插入到开头
     this.lastClone = lastItem.cloneNode(true)
     this.lastClone.setAttribute('data-clone', 'last')
+    this.lastClone.setAttribute('aria-hidden', 'true') // 隐藏克隆节点，避免重复内容
     this.sliderWrapper.insertBefore(this.lastClone, firstItem)
     
     //- 克隆第一个项目并追加到末尾
     this.firstClone = firstItem.cloneNode(true)
     this.firstClone.setAttribute('data-clone', 'first')
+    this.firstClone.setAttribute('aria-hidden', 'true') // 隐藏克隆节点，避免重复内容
     this.sliderWrapper.appendChild(this.firstClone)
     
     //- 保存第一个真实项目的引用
     this.firstRealItem = firstItem
     this.lastRealItem = lastItem
+    
+    //- 重置跳转标志
+    this.isJumping = false
   }
 
   //- 移除克隆节点
@@ -347,29 +352,42 @@ class CarouselComponent extends HTMLElement {
   handleInfiniteLoop(scrollLeft) {
     if (!this.firstRealItem || !this.lastRealItem || !this.firstClone || !this.lastClone) return
     
+    //- 防止重复跳转
+    if (this.isJumping) return
+    
     const firstRealLeft = this.firstRealItem.offsetLeft
     const lastRealLeft = this.lastRealItem.offsetLeft
-    const lastRealRight = lastRealLeft + this.lastRealItem.offsetWidth
     const firstCloneLeft = this.firstClone.offsetLeft
     const lastCloneLeft = this.lastClone.offsetLeft
+    const lastCloneRight = lastCloneLeft + this.lastClone.offsetWidth
     
     //- 如果滚动到了最后一个克隆节点（末尾），跳转到第一个真实项目
-    if (scrollLeft >= firstCloneLeft - 10) {
+    if (scrollLeft >= firstCloneLeft - this.sliderItemOffset / 2) {
+      this.isJumping = true
       // 使用 requestAnimationFrame 确保在滚动动画完成后跳转
       requestAnimationFrame(() => {
         this.sliderWrapper.scrollTo({ 
           left: firstRealLeft, 
           behavior: 'auto' // 使用 auto 避免动画，实现无缝跳转
         })
+        // 短暂延迟后重置标志，避免重复触发
+        setTimeout(() => {
+          this.isJumping = false
+        }, 50)
       })
     }
     //- 如果滚动到了第一个克隆节点（开头），跳转到最后一个真实项目
-    else if (scrollLeft <= lastCloneLeft + 10) {
+    else if (scrollLeft <= lastCloneRight + this.sliderItemOffset / 2) {
+      this.isJumping = true
       requestAnimationFrame(() => {
         this.sliderWrapper.scrollTo({ 
           left: lastRealLeft, 
           behavior: 'auto' // 使用 auto 避免动画，实现无缝跳转
         })
+        // 短暂延迟后重置标志，避免重复触发
+        setTimeout(() => {
+          this.isJumping = false
+        }, 50)
       })
     }
   }
