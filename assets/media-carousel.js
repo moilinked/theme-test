@@ -155,9 +155,15 @@ class CarouselComponent extends HTMLElement {
 
   //- 初始化轮播列表
   initPages() {
+    //- 先移除已存在的克隆节点（如果存在）
+    this.removeClones()
+    
     //- 重新获取所有项目，确保获取最新的DOM状态
     this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]')
-    this.sliderItemsToShow = Array.from(this.sliderItems).filter(element => element.clientWidth > 0)
+    //- 过滤掉克隆节点，只保留真实项目
+    this.sliderItemsToShow = Array.from(this.sliderItems).filter(element => 
+      element.clientWidth > 0 && !element.hasAttribute('data-clone')
+    )
     
     //- 如果列表长度小于 1，则不进行初始化
     if (this.sliderItemsToShow.length < 1) {
@@ -170,9 +176,8 @@ class CarouselComponent extends HTMLElement {
     //- 如果启用循环且项目数量大于1，设置无限循环
     if (this.enableSliderLooping && this.sliderItemsToShow.length > 1) {
       this.setupInfiniteLoop()
-    } else {
-      //- 移除已存在的克隆节点
-      this.removeClones()
+      //- 重新获取所有项目（包括新创建的克隆节点）
+      this.sliderItems = this.querySelectorAll('[id^="Carousel-Slide-"]')
     }
 
     //- 计算每个项目的实际宽度（包括margin等）
@@ -204,10 +209,11 @@ class CarouselComponent extends HTMLElement {
     this.totalPages = Math.max(1, this.sliderItemsToShow.length - this.slidesPerPage + 1)
     
     //- 如果启用循环，初始化时滚动到第一个真实项目
-    if (this.enableSliderLooping && this.sliderItemsToShow.length > 1) {
+    if (this.enableSliderLooping && this.sliderItemsToShow.length > 1 && this.firstRealItem) {
       // 等待DOM更新后滚动到第一个真实项目
       requestAnimationFrame(() => {
-        if (this.firstRealItem) {
+        // 确保克隆节点已经渲染完成
+        if (this.firstRealItem && this.firstRealItem.offsetLeft > 0) {
           this.sliderWrapper.scrollTo({ left: this.firstRealItem.offsetLeft, behavior: 'auto' })
         }
       })
