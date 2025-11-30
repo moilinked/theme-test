@@ -80,7 +80,6 @@
           %}
         </div>
       {%- endif -%}
-      {% comment %}- 最大 9 图 -{% endcomment %}
       {%- for media in product.media -%}
         {% comment %}- 非图片类型不展示 -{% endcomment %}
         {% if media.media_type != 'image' %}
@@ -127,7 +126,7 @@
       {%- endfor -%}
     </div>
     {% comment %}- 箭头 -{% endcomment %}
-    <div class='product__media-slider-buttons'>
+    <div class='product__media-slider-buttons' id='Carousel-Button-{{ section.id }}'>
       <button
         type='button'
         class='product__media-slider-button product__media-slider-button--prev'
@@ -151,111 +150,4 @@
     </div>
   </carousel-component>
 
-  {% comment %}- 当数量大于 1 时，展示缩略图 -{% endcomment %}
-  {%- if media_count == 1 -%}
-    <carousel-component
-      id='CarouselThumbnails-{{ section.id }}'
-      class='media-slider-thumbnail-component'
-    >
-      {% comment %}- 左箭头：当未超出屏幕时不展示，一次一张 -{% endcomment %}
-      <button
-        type='button'
-        class='product__media-thumbnail-button product__media-thumbnail-button--prev'
-        name='previous'
-        aria-label='Slide left'
-        aria-controls='CarouselThumbnails-{{ section.id }}'
-      >
-        <span class='product__media-thumbnail-icon'>
-          {{- 'icon-caret.svg' | inline_asset_content -}}
-        </span>
-      </button>
-      <ul
-        id='Slider-Thumbnails-{{ section.id }}'
-        class='product__media-slider-thumbnail-list'
-      >
-        {%- if featured_media != null -%}
-          {%- assign media_index = image_index | default: 0 | plus: 1 -%}
-          <li
-            id='Carousel-Slide-Thumbnails-{{ section.id }}-0'
-            class='product__media-slider-thumbnail-item'
-            data-target='{{ section.id }}-{{ featured_media.id }}'
-            data-media-position='{{ media_index }}'
-          >
-            {%- capture thumbnail_id -%}
-              Thumbnail-{{ section.id }}-0
-            {%- endcapture -%}
-            <button
-              class='product__media-slider-thumbnail-button'
-              aria-label='Load image {{ media_index }} in carousel view'
-              aria-current='true'
-              aria-controls='CarouselViewer-{{ section.id }}'
-              aria-describedby='{{ thumbnail_id }}'
-            >
-              {{
-                featured_media.preview_image
-                | image_url: width: 416
-                | image_tag:
-                  loading: 'lazy',
-                  sizes: sizes,
-                  widths: '54, 74, 104, 162, 208, 324, 416',
-                  id: thumbnail_id,
-                  alt: featured_media.alt
-                | escape
-              }}
-            </button>
-          </li>
-        {%- endif -%}
-        {%- for media in product.media -%}
-          {%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}
-            {%- assign media_index = image_index | default: 0 | plus: 1 -%}
-            <li
-              id='Carousel-Slide-Thumbnails-{{ section.id }}-{{ forloop.index }}'
-              class='product__media-slider-thumbnail-item'
-              data-target='{{ section.id }}-{{ media.id }}'
-              data-media-position='{{ media_index }}'
-            >
-              {%- capture thumbnail_id -%}
-                Thumbnail-{{ section.id }}-{{ forloop.index }}
-              {%- endcapture -%}
-              <button
-                class='product__media-slider-thumbnail-button'
-                aria-label='Load image {{ media_index }} in carousel view'
-                {% if media == product.selected_or_first_available_variant.featured_media
-                  or product.selected_or_first_available_variant.featured_media == null
-                  and forloop.index == 1
-                %}
-                  aria-current='true'
-                {% endif %}
-                aria-controls='CarouselViewer-{{ section.id }}'
-                aria-describedby='{{ thumbnail_id }}'
-              >
-                {{
-                  media.preview_image
-                  | image_url: width: 416
-                  | image_tag:
-                    loading: 'lazy',
-                    sizes: sizes,
-                    widths: '54, 74, 104, 162, 208, 324, 416',
-                    id: thumbnail_id,
-                    alt: media.alt
-                  | escape
-                }}
-              </button>
-            </li>
-          {%- endunless -%}
-        {%- endfor -%}
-      </ul>
-      <button
-        type='button'
-        class='product__media-thumbnail-button product__media-thumbnail-button--next'
-        name='next'
-        aria-label='Slide right'
-        aria-controls='CarouselThumbnails-{{ section.id }}'
-      >
-        <span class='product__media-thumbnail-icon'>
-          {{- 'icon-caret.svg' | inline_asset_content -}}
-        </span>
-      </button>
-    </carousel-component>
-  {%- endif -%}
 </media-carousel>

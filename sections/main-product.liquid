@@ -10,6 +10,7 @@
   {% endif %}
 >
   {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+  {{ 'section-main-product-next.css' | asset_url | stylesheet_tag }}
   {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
   {{ 'component-price.css' | asset_url | stylesheet_tag }}
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
@@ -76,7 +77,7 @@
   <div class="page-width">
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
       <div class="grid__item product__media-wrapper">
-        {% render 'product-media-gallery', variant_images: variant_images %}
+        {% render 'product-media-carousel', variant_images: variant_images %}
       </div>
       <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
@@ -711,10 +712,10 @@
         </div>
       </modal-dialog>
     {%- endfor -%}
-
+    
+    <script src="{{ 'media-carousel.js' | asset_url }}" defer="defer"></script>
     {%- if product.media.size > 0 -%}
       <script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
-      <script src="{{ 'media-gallery.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
     {%- if first_3d_model -%}
