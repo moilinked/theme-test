@@ -310,9 +310,9 @@ class CarouselComponent extends HTMLElement {
       this.currentPage = closestIndex;
     }
 
-    setTimeout(() => {
+    // setTimeout(() => {
       this.handleInfiniteLoop();
-    }, 1000);
+    // }, 1000);
 
     //- 触发轮播图切换事件
     if (this.currentPage !== previousPage && currentElement) {
