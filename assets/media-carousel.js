@@ -279,9 +279,9 @@ class CarouselComponent extends HTMLElement {
     const scrollLeft = this.sliderWrapper.scrollLeft;
 
     //- 如果启用循环，检查是否需要跳转到真实节点
-    // if (this.sliderItemsToShow.length > 1) {
-    //   this.handleInfiniteLoop(scrollLeft);
-    // }
+    if (this.sliderItemsToShow.length > 1) {
+      this.handleInfiniteLoop(scrollLeft);
+    }
 
     this.currentPage = Math.max(
       0,
