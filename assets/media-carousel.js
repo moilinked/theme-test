@@ -432,7 +432,7 @@ class CarouselComponent extends HTMLElement {
         (this.currentPage - 1 + this.sliderItemsToShow.length) %
         this.sliderItemsToShow.length;
     }
-    console.log("this.targetIndex=====>", this.targetIndex);
+    console.log("this.targetIndex=====>", targetIndex);
 
     //- 滚动到目标项目
     // const targetItem = this.sliderItemsToShow[targetIndex];
