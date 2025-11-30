@@ -245,8 +245,8 @@ class CarouselComponent extends HTMLElement {
 
     this.animationId = requestAnimationFrame(animate);
 
+    //- 获取真实显示的索引，并触发轮播图切换事件
     const currentPage = this.getCurrentShownIndex(i);
-
     this.dispatchEvent(
       new CustomEvent("carouselSlideChanged", {
         detail: {
