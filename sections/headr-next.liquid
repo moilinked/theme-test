@@ -1,0 +1,294 @@
+{% comment %} *CSS* {% endcomment %}
+<link rel='stylesheet' href='{{ 'component-search.css' | asset_url }}' media='print' onload="this.media='all'">
+<link rel='stylesheet' href='{{ 'component-menu-drawer.css' | asset_url }}' media='print' onload="this.media='all'">
+
+<style>
+  .header-wrapper {
+    z-index: 70;
+    position: relative;
+  }
+  .header-content {
+    width: 100%;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-margin-desktop);
+  }
+  .header-logo {
+    display: flex;
+    width: max-content;
+    height: max-content;
+    align-items: center;
+    justify-content: center;
+  }
+  .mega-menu-wrapper {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+  .mega-menu-nav {
+    width: 100%;
+    height: 100%;
+  }
+  .mega-menu-list {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .mega-menu-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 16px;
+    height: 100%;
+  }
+  .mega-menu-list-item:hover .mega-menu-jump-link {
+    color: var(--color-text-highlight);
+  }
+  .mega-menu-jump-link {
+    height: 100%;
+    align-content: center;
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+  .header-content-right {
+    gap: 12px;
+    display: flex;
+    position: relative;
+    align-items: center;
+  }
+  .header-content-right-item {
+    display: flex;
+    cursor: pointer;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+  }
+  .header-content-right-item .svg-wrapper {
+    width: 20px;
+    height: 20px;
+    color: #111111;
+  }
+  .cart-count-badge {
+    top: 0;
+    right: 0;
+    width: 22px;
+    color: #fff;
+    height: 22px;
+    display: flex;
+    position: absolute;
+    translate: 50% -30%;
+    border-radius: 22px;
+    align-items: center;
+    justify-content: center;
+    background-color: #00caff;
+  }
+</style>
+
+{%- style -%}
+{%- endstyle -%}
+
+{% comment %} *Layout* {% endcomment %}
+<shop-header class='header-wrapper'>
+  <header class='header'>
+    <div class='header-content'>
+      {%- if settings.logo != blank -%}
+        <a href='{{ routes.root_url }}' class='header-logo' aria-label='{{ shop.name }}'>
+          {% render 'component-image', image: settings.logo, width: 140, height: 34, width_plus: 5 %}
+        </a>
+      {%- endif -%}
+      <mega-menu class='mega-menu-wrapper'>
+        <nav class='mega-menu-nav' aria-label='MegaMenu'>
+          <ul class='mega-menu-list'>
+            {%- for block in section.blocks -%}
+              <li class='mega-menu-list-item'>
+                {%- case block.type -%}
+                  {%- when 'product_menu' -%}
+                    <div>{{ block.settings.title }}</div>
+                  {%- when 'link_menu' -%}
+                    <details>
+                      <summary>
+                        {{ block.settings.title }}
+                      </summary>
+                      <div>
+                        {{ block.settings.links | json }}
+                      </div>
+                      {%- if block.settings.links != blank -%}
+                      {%- endif -%}
+                    </details>
+                  {%- when 'image_text_menu' -%}
+                    <div>{{ block.settings.title }}</div>
+                  {%- when 'jump_menu' -%}
+                    {% assign url = block.settings.url | split: '?' | first | replace: request.origin, '' %}
+                    <a
+                      class='mega-menu-jump-link'
+                      href='{{ block.settings.url }}'
+                      {% if request.path == url %}
+                        aria-current='page'
+                      {% endif %}
+                    >
+                      {{ block.settings.title }}
+                    </a>
+                {%- endcase -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      </mega-menu>
+      <div class='header-content-right' id='country-selector'>
+        {% comment %} - 国家/地区选择器 - {% endcomment %}
+        {%- if section.settings.enable_country_selector -%}
+          <div class='header-content-right-item'>国家/地区选择器</div>
+        {%- endif -%}
+
+        {% comment %} - 搜索 - {% endcomment %}
+        <div class='header-content-right-item'>
+          <span class='svg-wrapper'>
+            {{- 'icon-search.svg' | inline_asset_content -}}
+          </span>
+        </div>
+
+        {% comment %} - 用户信息 - {% endcomment %}
+        {%- if shop.customer_accounts_enabled -%}
+          <account-drawer class='header-content-right-item' rel='nofollow'>
+            <span class='svg-wrapper'>{{ 'icon-account.svg' | inline_asset_content }}</span>
+            <span class='visually-hidden'>
+              {%- if customer -%}
+                Account
+              {%- else -%}
+                Log in
+              {%- endif -%}
+            </span>
+          </account-drawer>
+        {%- endif -%}
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+          {%- endcase -%}
+        {%- endfor -%}
+
+        {% comment %} - 购物车 - {% endcomment %}
+        <div class='header-content-right-item' id='cart-icon-bubble'>
+          <span class='svg-wrapper'>{{- 'icon-cart.svg' | inline_asset_content -}}</span>
+          <span class='visually-hidden'>Cart</span>
+          {%- if cart != empty -%}
+            <div class='cart-count-badge'>
+              {%- if cart.item_count < 100 -%}
+                <span aria-hidden='true'>{{ cart.item_count }}</span>
+              {%- endif -%}
+              <span class='visually-hidden'>
+                {%- if cart.item_count == 1 -%}1 item{% else %}{{ cart.item_count }} items{% endif -%}
+              </span>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </header>
+</shop-header>
+
+{% comment %} *Schema* {% endcomment %}
+{% schema %}
+{
+  "name": "导航栏",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo 图片",
+      "info": "建议图片压缩至 500 KB 以内"
+    },
+    {
+      "type": "header",
+      "content": "导航栏右侧内容"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "展示国家/地区选择器"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_customer_avatar",
+      "default": true,
+      "label": "展示用户信息"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "product_menu",
+      "name": "产品菜单",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "标题"
+        }
+      ]
+    },
+    {
+      "type": "link_menu",
+      "name": "链接集合菜单",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "标题"
+        },
+        { "type": "link_list", "id": "links", "label": "链接集合" },
+        {
+          "type": "select",
+          "id": "popup_type",
+          "label": "弹出样式",
+          "default": "min-width",
+          "options": [
+            { "value": "min-width", "label": "最小宽度" },
+            { "value": "full_screen", "label": "占满屏幕" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "image_text_menu",
+      "name": "图文卡片菜单",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "标题"
+        }
+      ]
+    },
+    {
+      "type": "jump_menu",
+      "name": "跳转菜单",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "标题"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "跳转链接"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
