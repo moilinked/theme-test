@@ -26,7 +26,7 @@
             "type": "link_menu",
             "settings": {
               "title": "drawer",
-              "menu": "",
+              "menu": "shop-by",
               "popup_type": "min-width"
             }
           }
