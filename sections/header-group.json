@@ -17,7 +17,6 @@
           "link_menu_6Q3rUN": {
             "type": "link_menu",
             "settings": {
-              "title": "shop",
               "menu": "main-menu",
               "popup_type": "min-width"
             }
@@ -25,7 +24,6 @@
           "link_menu_eqTkDi": {
             "type": "link_menu",
             "settings": {
-              "title": "drawer",
               "menu": "shop-by",
               "popup_type": "min-width"
             }
