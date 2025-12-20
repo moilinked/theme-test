@@ -117,6 +117,9 @@
   }
   .full_screen {
     width: 100%;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
   }
 </style>
 
@@ -136,6 +139,20 @@
         <nav class="header-menu-nav" aria-label="MegaMenu">
           <ul class="header-menu-list">
             {%- for block in section.blocks -%}
+              {%- liquid
+                assign full_screen = false
+                case block.type
+                  when 'link_menu'
+                    assign first_link = block.settings.menu.links | first
+                    if first_link.links != blank
+                      assign full_screen = true
+                    endif
+                  when 'product_menu'
+                    assign full_screen = true
+                  when 'image_text_menu'
+                    assign full_screen = true
+                endcase
+              -%}
               <li
                 role="none"
                 data-menu-item
@@ -154,13 +171,6 @@
                       {{ block.settings.menu.title | default: '' }}
                     </button>
                     {%- if block.settings.menu != blank and block.settings.menu.links != blank -%}
-                      {%- liquid
-                        assign full_screen = false
-                        assign first_link = block.settings.menu.links | first
-                        if first_link.links != blank
-                          assign full_screen = true
-                        endif
-                      -%}
                       <ul class="header__submenu list-menu {% if full_screen %}full-screen{% endif %}" role="menu">
                         {%- for link_1 in block.settings.menu.links -%}
                           {%- if link_1.links != blank -%}
