@@ -127,7 +127,7 @@
                       {{ block.settings.title }}
                     </button>
                     <ul class="header__submenu list-menu" role="menu">
-                      {% for link in block.settings.menu %}
+                      {% for link in block.settings.menu.links %}
                         <li role="none">
                           <a
                             href="{{ link.url }}"
