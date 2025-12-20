@@ -120,27 +120,26 @@
                     <div>{{ block.settings.title }}</div>
                   {%- when 'link_menu' -%}
                     <button
+                      class="header__menu-item list-menu__item link focus-inset"
                       aria-haspopup="true"
                       aria-expanded="false"
                     >
                       {{ block.settings.title }}
                     </button>
-                    {%- if block.settings.links != blank -%}
-                      <ul class="header__submenu list-menu" role="menu">
-                        {% for child in block.settings.links %}
-                          <li role="none">
-                            <a
-                              href="{{ child.url }}"
-                              class="list-menu__item link"
-                              role="menuitem"
-                              tabindex="-1"
-                            >
-                              {{ child.title }}
-                            </a>
-                          </li>
-                        {% endfor %}
-                      </ul>
-                    {%- endif -%}
+                    <ul class="header__submenu list-menu" role="menu">
+                      {% for child in block.settings.links %}
+                        <li role="none">
+                          <a
+                            href="{{ child.url }}"
+                            class="list-menu__item link"
+                            role="menuitem"
+                            tabindex="-1"
+                          >
+                            {{ child.title }}
+                          </a>
+                        </li>
+                      {% endfor %}
+                    </ul>
                   {%- when 'image_text_menu' -%}
                     <div>{{ block.settings.title }}</div>
                   {%- when 'jump_menu' -%}
