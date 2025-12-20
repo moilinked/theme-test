@@ -148,7 +148,7 @@
                       aria-haspopup="true"
                       aria-expanded="false"
                     >
-                      {{ block.settings.menu.title }}
+                      {{ block.settings.menu.title | default: "" }}
                     </button>
                     {%- if block.settings.menu != blank and block.settings.menu.links != blank -%}
                       <ul class="header__submenu list-menu" role="menu">
