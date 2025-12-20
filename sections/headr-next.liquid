@@ -150,24 +150,26 @@
                     >
                       {{ block.settings.title }}
                     </button>
-                    <ul class="header__submenu list-menu" role="menu">
-                      {% for link_1 in block.settings.menu.links %}
-                        {%- if link_1.links != blank -%}
-                          {%- assign link_level = 2 -%}
-                        {%- endif -%}
-                        {{ link_level }}
-                        <li role="none">
-                          <a
-                            href="{{ link_1.url }}"
-                            class="list-menu__item link"
-                            role="menuitem"
-                            tabindex="-1"
-                          >
-                            {{ link_1.title }}
-                          </a>
-                        </li>
-                      {% endfor %}
-                    </ul>
+                    {%- if block.settings.menu.links != blank -%}
+                      <ul class="header__submenu list-menu" role="menu">
+                        {%- for link_1 in block.settings.menu.links -%}
+                          {%- if link_1.links != blank -%}
+                            {%- assign link_level = 2 -%}
+                          {%- endif -%}
+                          {{ link_level }}
+                          <li role="none">
+                            <a
+                              href="{{ link_1.url }}"
+                              class="list-menu__item link"
+                              role="menuitem"
+                              tabindex="-1"
+                            >
+                              {{ link_1.title }}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
                   {%- when 'image_text_menu' -%}
                     <div>{{ block.settings.title }}</div>
                   {%- when 'jump_menu' -%}
