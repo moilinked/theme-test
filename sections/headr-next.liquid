@@ -119,14 +119,12 @@
                   {%- when 'product_menu' -%}
                     <div>{{ block.settings.title }}</div>
                   {%- when 'link_menu' -%}
-                    <div
+                    <button
                       aria-haspopup="true"
                       aria-expanded="false"
                     >
-                      <div>
-                        {{ block.settings.links | json }}
-                      </div>
-                    </div>
+                      {{ block.settings.title }}
+                    </button>
                     {%- if block.settings.links != blank -%}
                       <ul class="header__submenu list-menu" role="menu">
                         {% for child in block.settings.links %}
