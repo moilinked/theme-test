@@ -97,11 +97,12 @@
 <shop-header class='header-wrapper'>
   <header class='header'>
     <div class='header-content'>
-      {%- if settings.logo != blank -%}
+      {% comment %} {%- if settings.logo != blank -%}
         <a href='{{ routes.root_url }}' class='header-logo' aria-label='{{ shop.name }}'>
           {% render 'component-image', image: settings.logo, width: 140, height: 34, width_plus: 5 %}
         </a>
-      {%- endif -%}
+      {%- endif -%} {% endcomment %}
+       <div class='header-logo'>LOGO</div>
       <mega-menu class='mega-menu-wrapper'>
         <nav class='mega-menu-nav' aria-label='MegaMenu'>
           <ul class='mega-menu-list'>
