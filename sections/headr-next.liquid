@@ -127,7 +127,7 @@
                       {{ block.settings.title }}
                     </button>
                     <ul class="header__submenu list-menu" role="menu">
-                      {% for link in block.settings.links %}
+                      {% for link in block.settings.menu %}
                         <li role="none">
                           <a
                             href="{{ link.url }}"
@@ -339,7 +339,7 @@
           "id": "title",
           "label": "标题"
         },
-        { "type": "link_list", "id": "links", "label": "链接集合" },
+        { "type": "link_list", "id": "menu", "label": "链接集合" },
         {
           "type": "select",
           "id": "popup_type",
