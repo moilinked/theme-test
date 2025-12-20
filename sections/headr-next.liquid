@@ -148,10 +148,17 @@
                       aria-haspopup="true"
                       aria-expanded="false"
                     >
-                      {{ block.settings.menu.title | default: "" }}
+                      {{ block.settings.menu.title | default: '' }}
                     </button>
                     {%- if block.settings.menu != blank and block.settings.menu.links != blank -%}
-                      <ul class="header__submenu list-menu" role="menu">
+                      {%- liquid
+                        assign full_screen = false
+                        assign first_link = block.settings.menu.links | first
+                        if first_link.links != blank
+                          assign full_screen = true
+                        endif
+                      -%}
+                      <ul class="header__submenu list-menu {% if full_screen %}full-screen{% endif %}" role="menu">
                         {%- for link_1 in block.settings.menu.links -%}
                           {%- if link_1.links != blank -%}
                             {%- assign link_level = 2 -%}
