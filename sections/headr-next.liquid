@@ -127,15 +127,19 @@
                       {{ block.settings.title }}
                     </button>
                     <ul class="header__submenu list-menu" role="menu">
-                      {% for link in block.settings.menu.links %}
+                      {% for link_1 in block.settings.menu.links %}
+                        {%- if link_1.links != blank -%}
+                          {%- assign link_level = 2 -%}
+                        {%- endif -%}
+                        {{ link_level }}
                         <li role="none">
                           <a
-                            href="{{ link.url }}"
+                            href="{{ link_1.url }}"
                             class="list-menu__item link"
                             role="menuitem"
                             tabindex="-1"
                           >
-                            {{ link.title }}
+                            {{ link_1.title }}
                           </a>
                         </li>
                       {% endfor %}
