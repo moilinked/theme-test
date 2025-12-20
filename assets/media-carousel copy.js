@@ -78,7 +78,7 @@ class MediaCarousel extends HTMLElement {
     this.currentIndex = i;
     this.jumpToIndex(i);
   }
-
+  
   next() {
     this.animateToIndex(++this.currentIndex);
   }
