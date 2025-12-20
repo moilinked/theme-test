@@ -144,7 +144,7 @@
                     <div>{{ block.settings.title }}</div>
                   {%- when 'link_menu' -%}
                     <button
-                      class="header__menu-item list-menu__item"
+                      class="header__menu-item list-menu__item link focus-inset"
                       aria-haspopup="true"
                       aria-expanded="false"
                     >
@@ -260,11 +260,11 @@
         if (!trigger) return;
 
         item.addEventListener('mouseenter', () => {
-          this.scheduleOpen(item);
+          this.open(item);
         });
 
         item.addEventListener('mouseleave', () => {
-          this.scheduleClose(item);
+          this.close(item);
         });
 
         trigger.addEventListener('focus', () => {
