@@ -105,7 +105,7 @@
         {%- endif -%}
       {% endcomment %}
       <div class="header-logo">LOGO</div>
-      <mega-menu class="mega-menu-wrapper">
+      <header-menu class="mega-menu-wrapper">
         <nav class="mega-menu-nav" aria-label="MegaMenu">
           <ul class="mega-menu-list">
             {%- for block in section.blocks -%}
@@ -161,7 +161,7 @@
             {%- endfor -%}
           </ul>
         </nav>
-      </mega-menu>
+      </header-menu>
       <div class="header-content-right" id="country-selector">
         {% comment %} - 国家/地区选择器 - {% endcomment %}
         {%- if section.settings.enable_country_selector -%}
@@ -215,6 +215,78 @@
     </div>
   </header>
 </shop-header>
+
+<script>
+  class ShopHeader extends HTMLElement {
+    delay = 120;
+    closeDelay = 180;
+    timer = null;
+
+    connectedCallback() {
+      this.items = this.querySelectorAll('[data-menu-item]');
+      this.bindEvents();
+    }
+
+    bindEvents() {
+      this.items.forEach((item) => {
+        const trigger = item.querySelector('button');
+        if (!trigger) return;
+
+        item.addEventListener('mouseenter', () => {
+          this.scheduleOpen(item);
+        });
+
+        item.addEventListener('mouseleave', () => {
+          this.scheduleClose(item);
+        });
+
+        trigger.addEventListener('focus', () => {
+          this.open(item);
+        });
+
+        trigger.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            this.close(item);
+            trigger.focus();
+          }
+        });
+      });
+    }
+
+    scheduleOpen(item) {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => this.open(item), this.delay);
+    }
+
+    scheduleClose(item) {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => this.close(item), this.closeDelay);
+    }
+
+    open(item) {
+      this.closeAll();
+      item.dataset.open = 'true';
+      const btn = item.querySelector('button');
+      btn?.setAttribute('aria-expanded', 'true');
+
+      item.querySelectorAll('a').forEach((a) => (a.tabIndex = 0));
+    }
+
+    close(item) {
+      delete item.dataset.open;
+      const btn = item.querySelector('button');
+      btn?.setAttribute('aria-expanded', 'false');
+
+      item.querySelectorAll('a').forEach((a) => (a.tabIndex = -1));
+    }
+
+    closeAll() {
+      this.items.forEach((item) => this.close(item));
+    }
+  }
+
+  customElements.define('shop-header', ShopHeader);
+</script>
 
 {% comment %} *Schema* {% endcomment %}
 {% schema %}
