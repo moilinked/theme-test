@@ -144,13 +144,13 @@
                     <div>{{ block.settings.title }}</div>
                   {%- when 'link_menu' -%}
                     <button
-                      class="header__menu-item list-menu__item link focus-inset"
+                      class="header__menu-item list-menu__item"
                       aria-haspopup="true"
                       aria-expanded="false"
                     >
                       {{ block.settings.title }}
                     </button>
-                    {%- if block.settings.menu.links != blank -%}
+                    {%- if block.settings.menu != blank and block.settings.menu.links != blank -%}
                       <ul class="header__submenu list-menu" role="menu">
                         {%- for link_1 in block.settings.menu.links -%}
                           {%- if link_1.links != blank -%}
