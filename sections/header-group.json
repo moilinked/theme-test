@@ -7,42 +7,41 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
-    "name": "t:sections.header.name",
-    "type": "header",
-    "sections": {
-      "header": {
-        "type": "headr-next",
-        "blocks": {
-          "link_menu_6Q3rUN": {
-            "type": "link_menu",
-            "settings": {
-              "title": "shop",
-              "links": "",
-              "popup_type": "min-width"
-            }
-          },
-          "link_menu_eqTkDi": {
-            "type": "link_menu",
-            "settings": {
-              "title": "drawer",
-              "links": "",
-              "popup_type": "min-width"
-            }
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "header": {
+      "type": "headr-next",
+      "blocks": {
+        "link_menu_6Q3rUN": {
+          "type": "link_menu",
+          "settings": {
+            "title": "shop",
+            "links": "main-menu",
+            "popup_type": "min-width"
           }
         },
-        "block_order": [
-          "link_menu_6Q3rUN",
-          "link_menu_eqTkDi"
-        ],
-        "settings": {
-          "enable_country_selector": true,
-          "enable_customer_avatar": true
+        "link_menu_eqTkDi": {
+          "type": "link_menu",
+          "settings": {
+            "title": "drawer",
+            "links": "",
+            "popup_type": "min-width"
+          }
         }
+      },
+      "block_order": [
+        "link_menu_6Q3rUN",
+        "link_menu_eqTkDi"
+      ],
+      "settings": {
+        "enable_country_selector": true,
+        "enable_customer_avatar": true
       }
-    },
-    "order": [
-      "header"
-    ]
-  }
-  
+    }
+  },
+  "order": [
+    "header"
+  ]
+}
