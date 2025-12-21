@@ -126,38 +126,38 @@
     position: absolute;
     inset: 100% 0 auto 0;
     background: #fff;
-    box-shadow: 0 16px 40px rgba(0,0,0,.12);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
     opacity: 0;
     visibility: hidden;
-    transition: .25s ease;
+    transition: 0.25s ease;
   }
-  
+
   /* hover 打开 */
   .has-mega:hover > .mega-menu,
   .has-mega:focus-within > .mega-menu {
     opacity: 1;
     visibility: visible;
   }
-  
+
   /* 三列布局 */
   .mega-menu__grid {
     display: grid;
     grid-template-columns: 240px 240px 1fr;
     min-height: 420px;
   }
-  
+
   /* 默认隐藏 */
   .lvl2-group,
   .product-list {
     display: none;
   }
-  
+
   /* 激活态 */
-  .lvl2-group[data-active="true"],
-  .product-list[data-active="true"] {
+  .lvl2-group[data-active='true'],
+  .product-list[data-active='true'] {
     display: block;
   }
-  
+
   /* hover 高亮 */
   .lvl1-item:hover,
   .lvl2-item:hover {
@@ -220,74 +220,19 @@
                       <div class="mega-menu__grid" data-mega-panel>
                         <!-- 左：一级 -->
                         <ul class="mega-menu__level1">
-                          <li>
-                            <button
-                              class="lvl1-item"
-                              data-lvl1="1"
-                              aria-expanded="false"
-                            >
-                              level1
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              class="lvl1-item"
-                              data-lvl1="2"
-                              aria-expanded="false"
-                            >
-                              level2
-                            </button>
-                          </li>
+                          {%- for menu_1 in shop.metafields.custom.header_product_mega_menu.value -%}
+                            {%- assign level_index = forloop.index -%}
+                            <li>
+                              <button
+                                class="lvl1-item"
+                                aria-expanded="false"
+                                data-level="{{ level_index }}"
+                              >
+                                {{ menu_1.title }}
+                              </button>
+                            </li>
+                          {%- endfor -%}
                         </ul>
-                        <!-- 中：二级 -->
-                        <div class="mega-menu__level2">
-                          <ul
-                            class="lvl2-group"
-                            data-lvl1="1"
-                          >
-                            <li>
-                              <button
-                                class="lvl2-item"
-                                data-lvl2="1.2"
-                              >
-                                level1.1
-                              </button>
-                            </li>
-                            <li>
-                              <button
-                                class="lvl2-item"
-                                data-lvl2="1.2"
-                              >
-                                level1.2
-                              </button>
-                            </li>
-                          </ul>
-                          <ul
-                            class="lvl2-group"
-                            data-lvl1="2"
-                          >
-                            <li>
-                              <button
-                                class="lvl2-item"
-                                data-lvl2="2.1"
-                              >
-                                level2.1
-                              </button>
-                            </li>
-                            <li>
-                              <button
-                                class="lvl2-item"
-                                data-lvl2="2.2"
-                              >
-                                level2.2
-                              </button>
-                            </li>
-                          </ul>
-                        </div>
-                        <!-- 右：三级 -->
-                        <div class="mega-menu__level3">
-                          
-                        </div>
                       </div>
                     </div>
                   {%- when 'link_menu' -%}
@@ -464,54 +409,52 @@
 
   class MegaMenu {
     constructor(root) {
-      this.root = root
-      this.lvl1Items = root.querySelectorAll('.lvl1-item')
-      this.lvl2Items = root.querySelectorAll('.lvl2-item')
-  
-      this.bind()
+      this.root = root;
+      this.lvl1Items = root.querySelectorAll('.lvl1-item');
+      this.lvl2Items = root.querySelectorAll('.lvl2-item');
+
+      this.bind();
     }
-  
+
     bind() {
-      this.lvl1Items.forEach(btn => {
+      this.lvl1Items.forEach((btn) => {
         btn.addEventListener('mouseenter', () => {
-          this.activateLevel1(btn.dataset.lvl1)
-        })
-  
+          this.activateLevel1(btn.dataset.lvl1);
+        });
+
         btn.addEventListener('focus', () => {
-          this.activateLevel1(btn.dataset.lvl1)
-        })
-      })
-  
-      this.lvl2Items.forEach(btn => {
+          this.activateLevel1(btn.dataset.lvl1);
+        });
+      });
+
+      this.lvl2Items.forEach((btn) => {
         btn.addEventListener('mouseenter', () => {
-          const lvl1 = btn.closest('[data-lvl1]').dataset.lvl1
-          this.activateLevel2(lvl1, btn.dataset.lvl2)
-        })
-      })
+          const lvl1 = btn.closest('[data-lvl1]').dataset.lvl1;
+          this.activateLevel2(lvl1, btn.dataset.lvl2);
+        });
+      });
     }
-  
+
     activateLevel1(index) {
-      this.root.querySelectorAll('.lvl2-group').forEach(el => {
-        el.dataset.active = el.dataset.lvl1 === index
-      })
-  
-      this.root.querySelectorAll('.product-list').forEach(el => {
-        el.dataset.active = 'false'
-      })
+      this.root.querySelectorAll('.lvl2-group').forEach((el) => {
+        el.dataset.active = el.dataset.lvl1 === index;
+      });
+
+      this.root.querySelectorAll('.product-list').forEach((el) => {
+        el.dataset.active = 'false';
+      });
     }
-  
+
     activateLevel2(lvl1, lvl2) {
-      this.root.querySelectorAll('.product-list').forEach(el => {
-        el.dataset.active =
-          el.dataset.lvl1 === lvl1 &&
-          el.dataset.lvl2 === lvl2
-      })
+      this.root.querySelectorAll('.product-list').forEach((el) => {
+        el.dataset.active = el.dataset.lvl1 === lvl1 && el.dataset.lvl2 === lvl2;
+      });
     }
   }
-  
-  document.querySelectorAll('.mega-menu').forEach(menu => {
-    new MegaMenu(menu)
-  })
+
+  document.querySelectorAll('.mega-menu').forEach((menu) => {
+    new MegaMenu(menu);
+  });
 </script>
 
 {% comment %} *Schema* {% endcomment %}
