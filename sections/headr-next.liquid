@@ -216,7 +216,6 @@
                     </button>
                     <div class="mega-menu" id="{{ block.settings.title }}">
                       <div class="mega-menu__grid" data-mega-panel>
-                        <!-- 左：一级 -->
                         <ul class="mega-menu__level1">
                           {%- for menu_1 in shop.metafields.custom.header_product_mega_menu.value limit: 10 -%}
                             {%- assign level_index = forloop.index -%}
