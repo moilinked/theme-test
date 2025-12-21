@@ -168,10 +168,6 @@
 </style>
 
 {% comment %} *Layout* {% endcomment %}
-{%- for item in shop.metafields.custom.header_product_mega_menu.value -%}
-  {{ item.title }}
-{%- endfor -%}
-<br>
 {{ shop.metafields.custom.header_product_mega_menu }}
 <shop-header class="header-wrapper">
   <header class="header">
@@ -230,7 +226,7 @@
                                 aria-expanded="false"
                                 data-level="{{ level_index }}"
                               >
-                                {{ menu_1.title }}
+                                {{ menu_1.title }} => {{ level_index }}
                               </button>
                             </li>
                           {%- endfor -%}
