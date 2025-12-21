@@ -229,7 +229,7 @@
                                 {{ menu_1.title }} => {{ level_index }}
                               </button>
                             </li>
-                            {%- if menu_1.children != blank -%}
+                            {%- if menu_1.children != blank and menu_1.type == "menu" -%}
                               {%- for menu_2 in menu_1.children limit: 10 -%}
                                 {{ menu_2.title }}
                               {%- endfor -%}
