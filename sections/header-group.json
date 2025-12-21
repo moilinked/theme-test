@@ -7,40 +7,46 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
-    "name": "t:sections.header.name",
-    "type": "header",
-    "sections": {
-      "header": {
-        "type": "headr-next",
-        "blocks": {
-          "link_menu_6Q3rUN": {
-            "type": "link_menu",
-            "settings": {
-              "menu": "main-menu",
-              "popup_type": "min-width"
-            }
-          },
-          "link_menu_eqTkDi": {
-            "type": "link_menu",
-            "settings": {
-              "menu": "shop-by",
-              "popup_type": "min-width"
-            }
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "header": {
+      "type": "headr-next",
+      "blocks": {
+        "product_menu_tafM8U": {
+          "type": "product_menu",
+          "settings": {
+            "title": "Products"
           }
         },
-        "block_order": [
-          "link_menu_6Q3rUN",
-          "link_menu_eqTkDi"
-        ],
-        "settings": {
-          "enable_country_selector": true,
-          "enable_customer_avatar": true
+        "link_menu_6Q3rUN": {
+          "type": "link_menu",
+          "settings": {
+            "menu": "main-menu",
+            "popup_type": "min-width"
+          }
+        },
+        "link_menu_eqTkDi": {
+          "type": "link_menu",
+          "settings": {
+            "menu": "shop-by",
+            "popup_type": "min-width"
+          }
         }
+      },
+      "block_order": [
+        "product_menu_tafM8U",
+        "link_menu_6Q3rUN",
+        "link_menu_eqTkDi"
+      ],
+      "settings": {
+        "enable_country_selector": true,
+        "enable_customer_avatar": true
       }
-    },
-    "order": [
-      "header"
-    ]
-  }
-  
+    }
+  },
+  "order": [
+    "header"
+  ]
+}
