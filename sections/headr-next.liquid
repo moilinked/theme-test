@@ -165,9 +165,17 @@
                       class="header__menu-item list-menu__item link focus-inset"
                       aria-haspopup="true"
                       aria-expanded="false"
+                      aria-controls="{{ block.settings.title }}"
                     >
-                      {{ block.settings.menu.title | default: '' }}
+                      {{ block.settings.title }}
                     </button>
+                    <div class="mega-menu" id="{{ block.settings.title }}">
+                      <div class="mega-menu__grid" data-mega-panel>
+                        <!-- 左：一级 -->
+                        <!-- 中：二级 -->
+                        <!-- 右：三级 -->
+                      </div>
+                    </div>
                   {%- when 'link_menu' -%}
                     <button
                       class="header__menu-item list-menu__item link focus-inset"
