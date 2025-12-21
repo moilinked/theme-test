@@ -166,10 +166,10 @@
 </style>
 
 {% comment %} *Layout* {% endcomment %}
- {{ shop.metafields.custom.header_product_mega_menu }}
- {%- for item in shop.metafields.custom.header_product_mega_menu -%}
+{%- for item in shop.metafields.custom.header_product_mega_menu.value -%}
   {{ item.title }}
- {%- endfor -%}
+{%- endfor -%}
+{{ shop.metafields.custom.header_product_mega_menu.value }}
 <shop-header class="header-wrapper">
   <header class="header">
     <div class="header-content">
