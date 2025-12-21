@@ -214,6 +214,54 @@
   .product-list__item:hover {
     color: var(--color-text-highlight);
   }
+
+  .mega-panel {
+    position: absolute;
+    inset: 100% 0 auto 0;
+    background: #fff;
+    display: none;
+  }
+  
+  .has-mega:hover > .mega-panel,
+  .has-mega:focus-within > .mega-panel {
+    display: block;
+  }
+  
+  .menu-l2 {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+  }
+  
+  .menu-l2-item {
+    display: contents;
+  }
+  
+  .menu-l2-trigger {
+    grid-column: 1;
+  }
+  
+  .menu-l3 {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+  }
+  
+  .menu-l3-list {
+    grid-column: 1;
+  }
+  
+  .menu-products {
+    grid-column: 2;
+  }
+  
+  .product-group {
+    display: none;
+  }
+  
+  .product-group.is-active {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
 </style>
 
 {% comment %} *Layout* {% endcomment %}
