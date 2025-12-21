@@ -314,7 +314,7 @@
                     >
                       {{ block.settings.title }}
                     </button>
-                    <div class="mega-menu" id="{{ block.settings.title }}">
+                    <div class="mega-popup" role="group" id="{{ block.settings.title }}">
                       <ul class="menu-l1">
                         {% for menu_1 in shop.metafields.custom.header_product_mega_menu.value %}
                           <li class="menu-l1-item{% if forloop.first %} is-active{% endif %}">
