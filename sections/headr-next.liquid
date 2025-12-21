@@ -215,61 +215,56 @@
     color: var(--color-text-highlight);
   }
 
-  .mega-panel {
-    position: absolute;
-    inset: 100% 0 auto 0;
+  .mega-popup {
+    display: grid;
+    grid-template-columns: 240px 300px 1fr;
     background: #fff;
+    box-shadow: 0 16px 40px rgba(0,0,0,.12);
+  }
+  
+  /* 左列 */
+  .menu-l1 {
+    grid-column: 1;
+  }
+  
+  /* 中 + 右（属于当前 L1） */
+  .menu-l1-panel {
+    grid-column: 2 / 4;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+  }
+  
+  /* 中列 */
+  .menu-l2 {
+    grid-column: 1;
+  }
+  
+  /* 右列 */
+  .menu-l3-area {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+  }
+  
+  .menu-l3 {
+    grid-column: 1;
+  }
+  
+  .menu-products {
+    grid-column: 2;
+  }
+  
+  .menu-l1-panel,
+  .menu-l3-area,
+  .product-group {
     display: none;
   }
-
-  .has-mega:hover > .mega-panel,
-  .has-mega:focus-within > .mega-panel {
+  
+  .menu-l1-item.is-active > .menu-l1-panel,
+  .menu-l2-item.is-active > .menu-l3-area,
+  .product-group.is-active {
     display: block;
   }
-
-/* 左列 */
-.menu-l1 {
-  grid-column: 1;
-}
-
-/* 中 + 右（属于当前 L1） */
-.menu-l1-panel {
-  grid-column: 2 / 4;
-  display: grid;
-  grid-template-columns: 300px 1fr;
-}
-
-/* 中列 */
-.menu-l2 {
-  grid-column: 1;
-}
-
-/* 右列 */
-.menu-l3-area {
-  grid-column: 2;
-  display: grid;
-  grid-template-columns: 260px 1fr;
-}
-
-.menu-l3 {
-  grid-column: 1;
-}
-
-.menu-products {
-  grid-column: 2;
-}
-
-.menu-l1-panel,
-.menu-l3-area,
-.product-group {
-  display: none;
-}
-
-.menu-l1-item.is-active > .menu-l1-panel,
-.menu-l2-item.is-active > .menu-l3-area,
-.product-group.is-active {
-  display: block;
-}
 </style>
 
 {% comment %} *Layout* {% endcomment %}
