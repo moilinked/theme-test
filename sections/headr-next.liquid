@@ -221,43 +221,43 @@
     background: #fff;
     display: none;
   }
-  
+
   .has-mega:hover > .mega-panel,
   .has-mega:focus-within > .mega-panel {
     display: block;
   }
-  
+
   .menu-l2 {
     display: grid;
     grid-template-columns: 240px 1fr;
   }
-  
+
   .menu-l2-item {
     display: contents;
   }
-  
+
   .menu-l2-trigger {
     grid-column: 1;
   }
-  
+
   .menu-l3 {
     grid-column: 2;
     display: grid;
     grid-template-columns: 260px 1fr;
   }
-  
+
   .menu-l3-list {
     grid-column: 1;
   }
-  
+
   .menu-products {
     grid-column: 2;
   }
-  
+
   .product-group {
     display: none;
   }
-  
+
   .product-group.is-active {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -312,75 +312,65 @@
                       {{ block.settings.title }}
                     </button>
                     <div class="mega-menu" id="{{ block.settings.title }}">
-                      {% for menu_1 in shop.metafields.custom.header_product_mega_menu.value %}
-                        <li class="menu-l1 has-mega">
-                    
-                          <!-- Level 1 -->
-                          <button
-                            class="menu-l1-trigger"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                          >
-                            {{ menu_1.title }}
-                          </button>
-                    
-                          {% if menu_1.children %}
-                          <div class="mega-panel" role="group">
-                    
-                            <!-- Level 2 -->
-                            <ul class="menu-l2">
-                              {% for menu_2 in menu_1.children %}
-                              <li class="menu-l2-item{% if forloop.first %} is-active{% endif %}">
-                    
-                                <button
-                                  class="menu-l2-trigger"
-                                  aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
-                                >
-                                  {{ menu_2.title }}
-                                </button>
-                    
-                                {% if menu_2.children %}
-                                <div class="menu-l3">
-                    
-                                  <!-- Level 3 list -->
-                                  <ul class="menu-l3-list">
-                                    {% for menu_3 in menu_2.children %}
-                                    <li>
+                      <ul class="menu-l1">
+                        {% for menu_1 in shop.metafields.custom.header_product_mega_menu.value %}
+                          <li class="menu-l1-item{% if forloop.first %} is-active{% endif %}">
+                            <button
+                              class="menu-l1-trigger"
+                              aria-haspopup="true"
+                              aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                            >
+                              {{ menu_1.title }}
+                            </button>
+
+                            {% if menu_1.children %}
+                              <div class="menu-l1-panel">
+                                <!-- 中列：Level 2 -->
+                                <ul class="menu-l2">
+                                  {% for menu_2 in menu_1.children %}
+                                    <li class="menu-l2-item{% if forloop.first %} is-active{% endif %}">
                                       <button
-                                        class="menu-l3-trigger{% if forloop.first %} is-active{% endif %}"
+                                        class="menu-l2-trigger"
                                         aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
                                       >
-                                        {{ menu_3.title }}
+                                        {{ menu_2.title }}
                                       </button>
+
+                                      {% if menu_2.children %}
+                                        <!-- 右列：Level 3 / Products -->
+                                        <div class="menu-l3-area">
+                                          <ul class="menu-l3">
+                                            {% for menu_3 in menu_2.children %}
+                                              <li>
+                                                <button
+                                                  class="menu-l3-trigger{% if forloop.first %} is-active{% endif %}"
+                                                  aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                                                >
+                                                  {{ menu_3.title }}
+                                                </button>
+                                              </li>
+                                            {% endfor %}
+                                          </ul>
+
+                                          <div class="menu-products">
+                                            {% for menu_3 in menu_2.children %}
+                                              <div class="product-group{% if forloop.first %} is-active{% endif %}">
+                                                {% for product in menu_3.children %}
+                                                  <span>{{ product.title }}</span>
+                                                {% endfor %}
+                                              </div>
+                                            {% endfor %}
+                                          </div>
+                                        </div>
+                                      {% endif %}
                                     </li>
-                                    {% endfor %}
-                                  </ul>
-                    
-                                  <!-- Products -->
-                                  <div class="menu-products">
-                                    {% for menu_3 in menu_2.children %}
-                                    <div
-                                      class="product-group{% if forloop.first %} is-active{% endif %}"
-                                    >
-                                      {% for product in menu_3.children %}
-                                        <span>{{ product.title }}</span> 
-                                      {% endfor %}
-                                    </div>
-                                    {% endfor %}
-                                  </div>
-                    
-                                </div>
-                                {% endif %}
-                    
-                              </li>
-                              {% endfor %}
-                            </ul>
-                    
-                          </div>
-                          {% endif %}
-                    
-                        </li>
+                                  {% endfor %}
+                                </ul>
+                              </div>
+                            {% endif %}
+                          </li>
                         {% endfor %}
+                      </ul>
                     </div>
                   {%- when 'link_menu' -%}
                     <button
