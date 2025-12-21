@@ -265,68 +265,61 @@
                     </button>
                     <div class="mega-menu" id="{{ block.settings.title }}">
                       <div class="mega-menu__grid" data-mega-panel>
-                        <ul class="mega-menu__level1">
-                          {%- for menu_1 in shop.metafields.custom.header_product_mega_menu.value limit: 10 -%}
-                            {%- assign level_index = forloop.index -%}
-                            <li>
-                              <button
-                                class="lvl1-item"
-                                aria-expanded="false"
-                                data-lvl1="{{ level_index }}"
-                              >
-                                {{ menu_1.title }}
-                              </button>
-                            </li>
-                          {%- endfor -%}
-                        </ul>
-                        <div class="mega-menu__level2">
-                          {%- for menu_1 in shop.metafields.custom.header_product_mega_menu.value limit: 10 -%}
-                            {%- assign level_index = forloop.index -%}
-                            {%- if menu_1.children != blank and menu_1.type == 'menu' -%}
-                              <div class="lvl2-group" data-lvl1="{{ level_index }}" data-active="false">
-                                <ul class="lvl2-list">
-                                  {%- for menu_2 in menu_1.children limit: 10 -%}
-                                    {%- assign level2_index = forloop.index -%}
-                                    <li>
-                                      <button
-                                        class="lvl2-item"
-                                        data-lvl1="{{ level_index }}"
-                                        data-lvl2="{{ level2_index }}"
-                                      >
-                                        {{ menu_2.title }}
-                                      </button>
-                                    </li>
-                                  {%- endfor -%}
-                                </ul>
-                              </div>
-                            {%- endif -%}
-                          {%- endfor -%}
-                        </div>
-                        <div class="mega-menu__level3">
-                          {%- for menu_1 in shop.metafields.custom.header_product_mega_menu.value limit: 10 -%}
-                            {%- assign level_index = forloop.index -%}
-                            {%- if menu_1.children != blank and menu_1.type == 'menu' -%}
-                              {%- for menu_2 in menu_1.children limit: 10 -%}
-                                {%- assign level2_index = forloop.index -%}
-                                {%- if menu_2.children != blank -%}
-                                  <div class="product-list" data-lvl1="{{ level_index }}" data-lvl2="{{ level2_index }}" data-active="false">
-                                    <ul class="product-list__items">
-                                      {%- for menu_3 in menu_2.children limit: 10 -%}
-                                        <li>
-                                          <a href="{{ menu_3.url }}" class="product-list__item">
-                                            {{ menu_3.title }}
-                                          </a>
-                                        </li>
-                                      {%- endfor -%}
-                                    </ul>
-                                  </div>
-                                {%- endif -%}
-                              {%- endfor -%}
-                            {%- endif -%}
-                          {%- endfor -%}
-                        </div>
+                        <ul class="mega-menu__level1"></ul>
+                        <div class="mega-menu__level2"></div>
+                        <div class="mega-menu__level3"></div>
                       </div>
                     </div>
+                    {%- comment -%} 使用一次循环构建三级菜单树形结构 {%- endcomment -%}
+                    {%- for menu_1 in shop.metafields.custom.header_product_mega_menu.value limit: 10 -%}
+                      {%- assign level_index = forloop.index -%}
+                      <template data-mega-lvl1="{{ level_index }}">
+                        <li>
+                          <button
+                            class="lvl1-item"
+                            aria-expanded="false"
+                            data-lvl1="{{ level_index }}"
+                          >
+                            {{ menu_1.title }}
+                          </button>
+                        </li>
+                      </template>
+                      {%- if menu_1.children != blank and menu_1.type == 'menu' -%}
+                        <template data-mega-lvl2="{{ level_index }}">
+                          <div class="lvl2-group" data-lvl1="{{ level_index }}" data-active="false">
+                            <ul class="lvl2-list">
+                              {%- for menu_2 in menu_1.children limit: 10 -%}
+                                {%- assign level2_index = forloop.index -%}
+                                <li>
+                                  <button
+                                    class="lvl2-item"
+                                    data-lvl1="{{ level_index }}"
+                                    data-lvl2="{{ level2_index }}"
+                                  >
+                                    {{ menu_2.title }}
+                                  </button>
+                                </li>
+                                {%- if menu_2.children != blank -%}
+                                  <template data-mega-lvl3="{{ level_index }}-{{ level2_index }}">
+                                    <div class="product-list" data-lvl1="{{ level_index }}" data-lvl2="{{ level2_index }}" data-active="false">
+                                      <ul class="product-list__items">
+                                        {%- for menu_3 in menu_2.children limit: 10 -%}
+                                          <li>
+                                            <a href="{{ menu_3.url }}" class="product-list__item">
+                                              {{ menu_3.title }}
+                                            </a>
+                                          </li>
+                                        {%- endfor -%}
+                                      </ul>
+                                    </div>
+                                  </template>
+                                {%- endif -%}
+                              {%- endfor -%}
+                            </ul>
+                          </div>
+                        </template>
+                      {%- endif -%}
+                    {%- endfor -%}
                   {%- when 'link_menu' -%}
                     <button
                       class="header__menu-item list-menu__item link focus-inset"
