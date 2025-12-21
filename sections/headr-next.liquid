@@ -265,8 +265,8 @@
                     </button>
                     <div class="mega-menu" id="{{ block.settings.title }}">
                       <div class="mega-menu__grid" data-mega-panel>
-                        {%- comment -%} 使用一次循环构建三级菜单树形结构 {%- endcomment -%}
-                        <ul class="mega-menu__level1">
+                        {%- comment -%} 使用一次循环构建三级菜单树形结构，减少循环次数 {%- endcomment -%}
+                        {%- capture level1_html -%}
                           {%- for menu_1 in shop.metafields.custom.header_product_mega_menu.value limit: 10 -%}
                             {%- assign level_index = forloop.index -%}
                             <li>
@@ -279,8 +279,8 @@
                               </button>
                             </li>
                           {%- endfor -%}
-                        </ul>
-                        <div class="mega-menu__level2">
+                        {%- endcapture -%}
+                        {%- capture level2_html -%}
                           {%- for menu_1 in shop.metafields.custom.header_product_mega_menu.value limit: 10 -%}
                             {%- assign level_index = forloop.index -%}
                             {%- if menu_1.children != blank and menu_1.type == 'menu' -%}
@@ -302,8 +302,8 @@
                               </div>
                             {%- endif -%}
                           {%- endfor -%}
-                        </div>
-                        <div class="mega-menu__level3">
+                        {%- endcapture -%}
+                        {%- capture level3_html -%}
                           {%- for menu_1 in shop.metafields.custom.header_product_mega_menu.value limit: 10 -%}
                             {%- assign level_index = forloop.index -%}
                             {%- if menu_1.children != blank and menu_1.type == 'menu' -%}
@@ -325,7 +325,10 @@
                               {%- endfor -%}
                             {%- endif -%}
                           {%- endfor -%}
-                        </div>
+                        {%- endcapture -%}
+                        <ul class="mega-menu__level1">{{ level1_html }}</ul>
+                        <div class="mega-menu__level2">{{ level2_html }}</div>
+                        <div class="mega-menu__level3">{{ level3_html }}</div>
                       </div>
                     </div>
                   {%- when 'link_menu' -%}
