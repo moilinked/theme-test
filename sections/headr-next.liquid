@@ -167,6 +167,9 @@
 
 {% comment %} *Layout* {% endcomment %}
  {{ shop.metafields.custom.header_product_mega_menu }}
+ {%- for item in shop.metafields.custom.header_product_mega_menu -%}
+  {{ item.title }}
+ {%- endfor -%}
 <shop-header class="header-wrapper">
   <header class="header">
     <div class="header-content">
