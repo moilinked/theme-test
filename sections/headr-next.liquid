@@ -265,10 +265,14 @@
                     </button>
                     <div class="mega-menu" id="{{ block.settings.title }}">
                       <div class="mega-menu__grid" data-mega-panel>
-                        {%- comment -%} 使用一次循环构建三级菜单树形结构，减少循环次数 {%- endcomment -%}
-                        {%- capture level1_html -%}
-                          {%- for menu_1 in shop.metafields.custom.header_product_mega_menu.value limit: 10 -%}
-                            {%- assign level_index = forloop.index -%}
+                        {%- comment -%} 使用一次循环构建三级菜单树形结构，减少对数据源的遍历次数 {%- endcomment -%}
+                        {%- capture level1_html -%}{%- endcapture -%}
+                        {%- capture level2_html -%}{%- endcapture -%}
+                        {%- capture level3_html -%}{%- endcapture -%}
+                        {%- for menu_1 in shop.metafields.custom.header_product_mega_menu.value limit: 10 -%}
+                          {%- assign level_index = forloop.index -%}
+                          {%- comment -%} 第一级菜单 {%- endcomment -%}
+                          {%- capture level1_item -%}
                             <li>
                               <button
                                 class="lvl1-item"
@@ -278,12 +282,11 @@
                                 {{ menu_1.title }}
                               </button>
                             </li>
-                          {%- endfor -%}
-                        {%- endcapture -%}
-                        {%- capture level2_html -%}
-                          {%- for menu_1 in shop.metafields.custom.header_product_mega_menu.value limit: 10 -%}
-                            {%- assign level_index = forloop.index -%}
-                            {%- if menu_1.children != blank and menu_1.type == 'menu' -%}
+                          {%- endcapture -%}
+                          {%- assign level1_html = level1_html | append: level1_item -%}
+                          {%- comment -%} 第二级和第三级菜单 {%- endcomment -%}
+                          {%- if menu_1.children != blank and menu_1.type == 'menu' -%}
+                            {%- capture level2_item -%}
                               <div class="lvl2-group" data-lvl1="{{ level_index }}" data-active="false">
                                 <ul class="lvl2-list">
                                   {%- for menu_2 in menu_1.children limit: 10 -%}
@@ -297,35 +300,30 @@
                                         {{ menu_2.title }}
                                       </button>
                                     </li>
+                                    {%- comment -%} 第三级菜单 {%- endcomment -%}
+                                    {%- if menu_2.children != blank -%}
+                                      {%- capture level3_item -%}
+                                        <div class="product-list" data-lvl1="{{ level_index }}" data-lvl2="{{ level2_index }}" data-active="false">
+                                          <ul class="product-list__items">
+                                            {%- for menu_3 in menu_2.children limit: 10 -%}
+                                              <li>
+                                                <a href="{{ menu_3.url }}" class="product-list__item">
+                                                  {{ menu_3.title }}
+                                                </a>
+                                              </li>
+                                            {%- endfor -%}
+                                          </ul>
+                                        </div>
+                                      {%- endcapture -%}
+                                      {%- assign level3_html = level3_html | append: level3_item -%}
+                                    {%- endif -%}
                                   {%- endfor -%}
                                 </ul>
                               </div>
-                            {%- endif -%}
-                          {%- endfor -%}
-                        {%- endcapture -%}
-                        {%- capture level3_html -%}
-                          {%- for menu_1 in shop.metafields.custom.header_product_mega_menu.value limit: 10 -%}
-                            {%- assign level_index = forloop.index -%}
-                            {%- if menu_1.children != blank and menu_1.type == 'menu' -%}
-                              {%- for menu_2 in menu_1.children limit: 10 -%}
-                                {%- assign level2_index = forloop.index -%}
-                                {%- if menu_2.children != blank -%}
-                                  <div class="product-list" data-lvl1="{{ level_index }}" data-lvl2="{{ level2_index }}" data-active="false">
-                                    <ul class="product-list__items">
-                                      {%- for menu_3 in menu_2.children limit: 10 -%}
-                                        <li>
-                                          <a href="{{ menu_3.url }}" class="product-list__item">
-                                            {{ menu_3.title }}
-                                          </a>
-                                        </li>
-                                      {%- endfor -%}
-                                    </ul>
-                                  </div>
-                                {%- endif -%}
-                              {%- endfor -%}
-                            {%- endif -%}
-                          {%- endfor -%}
-                        {%- endcapture -%}
+                            {%- endcapture -%}
+                            {%- assign level2_html = level2_html | append: level2_item -%}
+                          {%- endif -%}
+                        {%- endfor -%}
                         <ul class="mega-menu__level1">{{ level1_html }}</ul>
                         <div class="mega-menu__level2">{{ level2_html }}</div>
                         <div class="mega-menu__level3">{{ level3_html }}</div>
