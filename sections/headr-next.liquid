@@ -521,8 +521,7 @@
 
       this.lvl2Items.forEach((btn) => {
         btn.addEventListener('mouseenter', () => {
-          const lvl1 = btn.closest('[data-lvl1]').dataset.lvl1;
-          this.activateLevel2(lvl1, btn.dataset.lvl2);
+          this.activateLevel2(btn.dataset.lvl1, btn.dataset.lvl2);
         });
       });
     }
