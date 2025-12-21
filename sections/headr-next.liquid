@@ -456,6 +456,57 @@
   }
 
   customElements.define('shop-header', ShopHeader);
+
+  class MegaMenu {
+    constructor(root) {
+      this.root = root
+      this.lvl1Items = root.querySelectorAll('.lvl1-item')
+      this.lvl2Items = root.querySelectorAll('.lvl2-item')
+  
+      this.bind()
+    }
+  
+    bind() {
+      this.lvl1Items.forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+          this.activateLevel1(btn.dataset.lvl1)
+        })
+  
+        btn.addEventListener('focus', () => {
+          this.activateLevel1(btn.dataset.lvl1)
+        })
+      })
+  
+      this.lvl2Items.forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+          const lvl1 = btn.closest('[data-lvl1]').dataset.lvl1
+          this.activateLevel2(lvl1, btn.dataset.lvl2)
+        })
+      })
+    }
+  
+    activateLevel1(index) {
+      this.root.querySelectorAll('.lvl2-group').forEach(el => {
+        el.dataset.active = el.dataset.lvl1 === index
+      })
+  
+      this.root.querySelectorAll('.product-list').forEach(el => {
+        el.dataset.active = 'false'
+      })
+    }
+  
+    activateLevel2(lvl1, lvl2) {
+      this.root.querySelectorAll('.product-list').forEach(el => {
+        el.dataset.active =
+          el.dataset.lvl1 === lvl1 &&
+          el.dataset.lvl2 === lvl2
+      })
+    }
+  }
+  
+  document.querySelectorAll('.mega-menu').forEach(menu => {
+    new MegaMenu(menu)
+  })
 </script>
 
 {% comment %} *Schema* {% endcomment %}
