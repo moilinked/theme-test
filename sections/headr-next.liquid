@@ -161,7 +161,13 @@
               >
                 {%- case block.type -%}
                   {%- when 'product_menu' -%}
-                    <div>{{ block.settings.title }}</div>
+                    <button
+                      class="header__menu-item list-menu__item link focus-inset"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      {{ block.settings.menu.title | default: '' }}
+                    </button>
                   {%- when 'link_menu' -%}
                     <button
                       class="header__menu-item list-menu__item link focus-inset"
