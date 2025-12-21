@@ -7,7 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-{
+ {
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
