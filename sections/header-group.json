@@ -7,46 +7,41 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
+{
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
-    "header": {
-      "type": "headr-next",
+    "announcement-bar": {
+      "type": "announcement-bar",
       "blocks": {
-        "product_menu_tafM8U": {
-          "type": "product_menu",
+        "announcement-bar-0": {
+          "type": "announcement",
           "settings": {
-            "title": "Products"
-          }
-        },
-        "link_menu_6Q3rUN": {
-          "type": "link_menu",
-          "settings": {
-            "menu": "main-menu",
-            "popup_type": "min-width"
-          }
-        },
-        "link_menu_eqTkDi": {
-          "type": "link_menu",
-          "settings": {
-            "menu": "shop-by",
-            "popup_type": "min-width"
+            "text": "Welcome to our store",
+            "link": ""
           }
         }
       },
       "block_order": [
-        "product_menu_tafM8U",
-        "link_menu_6Q3rUN",
-        "link_menu_eqTkDi"
+        "announcement-bar-0"
       ],
+      "disabled": true,
       "settings": {
-        "enable_country_selector": true,
-        "enable_customer_avatar": true
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "show_line_separator": true,
+        "show_social": false,
+        "enable_country_selector": false,
+        "enable_language_selector": false
       }
+    },
+    "header": {
+      "type": "header",
+      "settings": {}
     }
   },
   "order": [
+    "announcement-bar",
     "header"
   ]
 }
