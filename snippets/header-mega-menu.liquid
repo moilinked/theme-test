@@ -1,94 +1,249 @@
 {% comment %}
-  Renders a megamenu for the header.
+  产品列表导航
+  数据源从 shop 元字段中获取
+
+  参数:
+    - main_menu: {Object} 菜单数据
 
   Usage:
-  {% render 'header-mega-menu' %}
+  {% render 'header-mega-menu', main_menu: main_menu %}
 {% endcomment %}
 
-<nav class="header__inline-menu">
-  <ul class="list-menu list-menu--inline" role="list">
-    {%- for link in section.settings.menu.links -%}
-      <li>
-        {%- if link.links != blank -%}
-          <header-menu>
-            <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu">
-              <summary
-                id="HeaderMenu-{{ link.handle }}"
-                class="header__menu-item list-menu__item link focus-inset"
-              >
-                <span
-                  {%- if link.child_active %}
-                    class="header__active-menu-item"
-                  {% endif %}
-                >
-                  {{- link.title | escape -}}
-                </span>
-                {{- 'icon-caret.svg' | inline_asset_content -}}
-              </summary>
+{%- assign mega_menu = shop.metafields.custom.header_product_mega_menu.value -%}
+<li
+  data-menu-item
+  data-type='mega-menu'
+  aria-controls='{{ main_menu.handle }}'
+  class='header-menu-item header-menu-item-full-screen'
+>
+  <button
+    aria-has-popup='true'
+    aria-expanded='false'
+    class='header-menu-item-button'
+    aria-controls='submenu-{{ main_menu.handle }}'
+  >
+    {{ main_menu.title }}
+    <span class='svg-wrapper' aria-hidden='true'>
+      {{- 'icon-chevron-down.svg' | inline_asset_content -}}
+    </span>
+    <span class='svg-wrapper-mo' aria-hidden='true'>
+      {{- 'icon-chevron-right.svg' | inline_asset_content -}}
+    </span>
+  </button>
+  <nav
+    class='mega-menu'
+    role='navigation'
+    id='submenu-{{ main_menu.handle }}'
+    aria-label='{{ main_menu.title }} navigation'
+  >
+    <div class='mega-menu-panel'>
+      <button class='mega-menu-l1-back-button'>
+        <span class='svg-wrapper' aria-hidden='true'>
+          {{- 'icon-chevron-left.svg' | inline_asset_content -}}
+        </span>
+        {{ main_menu.title }}
+      </button>
+      <ul
+        role='list'
+        data-level='1'
+        class='mega-menu-list mega-menu-l1-list'
+      >
+        {% comment %} -遍历获取一级菜单数据- {% endcomment %}
+        {%- for menu_l1 in mega_menu -%}
+          {%- assign l1_index = forloop.index -%}
+          {%- assign l2_index = forloop.index -%}
+          <li class='mega-menu-item' role='none'>
+            <div class='mega-menu-l1-item'>
+              {% render 'header-trigger', menu: menu_l1, position: forloop.index0 %}
               <div
-                id="MegaMenu-Content-{{ forloop.index }}"
-                class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
-                tabindex="-1"
+                class='mega-menu-list mega-menu-l2-list'
+                data-position='{{ l1_index }}-{{ l2_index }}'
+                data-active='{% if forloop.first %}true{% else %}false{% endif %}'
               >
                 <ul
-                  class="mega-menu__list page-width{% if link.levels == 1 %} mega-menu__list--condensed{% endif %}"
-                  role="list"
+                  role='list'
+                  data-level='2'
+                  class='mega-menu-l2-list-ul'
+                  aria-label='{{ menu_l1.title }} submenu'
                 >
-                  {%- for childlink in link.links -%}
-                    <li>
-                      <a
-                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
-                        href="{{ childlink.url }}"
-                        class="mega-menu__link mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}"
-                        {% if childlink.current %}
-                          aria-current="page"
-                        {% endif %}
-                      >
-                        {{ childlink.title | escape }}
-                      </a>
-                      {%- if childlink.links != blank -%}
-                        <ul class="list-unstyled" role="list">
-                          {%- for grandchildlink in childlink.links -%}
-                            <li>
-                              <a
-                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
-                                href="{{ grandchildlink.url }}"
-                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
-                                {% if grandchildlink.current %}
-                                  aria-current="page"
-                                {% endif %}
+                  <button class='mega-menu-l2-back-button'>
+                    <span class='svg-wrapper' aria-hidden='true'>
+                      {{- 'icon-chevron-left.svg' | inline_asset_content -}}
+                    </span>
+                    {{ menu_l1.title }}
+                  </button>
+                  {%- if menu_l1.type == 'links' -%}
+                    <ul class='mega-menu-links-wrapper'>
+                      {%- for menu_l2 in menu_l1.children -%}
+                        <li class='header-submenu-icon-item mega-menu-l2-item' role='none'>
+                          <span class='header-submenu-icon-item-icon'>
+                            {%- if menu_l2.icon contains 'https://' -%}
+                              {% render 'component-image',
+                                src: menu_l2.icon,
+                                width: 32,
+                                height: 32,
+                                width_plus: 2,
+                                alt: menu_l2.title,
+                                class: 'header-submenu-icon-item-image'
+                              %}
+                            {%- elsif menu_l2.icon != blank -%}
+                              {{-
+                                menu_l2.icon
+                                | replace: '_', '-'
+                                | prepend: 'icon-'
+                                | append: '.svg'
+                                | inline_asset_content
+                              -}}
+                            {%- endif -%}
+                          </span>
+                          <div class='header-submenu-icon-item-title-wrapper'>
+                            <p class='header-submenu-icon-item-title'>{{ menu_l2.title }}</p>
+                            <span class='svg-wrapper' aria-hidden='true'>
+                              {{- 'icon-chevron-down.svg' | inline_asset_content -}}
+                            </span>
+                          </div>
+                          <nav>
+                            <ul class='header-submenu-icon-item-list'>
+                              {%- for menu_l3 in menu_l2.links -%}
+                                <li class='mega-menu-links-item-list-item'>
+                                  <a href='{{ menu_l3.url }}' class='header-submenu-icon-item-list-link'>
+                                    {{- menu_l3.title -}}
+                                  </a>
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                          </nav>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                    <ul class='mega-menu-links-wrapper-mobile'></ul>
+                  {%- else -%}
+                    {% comment %} -遍历获取二级菜单数据- {% endcomment %}
+                    {%- for menu_l2 in menu_l1.children -%}
+                      {%- assign l3_index = forloop.index -%}
+                      <li class='mega-menu-item mega-menu-l2-item' role='none'>
+                        {% render 'header-trigger', menu: menu_l2, position: forloop.index0 %}
+                        <section
+                          data-level='3'
+                          class='mega-menu-l3-list'
+                          aria-label='{{ menu_l2.title }} products'
+                          data-position='{{ l1_index }}-{{ l2_index }}-{{ l3_index }}'
+                          data-active='{% if forloop.first %}true{% else %}false{% endif %}'
+                        >
+                          {%- for menu_l3 in menu_l2.children -%}
+                            <article class='mega-menu-l3-products'>
+                              <div class='mega-menu-l3-products-head'>
+                                <p class='mega-menu-l3-products-head-title'>{{ menu_l3.title }}</p>
+                                {%- if menu_l3.url != blank -%}
+                                  <a
+                                    href='{{ menu_l3.url }}'
+                                    class='mega-menu-l3-products-head-link'
+                                    aria-label='Shop all {{ menu_l3.title }}'
+                                  >
+                                    Shop All
+                                    <span class='svg-wrapper' aria-hidden='true'>
+                                      {{- 'icon-chevron-right.svg' | inline_asset_content -}}
+                                    </span>
+                                  </a>
+                                {%- endif -%}
+                              </div>
+                              <splide-slider
+                                class='splide mega-menu-l3-products-splide'
+                                data-splide-url='{{ 'vendor-splide.esm.min.js' | asset_url }}'
+                                data-lazy-load='true'
+                                data-splide-options='
+                                  {
+                                    "type": "slide",
+                                    "autoWidth": true,
+                                    "arrows": false,
+                                    "pagination": false,
+                                    "drag": false,
+                                    "breakpoints": {
+                                      "1024": {
+                                        "drag": true,
+                                        "snap": true,
+                                        "flickPower": 200,
+                                        "focus":0,
+                                        "omitEnd":true
+                                      }
+                                    }
+                                  }
+                                '
                               >
-                                {{ grandchildlink.title | escape }}
-                              </a>
-                            </li>
+                                <div class='splide__track'>
+                                  <ul
+                                    role='list'
+                                    class='splide__list {% if menu_l3.type == 'series' %}mega-menu-l3-series-content{% else %}mega-menu-l3-products-content{% endif %}'
+                                  >
+                                    {%- for menu_l4 in menu_l3.children -%}
+                                      <li role='none' class='splide__slide mega-menu-l3-series-content-li'>
+                                        <a href='{{ menu_l4.url }}' class='mega-menu-l4-item'>
+                                          {% render 'component-image',
+                                            src: menu_l4.image,
+                                            width: 100,
+                                            height: 100,
+                                            width_plus: 2,
+                                            alt: menu_l4.title,
+                                            class: 'mega-menu-l4-item-image'
+                                          %}
+                                          <div class='mega-menu-l4-item-title'>
+                                            <p class='mega-menu-l4-item-title-text'>
+                                              {{ menu_l4.title }}
+                                            </p>
+                                            {%- if menu_l4.tags != blank -%}
+                                              <div class='mega-menu-item-tags'>
+                                                {%- for tag in menu_l4.tags -%}
+                                                  <span class='mega-menu-item-tag {% if tag.type == 'dark' %}mega-menu-item-tag-dark{% else %}mega-menu-item-tag-light{% endif %}'>
+                                                    {{- tag.title -}}
+                                                  </span>
+                                                {%- endfor -%}
+                                              </div>
+                                            {%- endif -%}
+                                          </div>
+                                        </a>
+                                      </li>
+                                    {%- endfor -%}
+                                  </ul>
+                                </div>
+                                <div class='mega-menu-l3-products-progress'>
+                                  <div class='mega-menu-l3-products-progress-bar'></div>
+                                </div>
+                              </splide-slider>
+                            </article>
                           {%- endfor -%}
-                        </ul>
-                      {%- endif -%}
-                    </li>
-                  {%- endfor -%}
+                          {%- if menu_l2.footer != blank and menu_l2.footer.size > 0 -%}
+                            <div class='mega-menu-l3-placeholder'></div>
+                            <nav
+                              class='mega-menu-l3-footer'
+                              aria-label='{{ menu_l2.title }} footer links'
+                            >
+                              {%- for footer in menu_l2.footer -%}
+                                <a href='{{ footer.url }}' class='mega-menu-l3-footer-item'>
+                                  {{ footer.title }}
+                                  <span class='svg-wrapper' aria-hidden='true'>
+                                    {{- 'icon-chevron-right.svg' | inline_asset_content -}}
+                                  </span>
+                                </a>
+                              {%- endfor -%}
+                            </nav>
+                            <div class='mega-menu-l3-footer-mobile'>
+                              {%- for footer in menu_l2.footer -%}
+                                <a href='{{ footer.url }}' class='mega-menu-l3-footer-item'>
+                                  {{ footer.title }}
+                                </a>
+                              {%- endfor -%}
+                            </div>
+                          {%- endif -%}
+                        </section>
+                      </li>
+                    {%- endfor -%}
+                  {%- endif -%}
                 </ul>
               </div>
-            </details>
-          </header-menu>
-        {%- else -%}
-          <a
-            id="HeaderMenu-{{ link.handle }}"
-            href="{{ link.url }}"
-            class="header__menu-item list-menu__item link link--text focus-inset"
-            {% if link.current %}
-              aria-current="page"
-            {% endif %}
-          >
-            <span
-              {%- if link.current %}
-                class="header__active-menu-item"
-              {% endif %}
-            >
-              {{- link.title | escape -}}
-            </span>
-          </a>
-        {%- endif -%}
-      </li>
-    {%- endfor -%}
-  </ul>
-</nav>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </nav>
+</li>
