@@ -1,0 +1,43 @@
+{% comment %}
+  菜单一级/二级触发器
+
+  参数:
+  - menu: {Object} 菜单对象
+  - position: {Number} 位置信息
+
+  使用:
+  {% render 'header-trigger', menu: menu, position: position %}
+{% endcomment %}
+
+{%- liquid
+  assign is_current = false
+  assign menu_path = menu.url | replace: request.origin, '' | split: '?' | first
+  if menu_path == request.path
+    assign is_current = true
+  endif
+-%}
+
+{%- if menu.url != blank -%}
+  <a
+    href='{{ menu.url }}'
+    class='mega-menu-trigger'
+    data-active='{% if position == 0 %}true{% else %}false{% endif %}'
+    aria-current='{% if is_current %}page{% else %}false{% endif %}'
+  >
+{%- else -%}
+  <button
+    type='button'
+    class='mega-menu-trigger'
+    data-active='{% if position == 0 %}true{% else %}false{% endif %}'
+    aria-expanded='{% if position == 0 %}true{% else %}false{% endif %}'
+  >
+{%- endif -%}
+{{ menu.title }}
+<span class='svg-wrapper' aria-hidden='true'>
+  {{- 'icon-chevron-right.svg' | inline_asset_content -}}
+</span>
+{%- if menu.url != blank -%}
+  </a>
+{%- else -%}
+  </button>
+{%- endif -%}
