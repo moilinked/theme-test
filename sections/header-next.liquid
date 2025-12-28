@@ -1312,7 +1312,10 @@
         trigger.addEventListener('click', () => this.openSubDrawer(item))
       })
       this.menuItems.forEach(item => {
-        item.addEventListener('click', ev => this.openSubDrawer(ev.target))
+        item.addEventListener('click', ev => {
+          const menuItem = ev.target.closest('[data-menu-item]')
+          if (menuItem) this.openSubDrawer(menuItem)
+        })
       })
       this.drawerOpener?.addEventListener('click', () => this.openDrawer())
       this.querySelector('.header-menu-drawer-header-close')?.addEventListener('click', () => this.hideDrawer())
@@ -1503,16 +1506,6 @@
       allTriggers.forEach(t => this.deactivateMegaMenuTrigger(t))
       allL2Lists.forEach(list => list.setAttribute('data-active', 'false'))
       allL3Lists.forEach(l3List => l3List.setAttribute('data-active', 'false'))
-    }
-
-    scheduleOpen(item) {
-      clearTimeout(this.timer)
-      this.timer = setTimeout(() => this.open(item), this.delay)
-    }
-
-    scheduleClose(item) {
-      clearTimeout(this.timer)
-      this.timer = setTimeout(() => this.close(item), this.closeDelay)
     }
 
     open(item) {
