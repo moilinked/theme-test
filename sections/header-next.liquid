@@ -1081,7 +1081,7 @@
                         role="none"
                         data-menu-item
                         data-type="full-screen-menu"
-                        aria-controls="submenu-{{ main_menu.handle }}"
+                        data-controls="submenu-{{ main_menu.handle }}"
                         class="header-menu-item header-menu-item-full-screen"
                       >
                         <button
@@ -1090,6 +1090,7 @@
                           aria-has-popup="true"
                           aria-expanded="false"
                           class="header-menu-item-button"
+                          aria-controls="submenu-{{ main_menu.handle }}"
                         >
                           <span>{{ main_menu.title | escape }}</span>
                           <span class="svg-wrapper" aria-hidden="true">
@@ -1260,8 +1261,8 @@
         <button
           type="button"
           aria-expanded="false"
-          aria-controls="search-modal"
           aria-label="Open search"
+          aria-controls="search-modal"
           class="header-content-right-item"
         >
           <span class="visually-hidden">Search</span>
@@ -1657,9 +1658,7 @@
     }
 
     openSubDrawer(item) {
-      console.log('openSubDrawer', item);
-      if (!item) return;
-      const id = item.getAttribute('aria-controls');
+      const id = item?.dataset?.controls;
       if (!id) return;
       const subDrawer = document.getElementById(id);
       if (subDrawer) {
