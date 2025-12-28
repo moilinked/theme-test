@@ -13,15 +13,18 @@
 <li
   data-menu-item
   data-type='mega-menu'
-  aria-controls='submenu-{{ main_menu.handle }}'
   class='header-menu-item header-menu-item-full-screen'
+  role='none'
 >
   <button
+    type='button'
     aria-has-popup='true'
     aria-expanded='false'
+    aria-controls='submenu-{{ main_menu.handle }}'
     class='header-menu-item-button'
+    role='menuitem'
   >
-    {{ main_menu.title }}
+    <span>{{ main_menu.title | escape }}</span>
     <span class='svg-wrapper' aria-hidden='true'>
       {{- 'icon-chevron-down.svg' | inline_asset_content -}}
     </span>
@@ -33,14 +36,14 @@
     class='mega-menu'
     role='navigation'
     id='submenu-{{ main_menu.handle }}'
-    aria-label='{{ main_menu.title }} navigation'
+    aria-label='{{ main_menu.title | escape }} navigation'
   >
     <div class='mega-menu-panel'>
-      <button class='mega-menu-l1-back-button'>
+      <button type='button' class='mega-menu-l1-back-button' aria-label='Back to main menu'>
         <span class='svg-wrapper' aria-hidden='true'>
           {{- 'icon-chevron-left.svg' | inline_asset_content -}}
         </span>
-        {{ main_menu.title }}
+        <span>{{ main_menu.title | escape }}</span>
       </button>
       <ul
         role='list'
