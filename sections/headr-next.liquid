@@ -982,7 +982,7 @@
     <div class='header-content'>
       {%- if settings.logo != blank -%}
         <a href='{{ routes.root_url }}' class='header-logo' aria-label='{{ shop.name }}'>
-          {% render 'component-image', image: settings.logo, width: 140, height: 34, width_plus: 5, alt: shop.name %}
+          {% comment %} {% render 'component-image', image: settings.logo, width: 140, height: 34, width_plus: 5, alt: shop.name %} {% endcomment %}
         </a>
       {%- endif -%}
       <div class='header-menu-wrapper'>
@@ -1067,7 +1067,7 @@
                                 <li>
                                   <a class='header-submenu-card-wrapper' href='{{ block.settings.cta_url }}'>
                                     <div class='header-submenu-card'>
-                                      {% render 'component-image',
+                                      {% comment %} {% render 'component-image',
                                         image: block.settings.image,
                                         width: 300,
                                         thumb: true,
@@ -1076,7 +1076,7 @@
                                         thumb_size: 100,
                                         alt: block.settings.title,
                                         class: 'header-submenu-card-image'
-                                      %}
+                                      %} {% endcomment %}
                                       <div class='header-submenu-card-content'>
                                         <p class='header-submenu-card-subtitle'>{{ block.settings.card_subtitle }}</p>
                                         <p class='header-submenu-card-title'>{{ block.settings.card_title }}</p>
@@ -1104,14 +1104,14 @@
                                         | inline_asset_content
                                       -}}
                                     {%- else -%}
-                                      {% render 'component-image',
+                                      {% comment %} {% render 'component-image',
                                         image: block.settings.image,
                                         width: 32,
                                         height: 32,
                                         width_plus: 2,
                                         alt: block.settings.subtitle,
                                         class: 'header-submenu-icon-item-image'
-                                      %}
+                                      %} {% endcomment %}
                                     {%- endif -%}
                                   </span>
                                   {%- for menu_l2 in main_menu.links -%}
