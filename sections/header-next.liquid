@@ -1013,7 +1013,7 @@
           title="{{ shop.name | escape }}"
           aria-label="{{ shop.name | escape }} - Home"
         >
-          {% comment %} 
+          {% comment %}
             Logo image rendering should be uncommented and implemented:
             {% render 'component-image', image: settings.logo, width: 140, height: 34, width_plus: 5, alt: shop.name %}
           {% endcomment %}
@@ -1023,9 +1023,9 @@
       <div class="header-menu-wrapper">
         <button
           type="button"
-          class="header-menu-drawer"
-          aria-label="Open menu"
           aria-expanded="false"
+          aria-label="Open menu"
+          class="header-menu-drawer"
           aria-controls="header-menu-nav"
         >
           <span aria-hidden="true">
@@ -1033,16 +1033,16 @@
           </span>
         </button>
         <nav
+          role="navigation"
           id="header-menu-nav"
           class="header-menu-nav"
           aria-label="Main navigation"
-          role="navigation"
         >
           <div class="header-menu-drawer-header">
             <button
               type="button"
-              class="header-menu-drawer-header-close"
               aria-label="Close menu"
+              class="header-menu-drawer-header-close"
             >
               <span aria-hidden="true">
                 {{- 'icon-close.svg' | inline_asset_content -}}
@@ -1057,9 +1057,9 @@
                     {% comment %} -普通直接跳转导航- {% endcomment %}
                     <li data-menu-item class="header-menu-item" role="none">
                       <a
+                        role="menuitem"
                         href="{{ main_menu.url }}"
                         class="header-menu-jump-link"
-                        role="menuitem"
                         {% if main_menu.current %}
                           aria-current="page"
                         {% endif %}
@@ -1327,350 +1327,350 @@
 
 <script type="module">
   class ShopHeader extends HTMLElement {
-    static MOBILE_BREAKPOINT = 1024
-    static DRAWER_CLOSE_DELAY = 300
-    megaMenuTimer = null
-    megaMenuDelay = 100
-    overlay = null
-    drawerOpener = null
-    drawer = null
-    closeTimer = null
-    drawerOpen = false
-    resizeHandler = null
+    static MOBILE_BREAKPOINT = 1024;
+    static DRAWER_CLOSE_DELAY = 300;
+    megaMenuTimer = null;
+    megaMenuDelay = 100;
+    overlay = null;
+    drawerOpener = null;
+    drawer = null;
+    closeTimer = null;
+    drawerOpen = false;
+    resizeHandler = null;
 
     get isMobile() {
-      return window.innerWidth < ShopHeader.MOBILE_BREAKPOINT
+      return window.innerWidth < ShopHeader.MOBILE_BREAKPOINT;
     }
 
     connectedCallback() {
-      this.items = this.querySelectorAll('[data-menu-item]')
-      this.menuItems = this.querySelectorAll('.header-menu-item-button')
-      this.overlay = this.querySelector('.mega-menu-overlay')
-      this.drawerOpener = this.querySelector('.header-menu-drawer')
-      this.drawer = this.querySelector('.header-menu-nav')
-      this.updateScreenSize()
-      this.resizeHandler = debounce(() => this.updateScreenSize(), 250)
-      window.addEventListener('resize', this.resizeHandler)
-      this.bindEvents()
-      this.bindMegaMenuEvents()
+      this.items = this.querySelectorAll('[data-menu-item]');
+      this.menuItems = this.querySelectorAll('.header-menu-item-button');
+      this.overlay = this.querySelector('.mega-menu-overlay');
+      this.drawerOpener = this.querySelector('.header-menu-drawer');
+      this.drawer = this.querySelector('.header-menu-nav');
+      this.updateScreenSize();
+      this.resizeHandler = debounce(() => this.updateScreenSize(), 250);
+      window.addEventListener('resize', this.resizeHandler);
+      this.bindEvents();
+      this.bindMegaMenuEvents();
     }
 
     disconnectedCallback() {
       if (this.resizeHandler) {
-        window.removeEventListener('resize', this.resizeHandler)
+        window.removeEventListener('resize', this.resizeHandler);
       }
     }
 
     updateScreenSize() {
       // Close drawer when switching from mobile to desktop view
       if (this.drawerOpen && !this.isMobile) {
-        this.hideDrawer()
+        this.hideDrawer();
       }
     }
 
     bindEvents() {
-      this.items.forEach(item => {
-        const trigger = item.querySelector('button')
-        if (!trigger) return
+      this.items.forEach((item) => {
+        const trigger = item.querySelector('button');
+        if (!trigger) return;
 
-        item.addEventListener('mouseenter', () => this.open(item))
-        item.addEventListener('mouseleave', () => this.close(item))
-        trigger.addEventListener('focus', () => this.open(item))
-        trigger.addEventListener('keydown', e => {
+        item.addEventListener('mouseenter', () => this.open(item));
+        item.addEventListener('mouseleave', () => this.close(item));
+        trigger.addEventListener('focus', () => this.open(item));
+        trigger.addEventListener('keydown', (e) => {
           if (e.key === 'Escape') {
-            this.close(item)
-            trigger.focus()
-            e.preventDefault()
+            this.close(item);
+            trigger.focus();
+            e.preventDefault();
           } else if (e.key === 'Enter' || e.key === ' ') {
             // Allow button click on Enter/Space
-            e.preventDefault()
-            trigger.click()
+            e.preventDefault();
+            trigger.click();
           }
-        })
-        trigger.addEventListener('click', () => this.openSubDrawer(item))
-      })
-      this.menuItems.forEach(item => {
-        item.addEventListener('click', ev => {
-          const menuItem = ev.target.closest('[data-menu-item]')
-          if (menuItem) this.openSubDrawer(menuItem)
-        })
-      })
-      this.drawerOpener?.addEventListener('click', () => this.openDrawer())
-      this.querySelector('.header-menu-drawer-header-close')?.addEventListener('click', () => this.hideDrawer())
-      this.overlay?.addEventListener('click', () => this.hideDrawer())
+        });
+        trigger.addEventListener('click', () => this.openSubDrawer(item));
+      });
+      this.menuItems.forEach((item) => {
+        item.addEventListener('click', (ev) => {
+          const menuItem = ev.target.closest('[data-menu-item]');
+          if (menuItem) this.openSubDrawer(menuItem);
+        });
+      });
+      this.drawerOpener?.addEventListener('click', () => this.openDrawer());
+      this.querySelector('.header-menu-drawer-header-close')?.addEventListener('click', () => this.hideDrawer());
+      this.overlay?.addEventListener('click', () => this.hideDrawer());
     }
 
     bindMegaMenuEvents() {
-      const allTriggers = Array.from(this.querySelectorAll('.mega-menu-trigger'))
-      const allL2Lists = Array.from(this.querySelectorAll('.mega-menu-l2-list'))
-      const allL3Lists = Array.from(this.querySelectorAll('.mega-menu-l3-list'))
-      const allMegaMenuL3ProductsSplide = Array.from(this.querySelectorAll('.mega-menu-l3-products-splide'))
+      const allTriggers = Array.from(this.querySelectorAll('.mega-menu-trigger'));
+      const allL2Lists = Array.from(this.querySelectorAll('.mega-menu-l2-list'));
+      const allL3Lists = Array.from(this.querySelectorAll('.mega-menu-l3-list'));
+      const allMegaMenuL3ProductsSplide = Array.from(this.querySelectorAll('.mega-menu-l3-products-splide'));
 
       // Build L2 list data map
-      const l2ListDataMap = new Map()
-      allL2Lists.forEach(l2List => {
-        const l2Items = Array.from(l2List.querySelectorAll('.mega-menu-l2-item'))
-        const itemsData = l2Items.map(l2Item => ({
+      const l2ListDataMap = new Map();
+      allL2Lists.forEach((l2List) => {
+        const l2Items = Array.from(l2List.querySelectorAll('.mega-menu-l2-item'));
+        const itemsData = l2Items.map((l2Item) => ({
           element: l2Item,
           trigger: l2Item.querySelector('.mega-menu-trigger'),
-          l3List: l2Item.querySelector('.mega-menu-l3-list')
-        }))
-        l2ListDataMap.set(l2List, itemsData)
-      })
+          l3List: l2Item.querySelector('.mega-menu-l3-list'),
+        }));
+        l2ListDataMap.set(l2List, itemsData);
+      });
 
-      const l1Items = this.querySelectorAll('.mega-menu-l1-item')
+      const l1Items = this.querySelectorAll('.mega-menu-l1-item');
 
-      l1Items.forEach(l1Item => {
-        const trigger = l1Item.querySelector('.mega-menu-trigger')
-        if (!trigger) return
+      l1Items.forEach((l1Item) => {
+        const trigger = l1Item.querySelector('.mega-menu-trigger');
+        if (!trigger) return;
 
-        const l2List = l1Item.querySelector('.mega-menu-l2-list')
-        const l2ListData = l2List ? l2ListDataMap.get(l2List) : null
-        const firstL2ItemData = l2ListData && l2ListData[0] ? l2ListData[0] : null
+        const l2List = l1Item.querySelector('.mega-menu-l2-list');
+        const l2ListData = l2List ? l2ListDataMap.get(l2List) : null;
+        const firstL2ItemData = l2ListData && l2ListData[0] ? l2ListData[0] : null;
 
-        trigger.addEventListener('click', e => {
+        trigger.addEventListener('click', (e) => {
           if (this.isMobile) {
-            e.preventDefault()
-            e.stopPropagation()
-            if (!l2List) return
-            allL2Lists.forEach(list => list.removeAttribute('open'))
-            l2List.setAttribute('open', 'true')
+            e.preventDefault();
+            e.stopPropagation();
+            if (!l2List) return;
+            allL2Lists.forEach((list) => list.removeAttribute('open'));
+            l2List.setAttribute('open', 'true');
           }
-        })
+        });
 
         trigger.addEventListener('mouseenter', () => {
-          if (trigger.getAttribute('data-active') === 'true') return
-          clearTimeout(this.megaMenuTimer)
+          if (trigger.getAttribute('data-active') === 'true') return;
+          clearTimeout(this.megaMenuTimer);
 
           this.megaMenuTimer = setTimeout(() => {
-            this.deactivateAllMegaMenuItems(allTriggers, allL2Lists, allL3Lists)
-            this.activateMegaMenuTrigger(trigger)
+            this.deactivateAllMegaMenuItems(allTriggers, allL2Lists, allL3Lists);
+            this.activateMegaMenuTrigger(trigger);
 
             if (l2List) {
-              l2List.setAttribute('data-active', 'true')
+              l2List.setAttribute('data-active', 'true');
               if (firstL2ItemData) {
-                this.activateMegaMenuTrigger(firstL2ItemData.trigger)
+                this.activateMegaMenuTrigger(firstL2ItemData.trigger);
                 if (firstL2ItemData.l3List) {
-                  firstL2ItemData.l3List.setAttribute('data-active', 'true')
+                  firstL2ItemData.l3List.setAttribute('data-active', 'true');
                 }
               }
             }
-          }, this.megaMenuDelay)
-        })
+          }, this.megaMenuDelay);
+        });
 
         trigger.addEventListener('mouseleave', () => {
-          clearTimeout(this.megaMenuTimer)
-        })
-      })
+          clearTimeout(this.megaMenuTimer);
+        });
+      });
 
-      allL2Lists.forEach(l2List => {
-        const l2ListData = l2ListDataMap.get(l2List)
-        if (!l2ListData) return
+      allL2Lists.forEach((l2List) => {
+        const l2ListData = l2ListDataMap.get(l2List);
+        if (!l2ListData) return;
 
-        l2ListData.forEach(itemData => {
-          itemData.element.addEventListener('click', e => {
-            const isOpen = itemData.element.getAttribute('open') === 'true'
+        l2ListData.forEach((itemData) => {
+          itemData.element.addEventListener('click', (e) => {
+            const isOpen = itemData.element.getAttribute('open') === 'true';
             if (isOpen) {
-              itemData.element.classList.remove('mega-menu-l2-item-open')
+              itemData.element.classList.remove('mega-menu-l2-item-open');
             } else {
-              l2ListData.forEach(otherItemData => {
+              l2ListData.forEach((otherItemData) => {
                 if (otherItemData.element !== itemData.element) {
-                  otherItemData.element?.classList.remove('mega-menu-l2-item-open')
+                  otherItemData.element?.classList.remove('mega-menu-l2-item-open');
                 }
-              })
-              itemData.element.classList.add('mega-menu-l2-item-open')
+              });
+              itemData.element.classList.add('mega-menu-l2-item-open');
               if (itemData.l3List) {
-                const splideSliders = Array.from(itemData.l3List.querySelectorAll('.mega-menu-l3-products-splide'))
-                splideSliders.forEach(slider => slider?.slider?.refresh())
+                const splideSliders = Array.from(itemData.l3List.querySelectorAll('.mega-menu-l3-products-splide'));
+                splideSliders.forEach((slider) => slider?.slider?.refresh());
               }
             }
-          })
+          });
 
-          const l2Trigger = itemData.trigger
-          if (!l2Trigger) return
+          const l2Trigger = itemData.trigger;
+          if (!l2Trigger) return;
 
           if (this.isMobile) {
-            l2Trigger.addEventListener('click', e => {
-              e.preventDefault()
-            })
-            return
+            l2Trigger.addEventListener('click', (e) => {
+              e.preventDefault();
+            });
+            return;
           }
 
           l2Trigger.addEventListener('mouseenter', () => {
-            if (l2Trigger.getAttribute('data-active') === 'true') return
-            clearTimeout(this.megaMenuTimer)
+            if (l2Trigger.getAttribute('data-active') === 'true') return;
+            clearTimeout(this.megaMenuTimer);
 
             this.megaMenuTimer = setTimeout(() => {
               // Deactivate other L2 items
-              l2ListData.forEach(otherItemData => {
+              l2ListData.forEach((otherItemData) => {
                 if (otherItemData.element !== itemData.element) {
-                  this.deactivateMegaMenuTrigger(otherItemData.trigger)
+                  this.deactivateMegaMenuTrigger(otherItemData.trigger);
                   if (otherItemData.l3List) {
-                    otherItemData.l3List.setAttribute('data-active', 'false')
+                    otherItemData.l3List.setAttribute('data-active', 'false');
                   }
                 }
-              })
+              });
 
               // Activate current L2 item
-              this.activateMegaMenuTrigger(l2Trigger)
+              this.activateMegaMenuTrigger(l2Trigger);
               if (itemData.l3List) {
-                itemData.l3List.setAttribute('data-active', 'true')
+                itemData.l3List.setAttribute('data-active', 'true');
               }
-            }, this.megaMenuDelay)
-          })
+            }, this.megaMenuDelay);
+          });
 
           l2Trigger.addEventListener('mouseleave', () => {
-            clearTimeout(this.megaMenuTimer)
-          })
-        })
-      })
+            clearTimeout(this.megaMenuTimer);
+          });
+        });
+      });
 
-      const l1BackButton = this.querySelector('.mega-menu-l1-back-button')
+      const l1BackButton = this.querySelector('.mega-menu-l1-back-button');
       if (l1BackButton) {
         l1BackButton.addEventListener('click', () => {
-          this.querySelector('.mega-menu')?.removeAttribute('open')
-        })
+          this.querySelector('.mega-menu')?.removeAttribute('open');
+        });
       }
 
-      allL2Lists.forEach(l2List => {
-        const l2BackButton = l2List.querySelector('.mega-menu-l2-back-button')
+      allL2Lists.forEach((l2List) => {
+        const l2BackButton = l2List.querySelector('.mega-menu-l2-back-button');
         if (l2BackButton) {
           l2BackButton.addEventListener('click', () => {
-            l2List.removeAttribute('open')
-            const l2ListData = l2ListDataMap.get(l2List)
+            l2List.removeAttribute('open');
+            const l2ListData = l2ListDataMap.get(l2List);
             if (l2ListData) {
-              l2ListData.forEach(itemData => {
+              l2ListData.forEach((itemData) => {
                 if (itemData.trigger) {
-                  itemData.trigger.removeAttribute('open')
+                  itemData.trigger.removeAttribute('open');
                   if (itemData.trigger.tagName === 'BUTTON') {
-                    itemData.trigger.setAttribute('aria-expanded', 'false')
+                    itemData.trigger.setAttribute('aria-expanded', 'false');
                   }
                 }
                 if (itemData.l3List) {
-                  itemData.l3List.removeAttribute('open')
+                  itemData.l3List.removeAttribute('open');
                 }
-              })
+              });
             }
-          })
+          });
         }
-      })
+      });
 
-      allMegaMenuL3ProductsSplide.forEach(splide => {
-        const bar = splide.querySelector('.mega-menu-l3-products-progress-bar')
-        if (!bar) return
+      allMegaMenuL3ProductsSplide.forEach((splide) => {
+        const bar = splide.querySelector('.mega-menu-l3-products-progress-bar');
+        if (!bar) return;
         splide.addEventListener('splide:loaded', ({ detail: { slider } }) => {
           slider.on('move refresh', () => {
-            const end = slider.Components.Controller.getEnd() + 1
-            const rate = Math.min((slider.index + 1) / end, 1)
-            bar.style.width = `${100 * rate}%`
-          })
-        })
-      })
+            const end = slider.Components.Controller.getEnd() + 1;
+            const rate = Math.min((slider.index + 1) / end, 1);
+            bar.style.width = `${100 * rate}%`;
+          });
+        });
+      });
     }
 
     // Helper methods for mega menu
     activateMegaMenuTrigger(trigger) {
-      if (!trigger) return
-      trigger.setAttribute('data-active', 'true')
+      if (!trigger) return;
+      trigger.setAttribute('data-active', 'true');
       if (trigger.tagName === 'BUTTON') {
-        trigger.setAttribute('aria-expanded', 'true')
+        trigger.setAttribute('aria-expanded', 'true');
       }
     }
 
     deactivateMegaMenuTrigger(trigger) {
-      if (!trigger) return
-      trigger.setAttribute('data-active', 'false')
+      if (!trigger) return;
+      trigger.setAttribute('data-active', 'false');
       if (trigger.tagName === 'BUTTON') {
-        trigger.setAttribute('aria-expanded', 'false')
+        trigger.setAttribute('aria-expanded', 'false');
       }
     }
 
     deactivateAllMegaMenuItems(allTriggers, allL2Lists, allL3Lists) {
-      allTriggers.forEach(t => this.deactivateMegaMenuTrigger(t))
-      allL2Lists.forEach(list => list.setAttribute('data-active', 'false'))
-      allL3Lists.forEach(l3List => l3List.setAttribute('data-active', 'false'))
+      allTriggers.forEach((t) => this.deactivateMegaMenuTrigger(t));
+      allL2Lists.forEach((list) => list.setAttribute('data-active', 'false'));
+      allL3Lists.forEach((l3List) => l3List.setAttribute('data-active', 'false'));
     }
 
     open(item) {
-      if (this.isMobile) return
-      this.closeAll()
-      item.dataset.open = 'true'
-      const btn = item.querySelector('button')
+      if (this.isMobile) return;
+      this.closeAll();
+      item.dataset.open = 'true';
+      const btn = item.querySelector('button');
       if (btn) {
-        btn.setAttribute('aria-expanded', 'true')
+        btn.setAttribute('aria-expanded', 'true');
       }
-      item.querySelectorAll('a').forEach(a => (a.tabIndex = 0))
+      item.querySelectorAll('a').forEach((a) => (a.tabIndex = 0));
 
       if (item.dataset.type === 'mega-menu' || item.dataset.type === 'full-screen-menu') {
-        this.overlay?.classList.add('active')
+        this.overlay?.classList.add('active');
       }
     }
 
     close(item) {
-      if (this.isMobile) return
-      delete item.dataset.open
-      const btn = item.querySelector('button')
+      if (this.isMobile) return;
+      delete item.dataset.open;
+      const btn = item.querySelector('button');
       if (btn) {
-        btn.setAttribute('aria-expanded', 'false')
+        btn.setAttribute('aria-expanded', 'false');
       }
-      item.querySelectorAll('a').forEach(a => (a.tabIndex = -1))
-      this.overlay?.classList.remove('active')
+      item.querySelectorAll('a').forEach((a) => (a.tabIndex = -1));
+      this.overlay?.classList.remove('active');
     }
 
     closeAll() {
-      this.items.forEach(item => this.close(item))
+      this.items.forEach((item) => this.close(item));
     }
 
     openDrawer() {
-      clearTimeout(this.closeTimer)
-      this.drawerOpen = true
-      this.drawer.classList.remove('closing')
-      this.drawer.setAttribute('open', '')
-      const drawerOpener = this.drawerOpener
+      clearTimeout(this.closeTimer);
+      this.drawerOpen = true;
+      this.drawer.classList.remove('closing');
+      this.drawer.setAttribute('open', '');
+      const drawerOpener = this.drawerOpener;
       if (drawerOpener) {
-        drawerOpener.setAttribute('aria-expanded', 'true')
+        drawerOpener.setAttribute('aria-expanded', 'true');
       }
-      document.body.style.setProperty('overflow-y', 'hidden')
-      this.overlay?.classList.add('active')
+      document.body.style.setProperty('overflow-y', 'hidden');
+      this.overlay?.classList.add('active');
       // Focus management: trap focus within drawer
-      const firstFocusable = this.drawer.querySelector('a, button, [tabindex]:not([tabindex="-1"])')
-      firstFocusable?.focus()
+      const firstFocusable = this.drawer.querySelector('a, button, [tabindex]:not([tabindex="-1"])');
+      firstFocusable?.focus();
     }
 
     hideDrawer() {
-      if (this.drawer.classList.contains('closing')) return
-      const drawerOpener = this.drawerOpener
-      this.drawerOpen = false
-      this.drawer.classList.add('closing')
-      this.drawer.removeAttribute('open')
+      if (this.drawer.classList.contains('closing')) return;
+      const drawerOpener = this.drawerOpener;
+      this.drawerOpen = false;
+      this.drawer.classList.add('closing');
+      this.drawer.removeAttribute('open');
       if (drawerOpener) {
-        drawerOpener.setAttribute('aria-expanded', 'false')
+        drawerOpener.setAttribute('aria-expanded', 'false');
       }
-      clearTimeout(this.closeTimer)
+      clearTimeout(this.closeTimer);
       this.closeTimer = setTimeout(() => {
-        this.drawer.classList.remove('closing')
-      }, ShopHeader.DRAWER_CLOSE_DELAY)
-      this.overlay?.classList.remove('active')
-      document.body.style.removeProperty('overflow-y')
+        this.drawer.classList.remove('closing');
+      }, ShopHeader.DRAWER_CLOSE_DELAY);
+      this.overlay?.classList.remove('active');
+      document.body.style.removeProperty('overflow-y');
       // Return focus to drawer opener
-      drawerOpener?.focus()
+      drawerOpener?.focus();
     }
 
     openSubDrawer(item) {
-      console.log('openSubDrawer', item)
-      if (!item) return
-      const id = item.getAttribute('aria-controls')
-      if (!id) return
-      const subDrawer = document.getElementById(id)
+      console.log('openSubDrawer', item);
+      if (!item) return;
+      const id = item.getAttribute('aria-controls');
+      if (!id) return;
+      const subDrawer = document.getElementById(id);
       if (subDrawer) {
-        subDrawer.setAttribute('active', '')
-        subDrawer.setAttribute('open', '')
+        subDrawer.setAttribute('active', '');
+        subDrawer.setAttribute('open', '');
       }
     }
   }
 
   if (!customElements.get('shop-header')) {
-    customElements.define('shop-header', ShopHeader)
+    customElements.define('shop-header', ShopHeader);
   }
 </script>
 
