@@ -1260,6 +1260,7 @@
 
 <script type="module">
   class ShopHeader extends HTMLElement {
+    static MOBILE_BREAKPOINT = 1024
     megaMenuTimer = null
     megaMenuDelay = 100
     overlay = null
@@ -1268,6 +1269,10 @@
     closeTimer = null
     drawerOpen = false
     resizeHandler = null
+
+    get isMobile() {
+      return window.innerWidth < ShopHeader.MOBILE_BREAKPOINT
+    }
 
     connectedCallback() {
       this.items = this.querySelectorAll('[data-menu-item]')
