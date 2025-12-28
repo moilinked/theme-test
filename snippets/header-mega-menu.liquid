@@ -66,13 +66,13 @@
                   role='list'
                   data-level='2'
                   class='mega-menu-l2-list-ul'
-                  aria-label='{{ menu_l1.title }} submenu'
+                  aria-label='{{ menu_l1.title | escape }} submenu'
                 >
-                  <button class='mega-menu-l2-back-button'>
+                  <button type='button' class='mega-menu-l2-back-button' aria-label='Back to {{ menu_l1.title | escape }}'>
                     <span class='svg-wrapper' aria-hidden='true'>
                       {{- 'icon-chevron-left.svg' | inline_asset_content -}}
                     </span>
-                    {{ menu_l1.title }}
+                    <span>{{ menu_l1.title | escape }}</span>
                   </button>
                   {%- if menu_l1.type == 'links' -%}
                     <ul class='mega-menu-links-wrapper'>
