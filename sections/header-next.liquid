@@ -1078,18 +1078,18 @@
                     {%- if full_screen_menu -%}
                       {% comment %} - 全屏弹出层导航 - {% endcomment %}
                       <li
+                        role="none"
                         data-menu-item
                         data-type="full-screen-menu"
-                        class="header-menu-item header-menu-item-full-screen"
                         aria-controls="submenu-{{ main_menu.handle }}"
-                        role="none"
+                        class="header-menu-item header-menu-item-full-screen"
                       >
                         <button
                           type="button"
+                          role="menuitem"
                           aria-has-popup="true"
                           aria-expanded="false"
                           class="header-menu-item-button"
-                          role="menuitem"
                         >
                           <span>{{ main_menu.title | escape }}</span>
                           <span class="svg-wrapper" aria-hidden="true">
@@ -1110,9 +1110,9 @@
                           endfor
                         -%}
                         <div
+                          role="region"
                           id="submenu-{{ main_menu.handle }}"
                           class="header-submenu header-submenu-list-full-screen"
-                          role="region"
                           aria-labelledby="submenu-{{ main_menu.handle }}-label"
                         >
                           <h2 id="submenu-{{ main_menu.handle }}-label" class="visually-hidden">
