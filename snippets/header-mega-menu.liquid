@@ -124,7 +124,7 @@
                         </li>
                       {%- endfor -%}
                     </ul>
-                    <ul class='mega-menu-links-wrapper-mobile'></ul>
+                    <ul class='mega-menu-links-wrapper-mobile' role='list' aria-label='Mobile menu links'></ul>
                   {%- else -%}
                     {% comment %} -遍历获取二级菜单数据- {% endcomment %}
                     {%- for menu_l2 in menu_l1.children -%}
@@ -230,21 +230,34 @@
                             <div class='mega-menu-l3-placeholder'></div>
                             <nav
                               class='mega-menu-l3-footer'
-                              aria-label='{{ menu_l2.title }} footer links'
+                              aria-label='{{ menu_l2.title | escape }} footer links'
+                              role='navigation'
                             >
                               {%- for footer in menu_l2.footer -%}
-                                <a href='{{ footer.url }}' class='mega-menu-l3-footer-item'>
-                                  {{ footer.title }}
+                                <a
+                                  href='{{ footer.url }}'
+                                  class='mega-menu-l3-footer-item'
+                                  {% if footer.current %}
+                                    aria-current='page'
+                                  {% endif %}
+                                >
+                                  <span>{{ footer.title | escape }}</span>
                                   <span class='svg-wrapper' aria-hidden='true'>
                                     {{- 'icon-chevron-right.svg' | inline_asset_content -}}
                                   </span>
                                 </a>
                               {%- endfor -%}
                             </nav>
-                            <div class='mega-menu-l3-footer-mobile'>
+                            <div class='mega-menu-l3-footer-mobile' role='navigation' aria-label='{{ menu_l2.title | escape }} footer links mobile'>
                               {%- for footer in menu_l2.footer -%}
-                                <a href='{{ footer.url }}' class='mega-menu-l3-footer-item'>
-                                  {{ footer.title }}
+                                <a
+                                  href='{{ footer.url }}'
+                                  class='mega-menu-l3-footer-item'
+                                  {% if footer.current %}
+                                    aria-current='page'
+                                  {% endif %}
+                                >
+                                  {{ footer.title | escape }}
                                 </a>
                               {%- endfor -%}
                             </div>
