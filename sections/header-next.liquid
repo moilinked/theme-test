@@ -1008,10 +1008,10 @@
     <div class="header-content">
       {%- if settings.logo != blank -%}
         <a
-          href="{{ routes.root_url }}"
           class="header-logo"
-          aria-label="{{ shop.name | escape }} - Home"
+          href="{{ routes.root_url }}"
           title="{{ shop.name | escape }}"
+          aria-label="{{ shop.name | escape }} - Home"
         >
           {% comment %} 
             Logo image rendering should be uncommented and implemented:
