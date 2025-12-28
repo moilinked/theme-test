@@ -14,7 +14,7 @@
   role='none'
   data-menu-item
   data-type='mega-menu'
-  aria-controls='submenu-{{ main_menu.handle }}'
+  data-controls='submenu-{{ main_menu.handle }}'
   class='header-menu-item header-menu-item-full-screen'
 >
   <button
@@ -23,6 +23,7 @@
     aria-expanded='false'
     aria-has-popup='true'
     class='header-menu-item-button'
+    aria-controls='submenu-{{ main_menu.handle }}'
   >
     <span>{{ main_menu.title | escape }}</span>
     <span class='svg-wrapper' aria-hidden='true'>
