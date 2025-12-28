@@ -1071,15 +1071,18 @@
                       <li
                         data-menu-item
                         data-type="full-screen-menu"
-                        aria-controls="submenu-{{ main_menu.handle }}"
                         class="header-menu-item header-menu-item-full-screen"
+                        role="none"
                       >
                         <button
+                          type="button"
                           aria-has-popup="true"
                           aria-expanded="false"
+                          aria-controls="submenu-{{ main_menu.handle }}"
                           class="header-menu-item-button"
+                          role="menuitem"
                         >
-                          {{ main_menu.title }}
+                          <span>{{ main_menu.title | escape }}</span>
                           <span class="svg-wrapper" aria-hidden="true">
                             {{- 'icon-chevron-down.svg' | inline_asset_content -}}
                           </span>
@@ -1097,10 +1100,18 @@
                             endif
                           endfor
                         -%}
-                        <div id="submenu-{{ main_menu.handle }}" class="header-submenu header-submenu-list-full-screen">
+                        <div
+                          id="submenu-{{ main_menu.handle }}"
+                          class="header-submenu header-submenu-list-full-screen"
+                          role="region"
+                          aria-labelledby="submenu-{{ main_menu.handle }}-label"
+                        >
+                          <h2 id="submenu-{{ main_menu.handle }}-label" class="visually-hidden">
+                            {{ main_menu.title | escape }} submenu
+                          </h2>
                           <ul
                             role="menu"
-                            aria-label="{{ main_menu.title }} submenu"
+                            aria-label="{{ main_menu.title | escape }} submenu"
                             class="{%- if block_type == 'image_text_menu' %}header-submenu-image-with-text{% elsif block_type == 'icon_list_menu' %}header-submenu-icon-list-menu{% endif %}"
                           >
                             {%- for block in section.blocks -%}
