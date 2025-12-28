@@ -1304,7 +1304,6 @@
     bindEvents() {
       this.items.forEach(item => {
         const trigger = item.querySelector('button')
-        console.log('trigger', trigger)
         if (!trigger) return
 
         item.addEventListener('mouseenter', () => this.open(item))
@@ -1574,6 +1573,7 @@
     }
 
     openSubDrawer(item) {
+      console.log('openSubDrawer', item)
       if (!item) return
       const id = item.getAttribute('aria-controls')
       if (!id) return
