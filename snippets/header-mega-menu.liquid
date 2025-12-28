@@ -11,18 +11,21 @@
 
 {%- assign mega_menu = shop.metafields.custom.header_product_mega_menu.value -%}
 <li
+  role='none'
   data-menu-item
   data-type='mega-menu'
-  aria-controls='{{ main_menu.handle }}'
+  data-controls='submenu-{{ main_menu.handle }}'
   class='header-menu-item header-menu-item-full-screen'
 >
   <button
-    aria-has-popup='true'
+    type='button'
+    role='menuitem'
     aria-expanded='false'
+    aria-has-popup='true'
     class='header-menu-item-button'
     aria-controls='submenu-{{ main_menu.handle }}'
   >
-    {{ main_menu.title }}
+    <span>{{ main_menu.title | escape }}</span>
     <span class='svg-wrapper' aria-hidden='true'>
       {{- 'icon-chevron-down.svg' | inline_asset_content -}}
     </span>
@@ -34,14 +37,14 @@
     class='mega-menu'
     role='navigation'
     id='submenu-{{ main_menu.handle }}'
-    aria-label='{{ main_menu.title }} navigation'
+    aria-label='{{ main_menu.title | escape }} navigation'
   >
     <div class='mega-menu-panel'>
-      <button class='mega-menu-l1-back-button'>
+      <button type='button' class='mega-menu-l1-back-button' aria-label='Back to main menu'>
         <span class='svg-wrapper' aria-hidden='true'>
           {{- 'icon-chevron-left.svg' | inline_asset_content -}}
         </span>
-        {{ main_menu.title }}
+        <span>{{ main_menu.title | escape }}</span>
       </button>
       <ul
         role='list'
@@ -64,19 +67,19 @@
                   role='list'
                   data-level='2'
                   class='mega-menu-l2-list-ul'
-                  aria-label='{{ menu_l1.title }} submenu'
+                  aria-label='{{ menu_l1.title | escape }} submenu'
                 >
-                  <button class='mega-menu-l2-back-button'>
+                  <button type='button' class='mega-menu-l2-back-button' aria-label='Back to {{ menu_l1.title | escape }}'>
                     <span class='svg-wrapper' aria-hidden='true'>
                       {{- 'icon-chevron-left.svg' | inline_asset_content -}}
                     </span>
-                    {{ menu_l1.title }}
+                    <span>{{ menu_l1.title | escape }}</span>
                   </button>
                   {%- if menu_l1.type == 'links' -%}
                     <ul class='mega-menu-links-wrapper'>
                       {%- for menu_l2 in menu_l1.children -%}
                         <li class='header-submenu-icon-item mega-menu-l2-item' role='none'>
-                          <span class='header-submenu-icon-item-icon'>
+                          <span class='header-submenu-icon-item-icon' aria-hidden='true'>
                             {%- if menu_l2.icon contains 'https://' -%}
                               {% render 'component-image',
                                 src: menu_l2.icon,
@@ -97,17 +100,23 @@
                             {%- endif -%}
                           </span>
                           <div class='header-submenu-icon-item-title-wrapper'>
-                            <p class='header-submenu-icon-item-title'>{{ menu_l2.title }}</p>
+                            <h3 class='header-submenu-icon-item-title'>{{ menu_l2.title | escape }}</h3>
                             <span class='svg-wrapper' aria-hidden='true'>
                               {{- 'icon-chevron-down.svg' | inline_asset_content -}}
                             </span>
                           </div>
-                          <nav>
-                            <ul class='header-submenu-icon-item-list'>
+                          <nav aria-label='{{ menu_l2.title | escape }} links'>
+                            <ul class='header-submenu-icon-item-list' role='list'>
                               {%- for menu_l3 in menu_l2.links -%}
-                                <li class='mega-menu-links-item-list-item'>
-                                  <a href='{{ menu_l3.url }}' class='header-submenu-icon-item-list-link'>
-                                    {{- menu_l3.title -}}
+                                <li class='mega-menu-links-item-list-item' role='none'>
+                                  <a
+                                    href='{{ menu_l3.url }}'
+                                    class='header-submenu-icon-item-list-link'
+                                    {% if menu_l3.current %}
+                                      aria-current='page'
+                                    {% endif %}
+                                  >
+                                    {{- menu_l3.title | escape -}}
                                   </a>
                                 </li>
                               {%- endfor -%}
@@ -116,7 +125,6 @@
                         </li>
                       {%- endfor -%}
                     </ul>
-                    <ul class='mega-menu-links-wrapper-mobile'></ul>
                   {%- else -%}
                     {% comment %} -遍历获取二级菜单数据- {% endcomment %}
                     {%- for menu_l2 in menu_l1.children -%}
@@ -126,21 +134,21 @@
                         <section
                           data-level='3'
                           class='mega-menu-l3-list'
-                          aria-label='{{ menu_l2.title }} products'
+                          aria-label='{{ menu_l2.title | escape }} products'
                           data-position='{{ l1_index }}-{{ l2_index }}-{{ l3_index }}'
                           data-active='{% if forloop.first %}true{% else %}false{% endif %}'
                         >
                           {%- for menu_l3 in menu_l2.children -%}
                             <article class='mega-menu-l3-products'>
                               <div class='mega-menu-l3-products-head'>
-                                <p class='mega-menu-l3-products-head-title'>{{ menu_l3.title }}</p>
+                                <h4 class='mega-menu-l3-products-head-title'>{{ menu_l3.title | escape }}</h4>
                                 {%- if menu_l3.url != blank -%}
                                   <a
                                     href='{{ menu_l3.url }}'
                                     class='mega-menu-l3-products-head-link'
-                                    aria-label='Shop all {{ menu_l3.title }}'
+                                    aria-label='Shop all {{ menu_l3.title | escape }}'
                                   >
-                                    Shop All
+                                    <span>Shop All</span>
                                     <span class='svg-wrapper' aria-hidden='true'>
                                       {{- 'icon-chevron-right.svg' | inline_asset_content -}}
                                     </span>
@@ -177,7 +185,11 @@
                                   >
                                     {%- for menu_l4 in menu_l3.children -%}
                                       <li role='none' class='splide__slide mega-menu-l3-series-content-li'>
-                                        <a href='{{ menu_l4.url }}' class='mega-menu-l4-item'>
+                                        <a
+                                          href='{{ menu_l4.url }}'
+                                          class='mega-menu-l4-item'
+                                          aria-label='{{ menu_l4.title | escape }}'
+                                        >
                                           {% render 'component-image',
                                             src: menu_l4.image,
                                             width: 100,
@@ -188,13 +200,16 @@
                                           %}
                                           <div class='mega-menu-l4-item-title'>
                                             <p class='mega-menu-l4-item-title-text'>
-                                              {{ menu_l4.title }}
+                                              {{ menu_l4.title | escape }}
                                             </p>
                                             {%- if menu_l4.tags != blank -%}
-                                              <div class='mega-menu-item-tags'>
+                                              <div class='mega-menu-item-tags' role='list' aria-label='Tags'>
                                                 {%- for tag in menu_l4.tags -%}
-                                                  <span class='mega-menu-item-tag {% if tag.type == 'dark' %}mega-menu-item-tag-dark{% else %}mega-menu-item-tag-light{% endif %}'>
-                                                    {{- tag.title -}}
+                                                  <span
+                                                    class='mega-menu-item-tag {% if tag.type == 'dark' %}mega-menu-item-tag-dark{% else %}mega-menu-item-tag-light{% endif %}'
+                                                    role='listitem'
+                                                  >
+                                                    {{- tag.title | escape -}}
                                                   </span>
                                                 {%- endfor -%}
                                               </div>
@@ -214,22 +229,35 @@
                           {%- if menu_l2.footer != blank and menu_l2.footer.size > 0 -%}
                             <div class='mega-menu-l3-placeholder'></div>
                             <nav
+                              role='navigation'
                               class='mega-menu-l3-footer'
-                              aria-label='{{ menu_l2.title }} footer links'
+                              aria-label='{{ menu_l2.title | escape }} footer links'
                             >
                               {%- for footer in menu_l2.footer -%}
-                                <a href='{{ footer.url }}' class='mega-menu-l3-footer-item'>
-                                  {{ footer.title }}
+                                <a
+                                  href='{{ footer.url }}'
+                                  class='mega-menu-l3-footer-item'
+                                  {% if footer.current %}
+                                    aria-current='page'
+                                  {% endif %}
+                                >
+                                  <span>{{ footer.title | escape }}</span>
                                   <span class='svg-wrapper' aria-hidden='true'>
                                     {{- 'icon-chevron-right.svg' | inline_asset_content -}}
                                   </span>
                                 </a>
                               {%- endfor -%}
                             </nav>
-                            <div class='mega-menu-l3-footer-mobile'>
+                            <div class='mega-menu-l3-footer-mobile' role='navigation' aria-label='{{ menu_l2.title | escape }} footer links mobile'>
                               {%- for footer in menu_l2.footer -%}
-                                <a href='{{ footer.url }}' class='mega-menu-l3-footer-item'>
-                                  {{ footer.title }}
+                                <a
+                                  href='{{ footer.url }}'
+                                  class='mega-menu-l3-footer-item'
+                                  {% if footer.current %}
+                                    aria-current='page'
+                                  {% endif %}
+                                >
+                                  {{ footer.title | escape }}
                                 </a>
                               {%- endfor -%}
                             </div>

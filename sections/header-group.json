@@ -22,9 +22,7 @@
           }
         }
       },
-      "block_order": [
-        "announcement-bar-0"
-      ],
+      "block_order": ["announcement-bar-0"],
       "disabled": true,
       "settings": {
         "auto_rotate": false,
@@ -36,12 +34,83 @@
       }
     },
     "header": {
-      "type": "header",
-      "settings": {}
+      "type": "header-next",
+      "blocks": {
+        "icon_list_menu_FTyfCR": {
+          "type": "icon_list_menu",
+          "settings": {
+            "title": "Shop By",
+            "subtitle": "Shop By Family Size",
+            "icon_type": "icon",
+            "icon": "home"
+          }
+        },
+        "icon_list_menu_q8MFT9": {
+          "type": "icon_list_menu",
+          "settings": {
+            "title": "Shop By",
+            "subtitle": "Shop By Scenario",
+            "icon_type": "icon",
+            "icon": "scenario"
+          }
+        },
+        "icon_list_menu_VjPw9j": {
+          "type": "icon_list_menu",
+          "settings": {
+            "title": "Shop By",
+            "subtitle": "Featured Products",
+            "icon_type": "icon",
+            "icon": "water"
+          }
+        },
+        "image_text_menu_B4kd3y": {
+          "type": "image_text_menu",
+          "settings": {
+            "title": "Featured",
+            "image": "shopify://shop_images/ui-wd-25christmas-header-banner-PC.webp",
+            "card_title": "Merry Christmas Sale",
+            "card_subtitle": "HOLIDAY DEALS",
+            "cta_text": "Shop Now",
+            "cta_url": "/pages/merry-christmas-deals?ref=headermenu"
+          }
+        },
+        "image_text_menu_UrzQAb": {
+          "type": "image_text_menu",
+          "settings": {
+            "title": "Featured",
+            "image": "shopify://shop_images/wd-header-menu-X16-alk-PC.jpg",
+            "card_title": "Best X Series Undersink RO System",
+            "card_subtitle": "BEST SELLER",
+            "cta_text": "Shop Now",
+            "cta_url": "/pages/reverse-osmosis-water-system-xseries?ref=headermenu"
+          }
+        },
+        "image_text_menu_R3bpth": {
+          "type": "image_text_menu",
+          "settings": {
+            "title": "Featured",
+            "image": "shopify://shop_images/WD_clearance_haeder_PC-min_479bc447-f9aa-4987-9744-6afc2c11aeda.webp",
+            "card_title": "Waterdrop Clearance Sale",
+            "card_subtitle": "BIG SAVE",
+            "cta_text": "Shop Now",
+            "cta_url": "/pages/clearance-sale?ref=headermenu"
+          }
+        }
+      },
+      "block_order": [
+        "icon_list_menu_FTyfCR",
+        "icon_list_menu_q8MFT9",
+        "icon_list_menu_VjPw9j",
+        "image_text_menu_B4kd3y",
+        "image_text_menu_UrzQAb",
+        "image_text_menu_R3bpth"
+      ],
+      "settings": {
+        "main_menu": "main-header",
+        "enable_country_selector": true,
+        "enable_customer_avatar": true
+      }
     }
   },
-  "order": [
-    "announcement-bar",
-    "header"
-  ]
+  "order": ["announcement-bar", "header"]
 }
