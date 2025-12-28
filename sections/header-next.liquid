@@ -1223,7 +1223,18 @@
                     {% comment %} - 产品列表导航 - {% endcomment %}
                     {% render 'header-mega-menu', main_menu: main_menu %}
                   {%- else -%}
-                    <a href="{{ main_menu.url }}">{{ main_menu.type }}</a>
+                    <li data-menu-item class="header-menu-item" role="none">
+                      <a
+                        href="{{ main_menu.url }}"
+                        class="header-menu-jump-link"
+                        role="menuitem"
+                        {% if main_menu.current %}
+                          aria-current="page"
+                        {% endif %}
+                      >
+                        {{ main_menu.title | default: main_menu.type | escape }}
+                      </a>
+                    </li>
                 {%- endcase -%}
               {%- endfor -%}
             {%- endif -%}
