@@ -185,7 +185,11 @@
                                   >
                                     {%- for menu_l4 in menu_l3.children -%}
                                       <li role='none' class='splide__slide mega-menu-l3-series-content-li'>
-                                        <a href='{{ menu_l4.url }}' class='mega-menu-l4-item'>
+                                        <a
+                                          href='{{ menu_l4.url }}'
+                                          class='mega-menu-l4-item'
+                                          aria-label='{{ menu_l4.title | escape }}'
+                                        >
                                           {% render 'component-image',
                                             src: menu_l4.image,
                                             width: 100,
@@ -196,13 +200,16 @@
                                           %}
                                           <div class='mega-menu-l4-item-title'>
                                             <p class='mega-menu-l4-item-title-text'>
-                                              {{ menu_l4.title }}
+                                              {{ menu_l4.title | escape }}
                                             </p>
                                             {%- if menu_l4.tags != blank -%}
-                                              <div class='mega-menu-item-tags'>
+                                              <div class='mega-menu-item-tags' role='list' aria-label='Tags'>
                                                 {%- for tag in menu_l4.tags -%}
-                                                  <span class='mega-menu-item-tag {% if tag.type == 'dark' %}mega-menu-item-tag-dark{% else %}mega-menu-item-tag-light{% endif %}'>
-                                                    {{- tag.title -}}
+                                                  <span
+                                                    class='mega-menu-item-tag {% if tag.type == 'dark' %}mega-menu-item-tag-dark{% else %}mega-menu-item-tag-light{% endif %}'
+                                                    role='listitem'
+                                                  >
+                                                    {{- tag.title | escape -}}
                                                   </span>
                                                 {%- endfor -%}
                                               </div>
