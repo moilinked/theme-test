@@ -1012,8 +1012,16 @@
         </a>
       {%- endif -%}
       <div class="header-menu-wrapper">
-        <button class="header-menu-drawer">
-          {{- 'icon-drawer.svg' | inline_asset_content -}}
+        <button
+          type="button"
+          class="header-menu-drawer"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="header-menu-nav"
+        >
+          <span aria-hidden="true">
+            {{- 'icon-drawer.svg' | inline_asset_content -}}
+          </span>
         </button>
         <nav class="header-menu-nav" aria-label="MegaMenu">
           <div class="header-menu-drawer-header">
@@ -1357,7 +1365,6 @@
         const firstL2ItemData = l2ListData && l2ListData[0] ? l2ListData[0] : null
 
         trigger.addEventListener('click', e => {
-          console.log('click', this.isMobile)
           if (this.isMobile) {
             e.preventDefault()
             e.stopPropagation()
