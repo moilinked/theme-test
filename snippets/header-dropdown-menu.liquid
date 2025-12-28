@@ -56,20 +56,28 @@
                         <summary
                           id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
                           class="header__menu-item link link--text list-menu__item focus-inset caption-large"
+                          role="menuitem"
+                          aria-haspopup="true"
+                          aria-expanded="false"
                         >
                           <span>{{ childlink.title | escape }}</span>
-                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                          <span class="svg-wrapper" aria-hidden="true">
+                            {{- 'icon-caret.svg' | inline_asset_content -}}
+                          </span>
                         </summary>
                         <ul
                           id="HeaderMenu-SubMenuList-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
                           class="header__submenu list-menu motion-reduce"
+                          role="menu"
+                          aria-label="{{ childlink.title | escape }} submenu"
                         >
                           {%- for grandchildlink in childlink.links -%}
-                            <li>
+                            <li role="none">
                               <a
                                 id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
                                 href="{{ grandchildlink.url }}"
                                 class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if grandchildlink.current %} list-menu__item--active{% endif %}"
+                                role="menuitem"
                                 {% if grandchildlink.current %}
                                   aria-current="page"
                                 {% endif %}
