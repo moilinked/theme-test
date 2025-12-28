@@ -1605,8 +1605,15 @@
       this.drawerOpen = true
       this.drawer.classList.remove('closing')
       this.drawer.setAttribute('open', '')
+      const drawerOpener = this.drawerOpener
+      if (drawerOpener) {
+        drawerOpener.setAttribute('aria-expanded', 'true')
+      }
       document.body.style.setProperty('overflow-y', 'hidden')
       this.overlay?.classList.add('active')
+      // Focus management: trap focus within drawer
+      const firstFocusable = this.drawer.querySelector('a, button, [tabindex]:not([tabindex="-1"])')
+      firstFocusable?.focus()
     }
 
     hideDrawer() {
