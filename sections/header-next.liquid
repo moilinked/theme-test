@@ -1511,25 +1511,29 @@
     }
 
     open(item) {
-      if (window.innerWidth < 1024) return
+      if (this.isMobile) return
       this.closeAll()
       item.dataset.open = 'true'
       const btn = item.querySelector('button')
-      btn?.setAttribute('aria-expanded', 'true')
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'true')
+      }
       item.querySelectorAll('a').forEach(a => (a.tabIndex = 0))
 
       if (item.dataset.type === 'mega-menu' || item.dataset.type === 'full-screen-menu') {
-        this.overlay.classList.add('active')
+        this.overlay?.classList.add('active')
       }
     }
 
     close(item) {
-      if (window.innerWidth < 1024) return
+      if (this.isMobile) return
       delete item.dataset.open
       const btn = item.querySelector('button')
-      btn?.setAttribute('aria-expanded', 'false')
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false')
+      }
       item.querySelectorAll('a').forEach(a => (a.tabIndex = -1))
-      this.overlay.classList.remove('active')
+      this.overlay?.classList.remove('active')
     }
 
     closeAll() {
