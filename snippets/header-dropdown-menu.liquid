@@ -33,11 +33,12 @@
               <ul
                 id="HeaderMenu-MenuList-{{ forloop.index }}"
                 class="header__submenu list-menu list-menu--disclosure color-{{ section.settings.menu_color_scheme }} gradient caption-large motion-reduce global-settings-popup"
-                role="list"
+                role="menu"
+                aria-label="{{ link.title | escape }} submenu"
                 tabindex="-1"
               >
                 {%- for childlink in link.links -%}
-                  <li>
+                  <li role="none">
                     {%- if childlink.links == blank -%}
                       <a
                         id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
