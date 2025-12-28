@@ -1566,10 +1566,11 @@
       if (!item) return
       const id = item.getAttribute('aria-controls')
       if (!id) return
-      console.log(item)
       const subDrawer = document.getElementById(id)
-      subDrawer?.setAttribute('active', '')
-      subDrawer?.setAttribute('open', '')
+      if (subDrawer) {
+        subDrawer.setAttribute('active', '')
+        subDrawer.setAttribute('open', '')
+      }
     }
   }
 
