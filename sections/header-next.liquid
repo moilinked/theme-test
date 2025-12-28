@@ -1236,10 +1236,12 @@
           <button
             type="button"
             aria-haspopup="true"
+            aria-expanded="false"
             class="header-content-right-item"
             aria-label="Select country or region"
           >
-            <span aria-hidden="true">国家/地区选择器</span>
+            <span class="visually-hidden">Select country or region</span>
+            <span aria-hidden="true" class="svg-wrapper">国家/地区选择器</span>
           </button>
         {%- endif -%}
 
@@ -1247,9 +1249,11 @@
         <button
           type="button"
           aria-expanded="false"
+          aria-controls="search-modal"
           aria-label="Open search"
           class="header-content-right-item"
         >
+          <span class="visually-hidden">Search</span>
           <span class="svg-wrapper" aria-hidden="true">
             {{- 'icon-search.svg' | inline_asset_content -}}
           </span>
@@ -1281,9 +1285,8 @@
           id="cart-icon-bubble"
           href="{{ routes.cart_url }}"
           class="header-content-right-item"
-          aria-label="Shopping cart, {% if cart != empty %}{{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}{% else %}empty{% endif %}"
+          aria-label="{% if cart != empty %}Shopping cart with {{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}{% else %}Shopping cart (empty){% endif %}"
         >
-          <span class="svg-wrapper" aria-hidden="true">{{- 'icon-cart.svg' | inline_asset_content }}</span>
           <span class="visually-hidden">
             {%- if cart != empty -%}
               Shopping cart with {{ cart.item_count }}
@@ -1292,15 +1295,17 @@
               Shopping cart (empty)
             {%- endif -%}
           </span>
+          <span class="svg-wrapper" aria-hidden="true">
+            {{- 'icon-cart.svg' | inline_asset_content -}}
+          </span>
           {%- if cart != empty -%}
             <div class="cart-count-badge" aria-hidden="true">
               {%- if cart.item_count < 100 -%}
                 <span>{{ cart.item_count }}</span>
+              {%- else -%}
+                <span>99+</span>
               {%- endif -%}
             </div>
-            <span class="visually-hidden">
-              {%- if cart.item_count == 1 -%}1 item{% else %}{{ cart.item_count }} items{% endif -%}
-            </span>
           {%- endif -%}
         </a>
       </nav>
