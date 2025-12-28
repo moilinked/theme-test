@@ -228,9 +228,9 @@
                           {%- if menu_l2.footer != blank and menu_l2.footer.size > 0 -%}
                             <div class='mega-menu-l3-placeholder'></div>
                             <nav
+                              role='navigation'
                               class='mega-menu-l3-footer'
                               aria-label='{{ menu_l2.title | escape }} footer links'
-                              role='navigation'
                             >
                               {%- for footer in menu_l2.footer -%}
                                 <a
