@@ -1623,15 +1623,21 @@
 
     hideDrawer() {
       if (this.drawer.classList.contains('closing')) return
+      const drawerOpener = this.drawerOpener
       this.drawerOpen = false
       this.drawer.classList.add('closing')
       this.drawer.removeAttribute('open')
+      if (drawerOpener) {
+        drawerOpener.setAttribute('aria-expanded', 'false')
+      }
       clearTimeout(this.closeTimer)
       this.closeTimer = setTimeout(() => {
         this.drawer.classList.remove('closing')
       }, ShopHeader.DRAWER_CLOSE_DELAY)
-      this.overlay.classList.remove('active')
+      this.overlay?.classList.remove('active')
       document.body.style.removeProperty('overflow-y')
+      // Return focus to drawer opener
+      drawerOpener?.focus()
     }
 
     openSubDrawer(item) {
