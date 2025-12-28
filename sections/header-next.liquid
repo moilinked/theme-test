@@ -1364,6 +1364,11 @@
           if (e.key === 'Escape') {
             this.close(item)
             trigger.focus()
+            e.preventDefault()
+          } else if (e.key === 'Enter' || e.key === ' ') {
+            // Allow button click on Enter/Space
+            e.preventDefault()
+            trigger.click()
           }
         })
         trigger.addEventListener('click', () => this.openSubDrawer(item))
