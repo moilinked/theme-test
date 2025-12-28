@@ -134,21 +134,21 @@
                         <section
                           data-level='3'
                           class='mega-menu-l3-list'
-                          aria-label='{{ menu_l2.title }} products'
+                          aria-label='{{ menu_l2.title | escape }} products'
                           data-position='{{ l1_index }}-{{ l2_index }}-{{ l3_index }}'
                           data-active='{% if forloop.first %}true{% else %}false{% endif %}'
                         >
                           {%- for menu_l3 in menu_l2.children -%}
                             <article class='mega-menu-l3-products'>
                               <div class='mega-menu-l3-products-head'>
-                                <p class='mega-menu-l3-products-head-title'>{{ menu_l3.title }}</p>
+                                <h4 class='mega-menu-l3-products-head-title'>{{ menu_l3.title | escape }}</h4>
                                 {%- if menu_l3.url != blank -%}
                                   <a
                                     href='{{ menu_l3.url }}'
                                     class='mega-menu-l3-products-head-link'
-                                    aria-label='Shop all {{ menu_l3.title }}'
+                                    aria-label='Shop all {{ menu_l3.title | escape }}'
                                   >
-                                    Shop All
+                                    <span>Shop All</span>
                                     <span class='svg-wrapper' aria-hidden='true'>
                                       {{- 'icon-chevron-right.svg' | inline_asset_content -}}
                                     </span>
