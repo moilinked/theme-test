@@ -1397,6 +1397,7 @@
 
         l2ListData.forEach(itemData => {
           itemData.element.addEventListener('click', e => {
+            console.log('click')
             const isOpen = itemData.element.getAttribute('open') === 'true'
             if (isOpen) {
               itemData.element.classList.remove('mega-menu-l2-item-open')
