@@ -1294,7 +1294,10 @@
     }
 
     updateScreenSize() {
-      if (this.drawerOpen) this.hideDrawer()
+      // Close drawer when switching from mobile to desktop view
+      if (this.drawerOpen && !this.isMobile) {
+        this.hideDrawer()
+      }
     }
 
     bindEvents() {
@@ -1481,11 +1484,12 @@
 
       allMegaMenuL3ProductsSplide.forEach(splide => {
         const bar = splide.querySelector('.mega-menu-l3-products-progress-bar')
+        if (!bar) return
         splide.addEventListener('splide:loaded', ({ detail: { slider } }) => {
-          slider.on('move refresh', ev => {
+          slider.on('move refresh', () => {
             const end = slider.Components.Controller.getEnd() + 1
             const rate = Math.min((slider.index + 1) / end, 1)
-            bar.style.width = String(100 * rate) + '%'
+            bar.style.width = `${100 * rate}%`
           })
         })
       })
