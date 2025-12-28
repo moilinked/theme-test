@@ -78,7 +78,7 @@
                     <ul class='mega-menu-links-wrapper'>
                       {%- for menu_l2 in menu_l1.children -%}
                         <li class='header-submenu-icon-item mega-menu-l2-item' role='none'>
-                          <span class='header-submenu-icon-item-icon'>
+                          <span class='header-submenu-icon-item-icon' aria-hidden='true'>
                             {%- if menu_l2.icon contains 'https://' -%}
                               {% render 'component-image',
                                 src: menu_l2.icon,
@@ -99,17 +99,23 @@
                             {%- endif -%}
                           </span>
                           <div class='header-submenu-icon-item-title-wrapper'>
-                            <p class='header-submenu-icon-item-title'>{{ menu_l2.title }}</p>
+                            <h3 class='header-submenu-icon-item-title'>{{ menu_l2.title | escape }}</h3>
                             <span class='svg-wrapper' aria-hidden='true'>
                               {{- 'icon-chevron-down.svg' | inline_asset_content -}}
                             </span>
                           </div>
-                          <nav>
-                            <ul class='header-submenu-icon-item-list'>
+                          <nav aria-label='{{ menu_l2.title | escape }} links'>
+                            <ul class='header-submenu-icon-item-list' role='list'>
                               {%- for menu_l3 in menu_l2.links -%}
-                                <li class='mega-menu-links-item-list-item'>
-                                  <a href='{{ menu_l3.url }}' class='header-submenu-icon-item-list-link'>
-                                    {{- menu_l3.title -}}
+                                <li class='mega-menu-links-item-list-item' role='none'>
+                                  <a
+                                    href='{{ menu_l3.url }}'
+                                    class='header-submenu-icon-item-list-link'
+                                    {% if menu_l3.current %}
+                                      aria-current='page'
+                                    {% endif %}
+                                  >
+                                    {{- menu_l3.title | escape -}}
                                   </a>
                                 </li>
                               {%- endfor -%}
