@@ -1554,7 +1554,7 @@
       this.drawer.classList.remove('closing')
       this.drawer.setAttribute('open', '')
       document.body.style.setProperty('overflow-y', 'hidden')
-      this.overlay.classList.add('active')
+      this.overlay?.classList.add('active')
     }
 
     hideDrawer() {
@@ -1565,7 +1565,7 @@
       clearTimeout(this.closeTimer)
       this.closeTimer = setTimeout(() => {
         this.drawer.classList.remove('closing')
-      }, 300)
+      }, ShopHeader.DRAWER_CLOSE_DELAY)
       this.overlay.classList.remove('active')
       document.body.style.removeProperty('overflow-y')
     }
