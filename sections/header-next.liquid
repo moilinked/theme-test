@@ -1657,6 +1657,7 @@
     }
 
     openSubDrawer(item) {
+      console.log('openSubDrawer', item)
       if (!item) return
       const id = item.getAttribute('aria-controls')
       if (!id) return
