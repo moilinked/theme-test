@@ -1131,9 +1131,9 @@
                               {%- if block.type == 'image_text_menu' -%}
                                 <li role="none">
                                   <a
+                                    role="menuitem"
                                     class="header-submenu-card-wrapper"
                                     href="{{ block.settings.cta_url }}"
-                                    role="menuitem"
                                   >
                                     <div class="header-submenu-card">
                                       {% comment %}
@@ -1196,9 +1196,9 @@
                                       {%- for menu_l3 in menu_l2.links -%}
                                         <li role="none">
                                           <a
-                                            class="header-submenu-icon-item-list-link"
-                                            href="{{ menu_l3.url }}"
                                             role="menuitem"
+                                            href="{{ menu_l3.url }}"
+                                            class="header-submenu-icon-item-list-link"
                                             {% if menu_l3.current %}
                                               aria-current="page"
                                             {% endif %}
