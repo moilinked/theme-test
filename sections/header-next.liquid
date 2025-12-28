@@ -1,6 +1,6 @@
 {% comment %} *CSS* {% endcomment %}
-<link rel='stylesheet' href='{{ 'component-search.css' | asset_url }}' media='print' onload="this.media='all'">
-<link rel='stylesheet' href='{{ 'component-menu-drawer.css' | asset_url }}' media='print' onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
 
 <style>
   /* ===== Header Container ===== */
@@ -977,36 +977,36 @@
 </style>
 
 {% comment %} *Layout* {% endcomment %}
-<shop-header class='header-wrapper'>
-  <header class='header'>
-    <div class='header-content'>
+<shop-header class="header-wrapper">
+  <header class="header">
+    <div class="header-content">
       {%- if settings.logo != blank -%}
-        <a href='{{ routes.root_url }}' class='header-logo' aria-label='{{ shop.name }}'>
+        <a href="{{ routes.root_url }}" class="header-logo" aria-label="{{ shop.name }}">
           {% comment %} {% render 'component-image', image: settings.logo, width: 140, height: 34, width_plus: 5, alt: shop.name %} {% endcomment %}
         </a>
       {%- endif -%}
-      <div class='header-menu-wrapper'>
-        <button class='header-menu-drawer'>
+      <div class="header-menu-wrapper">
+        <button class="header-menu-drawer">
           {{- 'icon-drawer.svg' | inline_asset_content -}}
         </button>
-        <nav class='header-menu-nav' aria-label='MegaMenu'>
-          <div class='header-menu-drawer-header'>
-            <button class='header-menu-drawer-header-close'>
+        <nav class="header-menu-nav" aria-label="MegaMenu">
+          <div class="header-menu-drawer-header">
+            <button class="header-menu-drawer-header-close">
               {{- 'icon-close.svg' | inline_asset_content -}}
             </button>
           </div>
-          <ul class='header-menu-list'>
+          <ul class="header-menu-list">
             {%- if section.settings.main_menu != blank -%}
               {%- for main_menu in section.settings.main_menu.links -%}
                 {%- case main_menu.type -%}
                   {%- when 'http_link', 'page_link' -%}
                     {% comment %} -普通直接跳转导航- {% endcomment %}
-                    <li data-menu-item class='header-menu-item'>
+                    <li data-menu-item class="header-menu-item">
                       <a
-                        href='{{ main_menu.url }}'
-                        class='header-menu-jump-link'
+                        href="{{ main_menu.url }}"
+                        class="header-menu-jump-link"
                         {% if main_menu.current %}
-                          aria-current='page'
+                          aria-current="page"
                         {% endif %}
                       >
                         {{ main_menu.title }}
@@ -1024,20 +1024,20 @@
                       {% comment %} - 全屏弹出层导航 - {% endcomment %}
                       <li
                         data-menu-item
-                        data-type='full-screen-menu'
-                        aria-controls='submenu-{{ main_menu.handle }}'
-                        class='header-menu-item header-menu-item-full-screen'
+                        data-type="full-screen-menu"
+                        aria-controls="submenu-{{ main_menu.handle }}"
+                        class="header-menu-item header-menu-item-full-screen"
                       >
                         <button
-                          aria-has-popup='true'
-                          aria-expanded='false'
-                          class='header-menu-item-button'
+                          aria-has-popup="true"
+                          aria-expanded="false"
+                          class="header-menu-item-button"
                         >
                           {{ main_menu.title }}
-                          <span class='svg-wrapper' aria-hidden='true'>
+                          <span class="svg-wrapper" aria-hidden="true">
                             {{- 'icon-chevron-down.svg' | inline_asset_content -}}
                           </span>
-                          <span class='svg-wrapper-mo' aria-hidden='true'>
+                          <span class="svg-wrapper-mo" aria-hidden="true">
                             {{- 'icon-chevron-right.svg' | inline_asset_content -}}
                           </span>
                         </button>
@@ -1051,12 +1051,11 @@
                             endif
                           endfor
                         -%}
-                        <div class='header-submenu header-submenu-list-full-screen'>
+                        <div id="submenu-{{ main_menu.handle }}" class="header-submenu header-submenu-list-full-screen">
                           <ul
-                            role='menu'
-                            id='submenu-{{ main_menu.handle }}'
-                            class='{%- if block_type == 'image_text_menu' %}header-submenu-image-with-text{% elsif block_type == 'icon_list_menu' %}header-submenu-icon-list-menu{% endif %}'
-                            aria-label='{{ main_menu.title }} submenu'
+                            role="menu"
+                            aria-label="{{ main_menu.title }} submenu"
+                            class="{%- if block_type == 'image_text_menu' %}header-submenu-image-with-text{% elsif block_type == 'icon_list_menu' %}header-submenu-icon-list-menu{% endif %}"
                           >
                             {%- for block in section.blocks -%}
                               {%- if block.type != block_type -%}
@@ -1065,24 +1064,26 @@
                               {% comment %} - 图文卡片菜单 - {% endcomment %}
                               {%- if block.type == 'image_text_menu' -%}
                                 <li>
-                                  <a class='header-submenu-card-wrapper' href='{{ block.settings.cta_url }}'>
-                                    <div class='header-submenu-card'>
-                                      {% comment %} {% render 'component-image',
-                                        image: block.settings.image,
-                                        width: 300,
-                                        thumb: true,
-                                        height: 100,
-                                        width_plus: 2,
-                                        thumb_size: 100,
-                                        alt: block.settings.title,
-                                        class: 'header-submenu-card-image'
-                                      %} {% endcomment %}
-                                      <div class='header-submenu-card-content'>
-                                        <p class='header-submenu-card-subtitle'>{{ block.settings.card_subtitle }}</p>
-                                        <p class='header-submenu-card-title'>{{ block.settings.card_title }}</p>
-                                        <div class='header-submenu-card-cta'>
+                                  <a class="header-submenu-card-wrapper" href="{{ block.settings.cta_url }}">
+                                    <div class="header-submenu-card">
+                                      {% comment %}
+                                        {% render 'component-image',
+                                          image: block.settings.image,
+                                          width: 300,
+                                          thumb: true,
+                                          height: 100,
+                                          width_plus: 2,
+                                          thumb_size: 100,
+                                          alt: block.settings.title,
+                                          class: 'header-submenu-card-image'
+                                        %}
+                                      {% endcomment %}
+                                      <div class="header-submenu-card-content">
+                                        <p class="header-submenu-card-subtitle">{{ block.settings.card_subtitle }}</p>
+                                        <p class="header-submenu-card-title">{{ block.settings.card_title }}</p>
+                                        <div class="header-submenu-card-cta">
                                           {{ block.settings.cta_text }}
-                                          <span class='svg-wrapper'>
+                                          <span class="svg-wrapper">
                                             {{- 'icon-chevron-right.svg' | inline_asset_content -}}
                                           </span>
                                         </div>
@@ -1093,8 +1094,8 @@
                               {%- endif -%}
                               {% comment %} - 图标 & 列表集合菜单 - {% endcomment %}
                               {%- if block.type == 'icon_list_menu' -%}
-                                <li class='header-submenu-icon-item'>
-                                  <span class='header-submenu-icon-item-icon'>
+                                <li class="header-submenu-icon-item">
+                                  <span class="header-submenu-icon-item-icon">
                                     {%- if block.settings.icon_type == 'icon' -%}
                                       {{-
                                         block.settings.icon
@@ -1104,25 +1105,27 @@
                                         | inline_asset_content
                                       -}}
                                     {%- else -%}
-                                      {% comment %} {% render 'component-image',
-                                        image: block.settings.image,
-                                        width: 32,
-                                        height: 32,
-                                        width_plus: 2,
-                                        alt: block.settings.subtitle,
-                                        class: 'header-submenu-icon-item-image'
-                                      %} {% endcomment %}
+                                      {% comment %}
+                                        {% render 'component-image',
+                                          image: block.settings.image,
+                                          width: 32,
+                                          height: 32,
+                                          width_plus: 2,
+                                          alt: block.settings.subtitle,
+                                          class: 'header-submenu-icon-item-image'
+                                        %}
+                                      {% endcomment %}
                                     {%- endif -%}
                                   </span>
                                   {%- for menu_l2 in main_menu.links -%}
                                     {%- if menu_l2.title != block.settings.subtitle -%}
                                       {%- continue -%}
                                     {%- endif -%}
-                                    <p class='header-submenu-icon-item-title'>{{ menu_l2.title }}</p>
-                                    <ul class='header-submenu-icon-item-list'>
+                                    <p class="header-submenu-icon-item-title">{{ menu_l2.title }}</p>
+                                    <ul class="header-submenu-icon-item-list">
                                       {%- for menu_l3 in menu_l2.links -%}
                                         <li>
-                                          <a class='header-submenu-icon-item-list-link' href='{{ menu_l3.url }}'>
+                                          <a class="header-submenu-icon-item-list-link" href="{{ menu_l3.url }}">
                                             {{- menu_l3.title -}}
                                           </a>
                                         </li>
@@ -1143,43 +1146,43 @@
                     {% comment %} - 产品列表导航 - {% endcomment %}
                     {% render 'header-mega-menu', main_menu: main_menu %}
                   {%- else -%}
-                    <a href='{{ main_menu.url }}'>{{ main_menu.type }}</a>
+                    <a href="{{ main_menu.url }}">{{ main_menu.type }}</a>
                 {%- endcase -%}
               {%- endfor -%}
             {%- endif -%}
           </ul>
         </nav>
       </div>
-      <nav class='header-content-right' id='country-selector' aria-label='Header actions'>
+      <nav class="header-content-right" id="country-selector" aria-label="Header actions">
         {% comment %} - 国家/地区选择器 - {% endcomment %}
         {%- if section.settings.enable_country_selector -%}
           <button
-            type='button'
-            aria-haspopup='true'
-            class='header-content-right-item'
-            aria-label='Select country or region'
+            type="button"
+            aria-haspopup="true"
+            class="header-content-right-item"
+            aria-label="Select country or region"
           >
-            <span aria-hidden='true'>国家/地区选择器</span>
+            <span aria-hidden="true">国家/地区选择器</span>
           </button>
         {%- endif -%}
 
         {% comment %} - 搜索 - {% endcomment %}
         <button
-          type='button'
-          aria-expanded='false'
-          aria-label='Open search'
-          class='header-content-right-item'
+          type="button"
+          aria-expanded="false"
+          aria-label="Open search"
+          class="header-content-right-item"
         >
-          <span class='svg-wrapper' aria-hidden='true'>
+          <span class="svg-wrapper" aria-hidden="true">
             {{- 'icon-search.svg' | inline_asset_content -}}
           </span>
         </button>
 
         {% comment %} - 用户信息 - {% endcomment %}
         {%- if shop.customer_accounts_enabled -%}
-          <account-drawer class='header-content-right-item' rel='nofollow'>
-            <span class='svg-wrapper' aria-hidden='true'>{{ 'icon-account.svg' | inline_asset_content }}</span>
-            <span class='visually-hidden'>
+          <account-drawer class="header-content-right-item" rel="nofollow">
+            <span class="svg-wrapper" aria-hidden="true">{{ 'icon-account.svg' | inline_asset_content }}</span>
+            <span class="visually-hidden">
               {%- if customer -%}
                 Account
               {%- else -%}
@@ -1198,13 +1201,13 @@
 
         {% comment %} - 购物车 - {% endcomment %}
         <a
-          id='cart-icon-bubble'
-          href='{{ routes.cart_url }}'
-          class='header-content-right-item'
-          aria-label='Shopping cart, {% if cart != empty %}{{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}{% else %}empty{% endif %}'
+          id="cart-icon-bubble"
+          href="{{ routes.cart_url }}"
+          class="header-content-right-item"
+          aria-label="Shopping cart, {% if cart != empty %}{{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}{% else %}empty{% endif %}"
         >
-          <span class='svg-wrapper' aria-hidden='true'>{{- 'icon-cart.svg' | inline_asset_content }}</span>
-          <span class='visually-hidden'>
+          <span class="svg-wrapper" aria-hidden="true">{{- 'icon-cart.svg' | inline_asset_content }}</span>
+          <span class="visually-hidden">
             {%- if cart != empty -%}
               Shopping cart with {{ cart.item_count }}
               {% if cart.item_count == 1 %}item{% else %}items{% endif %}
@@ -1213,12 +1216,12 @@
             {%- endif -%}
           </span>
           {%- if cart != empty -%}
-            <div class='cart-count-badge' aria-hidden='true'>
+            <div class="cart-count-badge" aria-hidden="true">
               {%- if cart.item_count < 100 -%}
                 <span>{{ cart.item_count }}</span>
               {%- endif -%}
             </div>
-            <span class='visually-hidden'>
+            <span class="visually-hidden">
               {%- if cart.item_count == 1 -%}1 item{% else %}{{ cart.item_count }} items{% endif -%}
             </span>
           {%- endif -%}
@@ -1226,10 +1229,10 @@
       </nav>
     </div>
   </header>
-  <div class='mega-menu-overlay'></div>
+  <div class="mega-menu-overlay"></div>
 </shop-header>
 
-<script type='module'>
+<script type="module">
   class ShopHeader extends HTMLElement {
     delay = 100
     closeDelay = 120
