@@ -5,16 +5,19 @@
   {% render 'header-dropdown-menu' %}
 {% endcomment %}
 
-<nav class="header__inline-menu">
-  <ul class="list-menu list-menu--inline" role="list">
+<nav class="header__inline-menu" role="navigation" aria-label="Main navigation">
+  <ul class="list-menu list-menu--inline" role="menubar">
     {%- for link in section.settings.menu.links -%}
-      <li>
+      <li role="none">
         {%- if link.links != blank -%}
           <header-menu>
             <details id="Details-HeaderMenu-{{ forloop.index }}">
               <summary
                 id="HeaderMenu-{{ link.handle }}"
                 class="header__menu-item list-menu__item link focus-inset"
+                role="menuitem"
+                aria-haspopup="true"
+                aria-expanded="false"
               >
                 <span
                   {%- if link.child_active %}
@@ -23,7 +26,9 @@
                 >
                   {{- link.title | escape -}}
                 </span>
-                {{- 'icon-caret.svg' | inline_asset_content -}}
+                <span class="svg-wrapper" aria-hidden="true">
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </span>
               </summary>
               <ul
                 id="HeaderMenu-MenuList-{{ forloop.index }}"
