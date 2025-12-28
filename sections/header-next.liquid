@@ -969,6 +969,19 @@
       line-height: normal;
       color: var(--color-text-primary);
     }
+    .header-submenu-list-full-screen {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+      width: 100%;
+      left: 0;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    .header-submenu-list-full-screen[open] {
+      transform: translateX(0);
+    }
     .mega-menu-overlay {
       top: 0;
       pointer-events: auto;
