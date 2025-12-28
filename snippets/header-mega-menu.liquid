@@ -11,18 +11,18 @@
 
 {%- assign mega_menu = shop.metafields.custom.header_product_mega_menu.value -%}
 <li
+  role='none'
   data-menu-item
   data-type='mega-menu'
+  aria-controls='submenu-{{ main_menu.handle }}'
   class='header-menu-item header-menu-item-full-screen'
-  role='none'
 >
   <button
     type='button'
-    aria-has-popup='true'
-    aria-expanded='false'
-    aria-controls='submenu-{{ main_menu.handle }}'
-    class='header-menu-item-button'
     role='menuitem'
+    aria-expanded='false'
+    aria-has-popup='true'
+    class='header-menu-item-button'
   >
     <span>{{ main_menu.title | escape }}</span>
     <span class='svg-wrapper' aria-hidden='true'>
@@ -124,7 +124,6 @@
                         </li>
                       {%- endfor -%}
                     </ul>
-                    <ul class='mega-menu-links-wrapper-mobile' role='list' aria-label='Mobile menu links'></ul>
                   {%- else -%}
                     {% comment %} -遍历获取二级菜单数据- {% endcomment %}
                     {%- for menu_l2 in menu_l1.children -%}
