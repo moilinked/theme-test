@@ -1353,7 +1353,7 @@
         const firstL2ItemData = l2ListData && l2ListData[0] ? l2ListData[0] : null
 
         trigger.addEventListener('click', e => {
-          if (window.innerWidth < 1024) {
+          if (this.isMobile) {
             e.preventDefault()
             e.stopPropagation()
             if (!l2List) return
@@ -1413,7 +1413,7 @@
           const l2Trigger = itemData.trigger
           if (!l2Trigger) return
 
-          if (window.innerWidth < 1024) {
+          if (this.isMobile) {
             l2Trigger.addEventListener('click', e => {
               e.preventDefault()
             })
