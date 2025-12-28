@@ -1120,8 +1120,12 @@
                               {%- endif -%}
                               {% comment %} - 图文卡片菜单 - {% endcomment %}
                               {%- if block.type == 'image_text_menu' -%}
-                                <li>
-                                  <a class="header-submenu-card-wrapper" href="{{ block.settings.cta_url }}">
+                                <li role="none">
+                                  <a
+                                    class="header-submenu-card-wrapper"
+                                    href="{{ block.settings.cta_url }}"
+                                    role="menuitem"
+                                  >
                                     <div class="header-submenu-card">
                                       {% comment %}
                                         {% render 'component-image',
@@ -1151,8 +1155,8 @@
                               {%- endif -%}
                               {% comment %} - 图标 & 列表集合菜单 - {% endcomment %}
                               {%- if block.type == 'icon_list_menu' -%}
-                                <li class="header-submenu-icon-item">
-                                  <span class="header-submenu-icon-item-icon">
+                                <li class="header-submenu-icon-item" role="none">
+                                  <span class="header-submenu-icon-item-icon" aria-hidden="true">
                                     {%- if block.settings.icon_type == 'icon' -%}
                                       {{-
                                         block.settings.icon
