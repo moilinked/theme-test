@@ -1658,7 +1658,9 @@
     }
 
     openSubDrawer(item) {
-      const id = item?.dataset?.controls;
+      console.log('openSubDrawer', item);
+      if (!item) return;
+      const id = item.getAttribute('aria-controls');
       if (!id) return;
       const subDrawer = document.getElementById(id);
       if (subDrawer) {
