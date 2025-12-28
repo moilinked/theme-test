@@ -1304,6 +1304,7 @@
     bindEvents() {
       this.items.forEach(item => {
         const trigger = item.querySelector('button')
+        console.log('trigger', trigger)
         if (!trigger) return
 
         item.addEventListener('mouseenter', () => this.open(item))
