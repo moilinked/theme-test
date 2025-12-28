@@ -1388,19 +1388,20 @@
 
         l2ListData.forEach(itemData => {
           itemData.element.addEventListener('click', e => {
-            if (itemData.element.getAttribute('open') === 'true') {
+            const isOpen = itemData.element.getAttribute('open') === 'true'
+            if (isOpen) {
               itemData.element.classList.remove('mega-menu-l2-item-open')
-              {% comment %} itemData.element.removeAttribute('open') {% endcomment %}
             } else {
               l2ListData.forEach(otherItemData => {
-                {% comment %} if (otherItemData.element !== itemData.element) otherItemData.element?.removeAttribute('open') {% endcomment %}
-                if (otherItemData.element !== itemData.element) otherItemData.element?.classList.remove('mega-menu-l2-item-open')
+                if (otherItemData.element !== itemData.element) {
+                  otherItemData.element?.classList.remove('mega-menu-l2-item-open')
+                }
               })
-              {% comment %} itemData.element.setAttribute('open', 'true') {% endcomment %}
               itemData.element.classList.add('mega-menu-l2-item-open')
-              if (!itemData.l3List) return
-              const splideSliders = Array.from(itemData.l3List.querySelectorAll('.mega-menu-l3-products-splide'))
-              splideSliders.forEach(slider => slider?.slider?.refresh())
+              if (itemData.l3List) {
+                const splideSliders = Array.from(itemData.l3List.querySelectorAll('.mega-menu-l3-products-splide'))
+                splideSliders.forEach(slider => slider?.slider?.refresh())
+              }
             }
           })
 
@@ -1550,7 +1551,7 @@
     }
 
     hideDrawer() {
-      if (this.classList.contains('closing')) return
+      if (this.drawer.classList.contains('closing')) return
       this.drawerOpen = false
       this.drawer.classList.add('closing')
       this.drawer.removeAttribute('open')
